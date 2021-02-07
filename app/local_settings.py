@@ -61,16 +61,15 @@ SECRET_KEY = 'This is an UNSECURE Secret. CHANGE THIS for production environment
 SERVER_HOST = "localhost"
 
 #// Customize
-COMPANY = "marshall"
+COMPANY = "agent7"
 
 #// Postgres
 SQLALCHEMY_DATABASE_URI = 'postgresql://db1:db1@localhost/db1'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-RMQ_USER = "admin"
-RMQ_PASS = "13916219"
-RMQ_HOST = "10.0.20.39"
-#RMQ_QUEUE = "ww_queue"
+RMQ_USER = ""
+RMQ_PASS = ""
+RMQ_HOST = ""
 RMQ_QUEUE = "stage_one_queue"
 
 #// Redis
@@ -107,8 +106,8 @@ MAIL_SERVER = 'smtp.gmail.com'
 MAIL_PORT = 587
 MAIL_USE_SSL = False
 MAIL_USE_TLS = True
-MAIL_USERNAME = 'bmarshall'
-MAIL_PASSWORD = 'lmah'
+MAIL_USERNAME = 'agent7'
+MAIL_PASSWORD = 'agent7'
 '''
 
 # Sendgrid settings
