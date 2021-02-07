@@ -1,0 +1,140 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True) }}
+
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block body %}
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Filesystem type</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Top File system</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Agents with less than 10% disk space</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Low Disk space</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Device mount</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Top Device Mount</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Memory</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Memory on Endpoints</h5>
+                <button type="button" style="float:right;display:inline-block;" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title="" data-toggle="modal" data-target="#helpModal">
+                            <i class="tim-icons icon-bulb-63"></i>
+                </button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example2" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Disk</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Disk data on Endpoints</h5>
+                <button type="button" style="float:right;display:inline-block;" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title="" data-toggle="modal" data-target="#helpModal">
+                            <i class="tim-icons icon-bulb-63"></i>
+                </button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        var table2 = cjs_init(
+            selector="chart",
+            url="/api/agent/data/agentdisk?as_chartjs=true&groupby=fs_type,count",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table2 = cjs_init(
+            selector="chart2",
+            url="/api/agent/data/agentdisk?as_chartjs=true&groupby=host_name,count&filter=used_percent,gt,90",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table2 = cjs_init(
+            selector="chart3",
+            url="/api/agent/data/agentdisk?as_chartjs=true&groupby=mount,count",
+            type="horizontalBar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Mount Point", // header of graph
+        );
+        // draw datatable
+        var table = dt_init(
+            selector="#example2", // table id selector
+            url = "/api/agent/data/agentmemory?as_datatables=true", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var table = dt_init(
+            selector="#example", // table id selector
+            url = "/api/agent/data/agentdisk?as_datatables=true", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+    });
+  </script>
+  {%endblock%}
+

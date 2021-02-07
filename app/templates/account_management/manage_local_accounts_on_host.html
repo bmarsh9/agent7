@@ -1,0 +1,133 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    <script src="{{url_for('static',filename='assets/js/chartjs_template.js')}}"></script>
+  {% endblock %}
+
+      {% block body %}
+        <div class="row">
+          <div class="col-lg-7 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Host Information</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <p class="title">Hostname</p>
+                          <p class="text">{{agent.fqdn}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Total Local Users</p>
+                          <p class="text">{{data|length}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Total Managed Users</p>
+                          <p class="text">{{managed_accounts}}</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Total number of managed and unmanaged accounts</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Managed vs Unmanaged</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Onboard Accounts for Host</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Account Name</th>
+                        <th scope="col">Privileged</th>
+                        <th scope="col">Managed</th>
+                        <th scope="col">Rotate After Check Out</th>
+                        <th scope="col">Last Password Sync</th>
+                        <th scope="col">Password Length</th>
+                        <th scope="col">Password Rotated (in days)</th>
+                        <th scope="col">Vault</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for account in data %}
+                       <tr>
+                        {% if account.managed %}
+                          <th scope="row"><i class="tim-icons icon-check-2 text-green"></i></th>
+                        {% elif not account.managed and account.priv == 2 %}
+                          <td><i class="tim-icons icon-alert-circle-exc text-red"></i></td>
+                        {% else %}
+                          <th scope="row"><i class="tim-icons icon-button-power text-yellow"></i></th>
+                        {% endif %}
+
+                          <td>{{account.username}}</td>
+                          {% if account.priv == 2 %}
+                            <td><i class="tim-icons icon-alert-circle-exc text-red"></i>  Yes</td>
+                          {% else %}
+                            <td> No </td>
+                          {% endif %}
+                          {% if account.managed %}
+                            <td> Yes </td>
+                          {% else %}
+                            <td> No </td>
+                          {% endif %}
+                          <td>{{account.rotate_after_checkout}}</td>
+                          <td>{{account.last_password_sync}}</td>
+                          <td>{{account.password_length}}</td>
+                          <td>{{account.password_rotation}}</td>
+                          {% if account.managed %}
+                            <td><a href="{{url_for('main_ui.view_account',aid=aid,username=account.username)}}"><i class="tim-icons icon-zoom-split text-green"></i></a></td>
+                          {% else %}
+                            <td><a href="{{url_for('main_ui.view_account',aid=aid,username=account.username)}}"><i class="tim-icons icon-zoom-split text-yellow"></i></a></td>
+                          {% endif %}
+                         </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>   
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        var table2 = cjs_init(
+            selector="chart",
+            url="/api/agent/data/agentuser?as_chartjs=true&groupby=managed,count&limit=100",
+            type="bar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Accounts", // header of graph
+        );
+    });
+  </script>
+  {%endblock%}

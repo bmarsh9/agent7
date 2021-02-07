@@ -1,0 +1,145 @@
+//
+// Updates "Select all" control in a data table
+//
+function updateDataTableSelectAllCtrl(table){
+   var $table             = table.table().node();
+   var $chkbox_all        = $('tbody input[type="checkbox"]', $table);
+   var $chkbox_checked    = $('tbody input[type="checkbox"]:checked', $table);
+   var chkbox_select_all  = $('thead input[name="select_all"]', $table).get(0);
+
+   // If none of the checkboxes are checked
+   if($chkbox_checked.length === 0){
+      chkbox_select_all.checked = false;
+      if('indeterminate' in chkbox_select_all){
+         chkbox_select_all.indeterminate = false;
+      }
+
+   // If all of the checkboxes are checked
+   } else if ($chkbox_checked.length === $chkbox_all.length){
+      chkbox_select_all.checked = true;
+      if('indeterminate' in chkbox_select_all){
+         chkbox_select_all.indeterminate = false;
+      }
+
+   // If some of the checkboxes are checked
+   } else {
+      chkbox_select_all.checked = true;
+      if('indeterminate' in chkbox_select_all){
+         chkbox_select_all.indeterminate = true;
+      }
+   }
+}
+
+$(document).ready(function (){
+   $.noConflict();
+   // Array holding selected row IDs
+   var rows_selected = [];
+   var table = $('#example').DataTable({
+      'ajax': {
+         'url': '/settings/api/0202'
+      },
+      'columnDefs': [{
+         'targets': 0,
+         'searchable': false,
+         'orderable': false,
+         'className': 'form-check',
+         'render': function (data, type, full, meta){
+             return '<label class="form-check-label"><input class="form-check-input" type="checkbox"><span class="form-check-sign"><span class="check"></span></span></label>'
+         }
+      },
+      {
+         'targets': -1,
+         'searchable': false,
+         'orderable': false,
+         'data': null,
+         'render': function (data, type, full, meta){
+               return '<td class="text-right"><button type="button" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title=""><i class="tim-icons icon-settings"></i></button><button type="button" rel="tooltip" class="btn btn-warning btn-link btn-sm " data-original-title="Delete" title=""><i class="tim-icons icon-simple-remove"></i></button></td>'
+         }
+      },
+      {
+         'targets': -2,
+         'data': null,
+         'searchable': false,
+         'orderable': false,
+         'width': "1%",
+         'render': function (data, type, full, meta){
+//ahaaaa
+             var enabled = data[data.length-1];
+             console.log(enabled);
+             if ( enabled === true ) {
+               return '<td class="text-right"><button type="button" rel="tooltip" class="btn btn-success btn-link btn-sm btn-icon " data-original-title="Refresh" title=""><i class="tim-icons icon-check-2"></i></button></td>'
+             } else {
+               return '<td class="text-right"><button type="button" rel="tooltip" class="btn btn-warning btn-link btn-sm btn-icon " data-original-title="Refresh" title=""><i class="tim-icons icon-button-power"></i></button></td>'
+             }
+         }
+//         'defaultContent': '<button>Click!</button>'
+      }],
+//      'order': [[8, 'desc']],
+      'rowCallback': function(row, data, dataIndex){
+         // Get row ID
+         var rowId = data[0];
+
+         // If row ID is in the list of selected row IDs
+         if($.inArray(rowId, rows_selected) !== -1){
+            $(row).find('input[type="checkbox"]').prop('checked', true);
+            $(row).addClass('selected');
+         }
+      }
+   });
+
+   // Handle click on checkbox
+   $('#example tbody').on('click', 'input[type="checkbox"]', function(e){
+      var $row = $(this).closest('tr');
+      //Call Modal and populate it with row data
+      jQuery('#exampleModal').modal('show');
+      jQuery('#exampleModal').on('shown.bs.modal', function (e) {
+          console.log("here2");
+          var data = table.row($row).data();
+
+          $(e.currentTarget).find('input[name="id"]').val(data[0]);
+          $(e.currentTarget).find('input[name="dataType"]').val(data[1]);
+          $(e.currentTarget).find('input[name="dataValue"]').val(data[2]);
+      });
+   });
+
+   // Handle click on table cells with checkboxes
+   // haaaaaa
+   $('#example').on('click', 'tbody div, thead th:first-child', function(e){
+      $(this).parent().find('input[type="checkbox"]').trigger('click');
+   });
+
+   // Handle click on "Select all" control
+   $('thead input[name="select_all"]', table.table().container()).on('click', function(e){
+      if(this.checked){
+         $('#example tbody input[type="checkbox"]:not(:checked)').trigger('click');
+      } else {
+         $('#example tbody input[type="checkbox"]:checked').trigger('click');
+      }
+
+      // Prevent click event from propagating to parent
+      e.stopPropagation();
+   });
+
+   // Handle table draw event
+   table.on('draw', function(){
+      // Update state of "Select all" control
+      updateDataTableSelectAllCtrl(table);
+   });
+
+   // Handle form submission event
+   $('#frm-example').on('submit', function(e){
+      var form = this;
+
+      // Iterate over all selected checkboxes
+      $.each(rows_selected, function(index, rowId){
+         // Create a hidden element
+         $(form).append(
+             $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', 'id[]')
+                .val(rowId)
+         );
+      });
+   });
+
+});

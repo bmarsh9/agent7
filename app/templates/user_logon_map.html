@@ -1,0 +1,481 @@
+{% extends "template.html" %}
+
+{% block head %}
+  {{super()}}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block style %}
+  {{super()}}
+      #mynetwork {
+        height: 100%;
+      }
+     .nav-pills .nav-link {
+       color:gray;
+     }
+     .nav-pills .nav-link:hover {
+       color:#00f2c3;
+     }
+     .sidebar-mini .main-panel>.content, .sidebar-mini footer {
+       padding-left:50px
+     }
+{% endblock %}
+      {% block sidebar %}
+      {% endblock %}
+      {% block body %}    
+        <div class="row">
+          <div class="col-4">
+            <div class="row">
+              <div class="col-12">
+                <div style="margin-top:25px" class="card">
+                  <div class="card-header">
+                    <h5 class="card-category">Displaying details on the selected Node</h5>
+                    <h4 class="card-title">Viewing Node:<div style="color:#00f2c3" id="title"></div></h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-12">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                          <li style="font-size:12px" class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Attributes</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Summary</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Analytics</a>
+                          </li>
+                        </ul>
+                        <hr style="border:1px solid gray">
+                        <div class="tab-content" id="myTabContent">
+                          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="table-full-width table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th id="zero">Label</th>
+                                                <td id="label"></td>
+                                        </tr>
+                                        <tr>
+                                            <th id="first">HostName</th>
+                                                <td id="hostname"></td>
+                                        </tr>
+                                        <tr>
+                                            <th id="second">Domain Joined</th>
+                                                <td id="dj"></td>
+                                        </tr>
+                                        <tr>
+                                            <th id="third">Domain</th>
+                                                <td  id="domain"></td>
+                                        </tr>        
+                                        <tr>
+                                            <th id="fourth">Local IP</th>
+                                                <td id="local_ip"></td>
+                                        </tr>
+                                        <tr>
+                                            <th id="fifth">Is DC</th>
+                                                <td id="is_dc"></td>
+                                        </tr>        
+                                        <tr>
+                                            <th id="six">Operating System</th>
+                                                <td id="os"></td>
+                                        </tr>                                        
+                                        <tr>
+                                            <th id="seven"></th>
+                                                <td id="sid"></td>
+                                        </tr>                                        
+                                        <tr>
+                                            <th id="eight"></th>
+                                                <td id="installtype"></td>
+                                        </tr>                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                          </div>
+                          <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="table-full-width table-responsive">
+                                <table id="summary" class="table">
+                                    <tbody>
+                                        <tr>
+                                            <th>Total Logons</th>
+                                                <td id="total_logons"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Unique Logons (per Hostname)</th>
+                                                <td id="uniq_host_logons"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Server Logons</th>
+                                                <td id="total_server_logons"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Workstation Logons</th>
+                                                <td id="total_wks_logons"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Uniq. Server Logons</th>
+                                                <td id="uniq_server_logons"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Uniq. Workstation Logons</th>
+                                                <td id="uniq_wks_logons"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Server Logons as % of Total</th>
+                                                <td id="per_of_server_logons"></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Workstation Logons as % of Total</th>
+                                                <td id="per_of_wks_logons"></td>
+                                        </tr>
+                                    </tbody>                            
+                                </table>
+                            </div>
+                          </div>
+                          <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                <div class="table-full-width table-responsive">
+                  <table id="analytics" class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Hostname</th>
+                        <th scope="col">Server/Workstation</th>
+                        <th scope="col">Total Logons</th>
+                        <th scope="col">Percentage of Total Logons</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                   </tbody>
+                  </table>
+                </div>
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8" style="height:80vh;border-left:1px solid #00f2c3;">
+            <div id="mynetwork"></div>
+          </div>
+        </div>
+      {% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+function get_host_analytics(id) {
+  $.ajax({
+         type: "GET",
+         url: "/api/main/logon-map/analytics/host/"+id,
+         contentType: 'application/json',
+         success: function(result) {
+//haaaaa
+            // update summary tab
+            $("table#summary tbody tr").empty();
+            $("table#summary tbody").append(
+              "<tr><th><i class='tim-icons icon-alert-circle-exc text-red'></i>&nbsp&nbspPercentage of Privileged Logons</th><td>"+result["percentage_logons_of_priv_users"]+"</td></tr>",
+              "<tr><th>Total Logons</th><td>"+result["total_logons"]+"</td></tr>",
+              "<tr><th><i class='tim-icons icon-alert-circle-exc text-red'></i>&nbsp&nbspTotal Privileged Logons</th><td>"+result["total_priv_logons"]+"</td></tr>",
+              "<tr><th><i class='tim-icons icon-alert-circle-exc text-red'></i>&nbsp&nbspUniq Privileged Users</th><td>"+result["uniq_priv_user_logons"]+"</td></tr>",
+              "<tr><th>Uniq Regular Users</th><td>"+result["uniq_reg_user_logons"]+"</td></tr>",
+              "<tr><th>Domain Users</th><td>"+result["domain_user_logons"]+"</td></tr>",
+              "<tr><th>Local Users</th><td>"+result["local_user_logons"]+"</td></tr>",
+            );
+            // update analytics tab
+            $("table#analytics thead tr").empty();
+            $("table#analytics thead tr").append(
+              "<th scope='col'>#</th>",
+              "<th scope='col'>Username</th>",
+              "<th scope='col'>Local</th>",
+              "<th scope='col'>Privileged</th>",
+              "<th scope='col'>Logon Count</th>",
+              "<th scope='col'>% of Total Logon</th>",
+            );
+            $("table#analytics tbody tr").empty();
+            $.each(result["users"], function( key, value ) {
+              if (value["is_priv"] === "yes") {
+                var v = "<i class='tim-icons icon-alert-circle-exc text-red'></i>"
+              } else {
+                var v = "No"
+              }
+              $("table#analytics").append(
+                "<tr><td>"+(key+1)+"</td><td>"+value["username"]+"</td><td>"+value["local_account"]+"</td><td>"+v+"</td><td>"+value["count"]+"</td><td>"+value["percentage_of_total_logon"]+"</td></tr>"
+              );
+            });
+         },
+         error: function(result) {
+            console.log(result);
+         }
+   });
+}
+function get_user_analytics(sid) {
+  $.ajax({
+         type: "GET",
+         url: "/api/main/logon-map/analytics/user/"+sid,
+         contentType: 'application/json',
+         success: function(result) {
+            $("#total_logons").text(result["total_logons"]);
+            $("#uniq_host_logons").text(result["uniq_host_logons"]);
+            $("#total_server_logons").text(result["total_server_logons"]);
+            $("#total_wks_logons").text(result["total_wks_logons"]);
+            $("#uniq_server_logons").text(result["uniq_server_logons"]);
+            $("#uniq_wks_logons").text(result["uniq_wks_logons"]);
+            $("#per_of_server_logons").text(result["per_of_server_logons"]);
+            $("#per_of_wks_logons").text(result["per_of_wks_logons"]);
+//haaaaa
+            // update summary tab
+            $("table#summary tbody tr").empty();
+            $("table#summary tbody").append(
+              "<tr><th>Total Logons</th><td>"+result["total_logons"]+"</td></tr>",
+              "<tr><th>Unqiue Logons (per Hostname)</th><td>"+result["uniq_host_logons"]+"</td></tr>",
+              "<tr><th>Server Logons</th><td>"+result["total_server_logons"]+"</td></tr>",
+              "<tr><th>Workstation Logons</th><td>"+result["total_wks_logons"]+"</td></tr>",
+              "<tr><th>Uniq. Server Logons</th><td>"+result["uniq_server_logons"]+"</td></tr>",
+              "<tr><th>Uniq Workstation Logons</th><td>"+result["uniq_wks_logons"]+"</td></tr>",
+              "<tr><th>Server Logons as % of Total</th><td>"+result["per_of_server_logons"]+"</td></tr>",
+              "<tr><th>Workstation Logons as % of Total</th><td>"+result["per_of_wks_logons"]+"</td></tr>",
+            );
+
+            // update analytics tab
+            $("table#analytics thead tr").empty();
+            $("table#analytics thead tr").append(
+              "<th scope='col'>#</th>",
+              "<th scope='col'>Hostname</th>",
+              "<th scope='col'>Server/Workstation</th>",
+              "<th scope='col'>Total Logons</th>",
+              "<th scope='col'>Percentage of Total Logons</th>",
+            );
+
+            $("table#analytics tbody tr").empty();
+            $.each(result["hosts"], function( key, value ) {
+              $("table#analytics").append(
+                "<tr><td>"+(key+1)+"</td><td>"+value["hostname"]+"</td><td>"+value["type"]+"</td><td>"+value["total_logons"]+"</td><td>"+value["percentage_of_total_logons"]+"</td></tr>"
+              );
+            });
+
+         },
+         error: function(result) {
+            console.log(result);
+         }
+   });
+}
+
+      // create an array with nodes
+      var nodes = new vis.DataSet({{data["nodes"]|safe}});
+
+      // create an array with edges
+      var edges = new vis.DataSet({{data["edges"]|safe}});
+
+      // create a network
+      var container = document.getElementById('mynetwork');
+
+      // provide the data in the vis format
+      var data = {
+        nodes: nodes,
+        edges: edges
+      };
+      var options = {
+        //physics: false,
+        nodes: {
+          autoResize: true,
+          height: '100%',
+          width: '100%',
+          shape: 'circle',
+          font: {
+            size: 14,
+            color: "#fff"
+          },
+          scaling:{
+            label: {
+              min:8,
+              max:20
+            }
+          },
+          borderWidth: 1,
+          shadow: true,
+          margin: {
+            top: 10,
+            left: 20,
+            right: 20,
+            bottom: 10
+          },
+          color: {
+            border: "",
+            background: "#7386e5",
+            highlight : {
+              border: '#00f2c3',
+              background: '#ffcdd2'
+            }
+          }
+        },
+        layout: {
+          improvedLayout: true,
+          hierarchical: {
+            enabled: false,
+            direction: 'UD',
+            sortMethod: 'hubsize',
+            parentCentralization: true,
+            blockShifting: true,
+            edgeMinimization: true
+          }
+        },
+        edges: {
+          arrowStrikethrough: false,
+          strokeWidth: 1, // px
+          strokeColor: '#ffffff',
+          smooth: true,
+          chosen: true,
+          arrows: {
+            to : {
+              enabled: true,
+              type: 'arrow'
+            }
+          },
+          color: {
+            color: "#7386e5",
+            highlight:'#00f2c3',
+            hover: '#848484',
+            inherit: 'from',
+            opacity:1.0
+          },
+        }
+      };
+
+      // initialize your network!
+      var network = new vis.Network(container, data, options);
+      var firstnode = nodes.get(1);
+      var meta_data_first = firstnode["meta"];
+      get_user_analytics(meta_data_first["sid"]);
+      $("#title").text(firstnode["label"])
+      $("#first").text("Description");
+      $("#second").text("Domain");
+      $("#third").text("Last Logon");
+      $("#fourth").text("Logon Count");
+      $("#fifth").text("Managed");
+      $("#six").text("Pwd Last Set");
+      $("#seven").text("SID");
+      $("#eight").text("");
+
+      $("#label").text(firstnode["label"]);          
+      $("#hostname").text(meta_data_first["description"]);          
+      $("#dj").text(meta_data_first["domain"]);
+      $("#domain").text(meta_data_first["lastlogon"]);
+      $("#local_ip").text(meta_data_first["logoncount"]);
+      $("#is_dc").text(meta_data_first["managed"]);
+      $("#os").text(meta_data_first["pwdlastset"]);
+      $("#sid").text(meta_data_first["sid"]);
+      $("#installtype").text("");
+
+      network.on("initRedraw", function () {
+        // do something like move some custom elements?
+      });
+      network.on("beforeDrawing", function (ctx) {
+        
+      });
+      network.on("afterDrawing", function (ctx) {
+        //var nodeId = 1;
+        //var nodePosition = network.getPositions([nodeId]);
+        //roundRect(ctx, nodePosition[nodeId].x-70, nodePosition[nodeId].y-70, 150, 120, 40, true);
+      });
+      network.on( 'click', function(properties) {
+        var ids = properties.nodes;
+        var clickedNodes = nodes.get(ids);
+
+//haaaaaa
+        if (clickedNodes[0]["id"] === 1) { // user selected
+          $("#title").text(clickedNodes[0]["label"])
+          get_user_analytics(clickedNodes[0]["meta"]["sid"])
+
+
+          $("#first").text("Description");
+          $("#second").text("Domain");
+          $("#third").text("Last Logon");
+          $("#fourth").text("Logon Count");
+          $("#fifth").text("Managed");
+          $("#six").text("Pwd Last Set");
+          $("#seven").text("SID");
+          $("#eight").text("");
+          var meta_data = clickedNodes[0]["meta"];
+          $("#label").text(clickedNodes[0]["label"]);          
+          $("#hostname").text(meta_data["description"]);          
+          $("#dj").text(meta_data["domain"]);
+          $("#domain").text(meta_data["lastlogon"]);
+          $("#local_ip").text(meta_data["logoncount"]);
+          $("#is_dc").text(meta_data["managed"]);
+          $("#os").text(meta_data["pwdlastset"]);
+          $("#sid").text(meta_data["sid"]);
+          $("#installtype").text("");
+        } else {
+          get_host_analytics(clickedNodes[0]["meta"]["host_id"])
+          $("#title").text(clickedNodes[0]["label"])
+          $("#first").text("HostName");
+          $("#second").text("Domain Joined");
+          $("#third").text("Domain");
+          $("#fourth").text("Local IP Address");
+          $("#fifth").text("Is a DC");
+          $("#six").text("Operating System");
+          $("#seven").text("");
+          $("#eight").text("Host Type");
+          var meta_data = clickedNodes[0]["meta"];
+          $("#label").text(clickedNodes[0]["label"]);          
+          $("#hostname").text(meta_data["hostname"]);
+          $("#dj").text(meta_data["domain_joined"]);
+          $("#domain").text(meta_data["domain"]);
+          $("#local_ip").text(meta_data["local_ip"]);
+          $("#is_dc").text(meta_data["is_dc"]);
+          $("#os").text(meta_data["os"]);
+          $("#installtype").text(meta_data["type"]);
+          $("#sid").text("");
+        }
+      });
+      network.once('stabilized', function() {
+        var scaleOption = { scale : 1.3 };
+        network.moveTo(scaleOption);
+      })
+
+
+      function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
+        if (typeof stroke == 'undefined') {
+          stroke = true;
+        }
+        if (typeof radius === 'undefined') {
+          radius = 5;
+        }
+        if (typeof radius === 'number') {
+          radius = {tl: radius, tr: radius, br: radius, bl: radius};
+        } else {
+          var defaultRadius = {tl: 0, tr: 0, br: 0, bl: 0};
+          for (var side in defaultRadius) {
+            radius[side] = radius[side] || defaultRadius[side];
+          }
+        }
+        ctx.beginPath();
+        ctx.moveTo(x + radius.tl, y);
+        ctx.lineTo(x + width - radius.tr, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius.tr);
+        ctx.lineTo(x + width, y + height - radius.br);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius.br, y + height);
+        ctx.lineTo(x + radius.bl, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius.bl);
+        ctx.lineTo(x, y + radius.tl);
+        ctx.quadraticCurveTo(x, y, x + radius.tl, y);
+        ctx.closePath();
+        if (fill) {
+          ctx.fill();
+        }
+        if (stroke) {
+          ctx.stroke();
+        }
+
+        ctx.strokeText("AAA",x,y);
+      }
+    </script>
+    <script>
+    // haaaaa
+
+    </script>
+{% endblock %}

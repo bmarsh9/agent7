@@ -1,0 +1,152 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+  {% endblock %}
+
+  {% block style %}
+    ul#myTab {
+      padding-bottom: 30px;
+    }
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+      <!-- End Navbar -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link" id="home-tab" href="{{url_for('agent_ui.panels')}}" role="tab" aria-controls="home" aria-selected="true">Agent</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" id="profile-tab" href="{{url_for('agent_ui.ad_panels')}}" role="tab" aria-controls="profile" aria-selected="false">Active Directory</a>
+          </li>
+        </ul>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-dark alert-dismissible">
+              <button type="button" class="close"  data-dismiss="alert">&times;</button>
+              <i class="tim-icons icon-light-3 text-success"></i> View any data collected from your Active Directory. You must designate an Agent as a AD Collector to collect relevant data.
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.ad_domains')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View Active Directory Domains & Domain Controllers</h1>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>Domain & DC's</h3>
+              </div></a>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.ad_ous')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Discover Organizational Units & GPO's</h1>
+                <h3 class="card-title"><i class="tim-icons icon-button-pause text-red"></i>OU's & GPO's</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.ad_groups')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View Groups</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-orange"></i>AD Group's</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.ad_computers')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Discover computers</h1>
+                <h3 class="card-title"><i class="tim-icons icon-app text-blue"></i>AD Computer's</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.ad_users')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Discover User's</h1>
+                <h3 class="card-title"><i class="tim-icons icon-compass-05 text-yellow"></i>AD User's</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('ad_ui.graph')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View Membership in graphs</h1>
+                <h3 class="card-title"><i class="tim-icons icon-molecule-40 text-teal"></i>Membership</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('ad_ui.sysvol_view')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View ACL's for files found on SYSVOL</h1>
+                <h3 class="card-title"><i class="tim-icons icon-basket-simple text-red"></i>SysVol ACL's</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.ad_spns')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View service principal names</h1>
+                <h3 class="card-title"><i class="tim-icons icon-app text-success"></i>View SPN's</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.ad_priv_users')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View all admin users</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bank text-yellow"></i>Admin Users</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('ad_ui.stale_users')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View Stale Users</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bag-16 text-teal"></i>Stale Users</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('ad_ui.stale_computers')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View Stale Computers</h1>
+                <h3 class="card-title"><i class="tim-icons icon-laptop text-blue"></i>Stale Computers</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('ad_ui.stale_groups')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View all Stale Groups</h1>
+                <h3 class="card-title"><i class="tim-icons icon-molecule-40 text-success"></i>Stale Groups</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('ad_ui.attr_viewer')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View Attributes</h1>
+                <h3 class="card-title"><i class="tim-icons icon-notes text-red"></i>Attribute Viewer</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+      </div>
+
+  {% endblock %}
+
+{% block extra_js %}
+<!-- Place Scripts here -->
+{% endblock %}

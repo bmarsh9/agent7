@@ -1,0 +1,757 @@
+from flask import Blueprint,jsonify,abort, request, url_for, render_template,redirect, session, flash, current_app,send_from_directory,send_file,g
+from app.agent import bp
+from app.agent.utils.search import add_to_index, remove_from_index, query_index
+from app.utils.auth import agent_login_required,login_required
+from app.agent.tasks import *
+import shutil,jinja2,os,subprocess,json
+from datetime import datetime,timedelta
+from random import choice
+from string import digits
+from app.models import dbUser,dbAgentInteract,dbAgentHost #dbAgent
+from app.utils.db_helper import DynamicQuery
+from app.utils.db_resolver import aid_to_hostid,hostname_to_hostid
+
+@bp.route("/api/agent/getjob", methods=["GET","POST"])
+def get_job():
+    result = DynamicQuery(
+                model="dbagentjob",
+                access_id=10,
+                limit=1
+    )
+#haaaa
+    response = result.generate()
+    if response.get("count"):
+        return jsonify(response.get("data")[0])
+    return "ok"
+
+@bp.route("/api/agent/insertjob", methods=["GET","POST"])
+def insert_job():
+    data = {
+      "jobset": [
+        {"task":"get-software","interval":180,"force":0},
+        {"task":"get-connection","interval":60,"force":0},
+        {"task":"get-session","interval":2,"force":0},
+        {"task":"get-process","interval":30,"force":0},
+        {"task":"get-service","interval":30,"force":0},
+        {"task":"get-patch","interval":180,"force":0},
+        {"task":"get-user","interval":240,"force":0,"filter":{'localaccount':False}},
+        {"task":"get-group","interval":240,"force":0,"filter":{'localaccount':False}},
+        {"task":"get-system","interval":300,"force":0},
+        {"task":"get-profile","interval":20,"force":0},
+        {"task":"get-logon","interval":20,"force":0},
+        {"task":"get-netadapter","interval":180,"force":0},
+        {"task":"get-share","interval":10,"force":0},
+        {"task":"get-startup","interval":20,"force":0},
+        {"task":"get-schtask","interval":20,"force":0},
+        {"task":"get-memory","interval":180,"force":0},
+        {"task":"get-disk","interval":180,"force":0},
+        {"task":"get-platform","interval":300,"force":0},
+      ],
+#      "update":0,
+#      "uninstall":0,
+#      "job_id":123345,
+    }
+
+    result = DynamicQuery(
+                model="dbagentjob",
+                access_id=10,
+                crud="insert",
+                data=data
+    )
+    print result.generate()
+    return "ok"
+
+@bp.route("/api/agent/data/<model>", methods=["GET","POST"])
+@login_required
+def get_agent_events(model):
+    '''
+    API for sqlalchemy database tables
+    '''
+    aid = request.args.get('aid', default = None, type = str)
+    hostname = request.args.get('hostname', default = None, type = str)
+    filter=[]
+
+    if aid:
+        id = aid_to_hostid(aid)
+    elif hostname:
+        id = hostname_to_hostid(hostname)
+
+    if aid or hostname:
+        filter = [("host_id","eq",id)]
+
+    result = DynamicQuery(
+        model=model,
+        access_id=session.get("access") or g.access,
+        request_args=request.args,
+        filter=filter,
+        qjson=request.get_json(silent=True)
+    )
+    response = result.generate()
+    return jsonify(response)
+
+@bp.route("/api/agent/health/<aid>",methods=["POST"])
+def agent_health(aid):
+    id = aid_to_hostid(aid)
+    record = request.get_json()
+    record["host_id"] = id
+    #major,minor,fix = record.get("version").split(".")
+    #record["major"] = major
+    #record["minor"] = minor
+    #record["fix"] = fix
+    result = DynamicQuery(
+        model="dbagenthealth",
+        access_id=10,
+        crud="update",
+        filter=[("host_id","eq",id)],
+        data=record
+    )
+    if result.generate().get("result") is False:
+        print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/version/<aid>")
+def get_version(aid):
+    result = DynamicQuery(
+        model="dbagent",
+        access_id=10,
+        filter=[("uuid","eq",aid)],
+    )
+    data = result.generate()
+    try:
+        return jsonify({"version":data["data"][0].version})
+    except:
+        return jsonify({"version":0})
+
+@bp.route("/api/agent/valid-cmd/rtr/<aid>",methods=["GET"])
+def rtr_valid(aid):
+    return jsonify({"commands":["ls","dir","tasklist","ps","netstat","cd","get-hash","ping","net","powershell","powershell.exe"]})
+
+# ------------ Agent Interactive
+# Add RTR commands for the agents to execute and gather the results
+@bp.route("/api/agent/rtr/<aid>",methods=["GET","POST"])
+def agent_rtr(aid):
+    if request.method == "GET": #// checking for updates
+        id = request.args.get('id', default = None, type = int)
+        p = db.session.query(dbAgentInteract).filter(dbAgentInteract.id==id).first()
+        result = DynamicQuery(
+                model="dbagentinteract",
+                access_id=10,
+                getfirst=True,
+                filter=[("id","eq",id)]
+        )
+        response = result.generate()
+        if response.get("count"):
+            r = response["data"][0]
+            return jsonify({"message":"Data returned from agent.","type":"success","id":r.id,
+                "complete":r.complete,"data":r.data,"cwd":r.cwd})
+        return jsonify({"message":"Command not complete.","type":"info","complete":0})
+    elif request.method == "POST":
+        dataset = request.get_json()
+        id = aid_to_hostid(aid)
+        if id:
+            dataset["host_id"] = id
+            result = DynamicQuery(
+                model="dbagentinteract",
+                access_id=10,
+                crud="insert",
+                data=dataset
+            )
+            response = result.generate()
+            return jsonify({"message":"Sending the command to the agent.","type":"info","id":response.get("id")})
+
+# Agent can GET interactive commands and POST data back to server
+@bp.route("/api/agent/interactive/<aid>",methods=["GET","POST"])
+def agent_interactive(aid):
+    if request.method == "GET":
+        result = DynamicQuery(
+            model="dbAgentInteract",
+            access_id=10,
+            orderby=("id","desc"),
+            getfirst=True,
+            filter=[("complete", 'eq', 0),("date_added","gt",datetime.utcnow() - timedelta(minutes=10))],
+        )
+        response = result.generate()
+        if response.get("count"):
+            return jsonify({"response":response["data"][0]})
+        return jsonify({})
+    elif request.method == "POST":
+        response = request.get_json()
+        response = response["dataset"]
+        result = DynamicQuery(
+            model="dbAgentInteract",
+            access_id=10,
+            data={"data":response["output"],"cwd":response["context"]["cwd"],"complete":1},
+            filter=[("id", 'eq',response["id"])],
+            crud="update"
+        )
+        response = result.generate()
+        return jsonify({"message":"ok"})
+
+# ------------ End Agent Interactive
+
+@bp.route("/api/agent/register/<aid>",methods=["POST"])
+def register_agent(aid):
+    registered = 0
+#haaaaa
+    #// Check if agent is registered already
+    result = DynamicQuery(model="dbagent",access_id=10,getfirst=True,filter=[("id","eq",aid)])
+    if result.generate().get("count"):
+        registered = 1
+    else:
+        #// Add Agent and AgentHost
+        data = request.get_json()
+        host = data.get("agenthost")[0]
+        data.pop("agenthost")
+        agent = data
+
+        #// Enrich data
+        agent["public_addr"] = request.remote_addr
+        major,minor,fix = agent.get("version").split(".")
+        agent["major"] = major
+        agent["minor"] = minor
+        agent["fix"] = fix
+
+        add_host = dbAgentHost(**host)
+        add_agent = dbAgent(host=[add_host], **agent)
+        db.session.add(add_agent)
+        db.session.add(add_host)
+        db.session.commit()
+        registered = 1
+
+    #// Tell agent about status
+    return jsonify({"registered":registered})
+
+@bp.route("/api/agent/collection/get-memory/<aid>",methods=["POST"])
+def get_memory(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentmemory",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-disk/<aid>",methods=["POST"])
+def get_disk(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentdisk",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-schtask/<aid>",methods=["POST"])
+def get_schtask(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentschtask",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-patch/<aid>",methods=["POST"])
+def get_patch(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentpatch",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-profile/<aid>",methods=["POST"])
+def get_profile(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentprofile",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-logon/<aid>",methods=["POST"])
+def get_logon(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentlogon",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-session/<aid>",methods=["POST"])
+def get_session(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentsession",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-connection/<aid>",methods=["POST"])
+def get_connection(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentnet",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-software/<aid>",methods=["POST"])
+def get_software(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentsoftware",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-system/<aid>",methods=["POST"])
+def get_system(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentsystem",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-share/<aid>",methods=["POST"])
+def get_share(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentshare",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-startup/<aid>",methods=["POST"])
+def get_startup(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentstartup",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-netadapter/<aid>",methods=["POST"])
+def get_netadapter(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentadapter",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-process/<aid>",methods=["POST"])
+def get_process(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentprocess",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-service/<aid>",methods=["POST"])
+def get_service(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentservice",
+            access_id=10,
+            crud="insert",
+            filter=[("host_id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-user/<aid>",methods=["POST"])
+def get_user(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentuser",
+            access_id=10,
+            crud="update",
+            filter=[("host_id","eq",id),("sid","eq",record.get("sid"))],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-group/<aid>",methods=["POST"])
+def get_group(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["host_id"] = id
+        result = DynamicQuery(
+            model="dbagentgroup",
+            access_id=10,
+            crud="update",
+            filter=[("host_id","eq",id),("sid","eq",record.get("sid"))],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/collection/get-platform/<aid>",methods=["POST"])
+def get_platform(aid):
+    id = aid_to_hostid(aid)
+    response = request.get_json()
+    for record in response.get("dataset"):
+        record["public_addr"] = request.remote_addr
+        result = DynamicQuery(
+            model="dbagenthost",
+            access_id=10,
+            crud="update",
+            filter=[("id","eq",id)],
+            data=record
+        )
+        if result.generate().get("result") is False:
+            print "insert error"
+    return jsonify({"response":1})
+
+@bp.route("/api/agent/job/<aid>",methods=["GET","POST"])
+def agent_job(aid):
+  """
+  :repeat -> how many times task is repeated
+  :interval -> time it takes to check back to server
+  """
+  if request.method == "GET":
+    response = {
+      "jobset": [
+#        {"task":"get-software","id":12345,"interval":180,"force":0}, #good
+#        {"task":"get-connection","id":12345,"interval":60,"force":0}, #good
+#        {"task":"get-session","id":12345,"interval":2,"force":0}, #good
+#        {"task":"get-process","id":12345,"interval":30,"force":0}, #good
+#        {"task":"get-service","id":12345,"interval":30,"force":0}, #good
+#        {"task":"get-patch","id":12345,"interval":180,"force":0}, #good
+#        {"task":"get-user","id":12345,"interval":240,"force":0,"filter":{'localaccount':False}}, #good
+#        {"task":"get-group","id":12345,"interval":240,"force":0,"filter":{'localaccount':False}}, #good
+#        {"task":"get-system","id":12345,"interval":300,"force":0}, #good
+#        {"task":"get-profile","id":12345,"interval":20,"force":0}, #good
+#        {"task":"get-logon","id":12345,"interval":20,"force":0}, #good
+#        {"task":"get-netadapter","id":12345,"interval":180,"force":0}, #good
+#        {"task":"get-share","id":12345,"interval":10,"force":0}, #good
+#        {"task":"get-startup","id":12345,"interval":20,"force":0}, #good
+#        {"task":"get-schtask","id":12345,"interval":20,"force":0}, #good
+#        {"task":"get-memory","id":12345,"interval":180,"force":0}, #good
+#        {"task":"get-disk","id":12345,"interval":180,"force":0}, #good
+        {"task":"get-platform","id":12345,"interval":300,"force":0}, #good
+      ],
+#haaaaa
+      "update":0,
+      "uninstall":0,
+      "signature":"a",
+      "job_id":123345,
+      "status":"inflight"
+    }
+    return jsonify(response)
+  elif request.method == "POST":
+#    print datetime.now(),response.get("task")
+    response = request.get_json()
+    task = response.get("task")
+    for record in response.get("dataset"):
+        if task == "get-platform":
+            record["public_addr"] = request.remote_addr
+        result = DynamicQuery(
+            model="dbagenthost",
+            access_id=4,
+            crud="update",
+            filter=[("hostname","eq","EC2AMAZ-AV774MG")],
+            data=record
+        )
+        print result.generate()
+#    print response.get("task")
+#    for k,v in response["dataset"][0].items():
+#        print k,v
+    return "ok"
+
+####
+@bp.route('/api/agent/registerasd', methods = ['POST','GET'])
+@login_required
+def new_agent():
+    """
+    Adding a new agent to the database
+    """
+    groupname = request.form.get('groupname','main')
+    aid = ''.join(choice(digits) for i in range(30))
+    token = ''.join(choice(digits) for i in range(30))
+
+    if aid is None or token is None:
+        return jsonify({"message":"400"})
+    if AgentId.query.filter_by(aid = aid).first() is not None:
+        return jsonify({"message":"400"})
+    if groupname is None:
+        groupname = "main"
+    agent = AgentId(aid = aid,groupname=groupname)
+    agent.hash_token(token)
+
+    # ---- Generate agent install file ----
+    #// Set Directories
+    agent_dir = app.config["AGENT_DIR"]
+    client_dir = os.path.join(agent_dir,"agentbuild","clients")
+    dir_name = os.path.join(agent_dir,"agentbuild","windows")
+    template_dir = os.path.join(agent_dir,"agentbuild","templates")
+
+    output_filename = "honeyad_agent" #// Zip filename
+
+    #// Render Agent Configuration file
+    config_file = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir+"/")).\
+        get_template("app.conf").\
+        render(server="10.5.200.82",port=5000,aid=aid,token=token)
+
+    #// Save the configuration file
+    with open(os.path.join(dir_name,"app.conf"),"w") as file:
+        config_file = config_file.encode('utf-8').strip()
+        file.write(config_file)
+
+    #// Create client certificate and move it into the zip directory
+    with open(os.devnull, "w") as f:
+        script_path = os.path.join(agent_dir,"certauth/create_certs.sh")
+        subprocess.call(["/bin/bash",script_path,"client"],stdout=f,stderr=f)
+
+    #// Zip the directory up
+    full_zipfile_path = os.path.join(client_dir,output_filename)
+    perform_zip = shutil.make_archive(full_zipfile_path, 'zip', dir_name)
+
+    #// Check if file exists, add agent and return zip file
+    if os.path.isfile(perform_zip):
+        db.session.add(agent)
+        db.session.commit()
+        return send_file(perform_zip,attachment_filename="honeyad_agent.zip",as_attachment=True)
+
+@bp.route("/api/agent/orders",methods=["GET"])
+@agent_login_required
+def agent_orders():
+    '''
+    Function for agents to retrieve their orders and for users to input new orders for the agents
+    '''
+    aid = request.headers.get("aid")
+    #// Agent calling in for their orders
+    record = AgentTask.query.filter_by(aid=aid,status="staged").first() #// grab the task for the agent
+    if record:
+        update_record = AgentTask.query.filter_by(aid = aid, id=record.id).update({"status":"grab"}) #// update the status of the record to show agent got the task
+        db.session.commit()
+        data_returned = {"tracking_id":record.tracking_id,"message":record.task,"status":"ok","taskname":record.taskname,"aid":record.aid}
+        return jsonify(data_returned)
+    return jsonify({"status":"default"}) #// no tasks, run the default taskval
+
+@bp.route("/api/agent/file/<plugin>/<filetype>/<filename>")
+@agent_login_required
+def agent_download(plugin,filetype,filename):
+    '''
+    Function for agents to download new configuration and zip files
+    '''
+    valid_plugins = ["sysmon","winlogbeat"]
+    valid_filetypes = ["exe","config"]
+    if plugin in valid_plugins and filetype in valid_filetypes:
+        grab_directory = "files/%s/%s/" % (plugin,filetype)
+        return send_from_directory(grab_directory, filename)
+    return "error"
+
+@bp.route("/api/agent/callback",methods=["POST"])
+@agent_login_required
+def agent_callback():
+    '''
+    Function for the agent to callback to and send data such as status updates and threat hunting data
+    '''
+    aid = request.headers.get("aid")
+    #// Check agent hostname, platform, and domain
+    record = AgentId.query.filter_by(aid=aid).first()
+    if record.hostname is None or record.os is None or record.domain is None:
+        AgentId.query.filter_by(aid=aid).update({"os":request.headers.get("Platform"),
+            "hostname":request.headers.get("Hostname"),"domain":request.headers.get("Fqdn")})
+        db.session.commit()
+
+    response = request.get_json()
+    if response:
+        tracking_id = response["tracking_id"]
+        if tracking_id == 100: #// default task
+            sysmon_status = "Not Running"
+            winlogbeat_status = "Not Running"
+            if response["message"]["sysmon"] is True:
+                sysmon_status = "Running"
+            if response["message"]["winlogbeat"] is True:
+                winlogbeat_status = "Running"
+            update_record = AgentId.query.filter_by(aid = aid).update({"sysmon_status":sysmon_status,
+                "winlogbeat_status":winlogbeat_status}) #// update the status of the record to show agent got the task
+            db.session.commit()
+        else: #// Update the tracking number and capture the data
+            update_record = AgentTask.query.filter_by(tracking_id=tracking_id).update({"status":"complete"}) #// update the status of the record to show agent completed the task
+            db.session.commit()
+            #// Post data to ES
+            if response.get('message', {}).get('threathunt', None):
+                es_wmi_index = app.config["ELASTICSEARCH_WMI"]
+                for data in response["message"]["threathunt"]:
+                    for key, value in data.items():
+                        response = ElasticsearchModel(es_wmi_index,"_doc").add_to_index(value)
+#                        for record in value:
+#                            try:
+#                                add_to_index(es_wmi_index, record)
+#                            except Exception as e:
+#                                print e
+    return jsonify({"task":"got it","message":"Ok","status":200})
+
+@bp.route("/api/agent/wmi",methods=["GET","POST"])
+#@login_required
+def wmi_returner():
+    aid = request.args.get('aid', default = "*", type = str)
+    taskname = request.args.get('taskname', default = "*", type = str)
+    subcategory = request.args.get('subcategory', default = "*", type = str)
+    size = request.args.get('size', default = 10, type = int)
+    query_string = request.args.get('query_string', default = "*", type = str) #// returns a different view of the data
+    start = request.args.get('start', default = str(), type = str)
+    end = request.args.get('end', default = str(), type = str)
+    fields = request.args.get('fields', default = ["*"], type = str)
+    agg_field = request.args.get('agg_field', default = str(), type = str)
+    view = request.args.get('view', default = "default", type = str) #// returns a different view of the data
+    graph_format = request.args.get('graph_format', default = "datatables", type = str) #// returns the data in a way that can be read by the graph library (datatables,chartjs)
+
+    if "*" not in fields:
+        try:
+            fields = fields.split(",")
+        except:
+            fields = ["*"]
+
+    wmi_subcategories = {
+        'win32_computersystem': win32_computersystem,
+        'win32_useraccount': win32_useraccount,
+        'win32_quickfixengineering': win32_quickfixengineering,
+        'win32_group': win32_group,
+        'win32_service': win32_service,
+        'win32_loggedonuser': win32_loggedonuser,
+        'win32_process': win32_process,
+        'win32_startupcommand': win32_startupcommand,
+        'win32_share': win32_share,
+        'win32_networkadapterconfiguration': win32_networkadapterconfiguration,
+        'win32_networkloginprofile': win32_networkloginprofile
+    }
+
+    data = []
+    if not subcategory or subcategory == "all": # return all data
+        for subcategory in wmi_subcategories:
+            data.append(wmi_subcategories[subcategory](aid=aid,agent_taskname=taskname,
+                query_string=query_string,start=start,end=end,size=size,view=view,fields=fields,agg_field=agg_field))
+    elif subcategory not in wmi_subcategories:
+        return jsonify({"message":"invalid subcategory"})
+    else:
+        data.append(wmi_subcategories[subcategory](aid=aid,agent_taskname=taskname,
+            query_string=query_string,start=start,end=end,size=size,view=view,fields=fields,agg_field=agg_field))
+    return jsonify(data)

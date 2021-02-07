@@ -1,0 +1,196 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True,counter=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block style %}
+    {{super()}}
+  {% endblock %}
+
+  {% block body %}
+      <div class="row">
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">total open insights</h1>
+                <h4 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>Open Insights</h4>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter" class="text-large" style="font-size:2.5rem;"></h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">total closed insights</h1>
+                <h4 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>Closed Insights</h4>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter2" class="text-large" style="font-size:2.5rem;"></h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">total critical & high insights</h1>
+                <h4 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>High Risk</h4>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter3" class="text-large" style="font-size:2.5rem;"></h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">number of easy fixes</h1>
+                <h4 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Easy Fixes</h4>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter4" class="text-large" style="font-size:2.5rem;"></h1>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-8">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Open Insights by name</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Top Insights</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Open Insights by severity</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Insight Severity</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Open Insights</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Open Insights grouped by count</h5>
+                <button type="button" style="float:right;display:inline-block;" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title="" data-toggle="modal" data-target="#helpModal">
+                            <i class="tim-icons icon-bulb-63"></i>
+                </button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Open Insights by module</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Module</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Open Insights by category</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Category</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart4"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        var table2 = cjs_init(
+            selector="chart",
+            url="/api/agent/data/insight?as_chartjs=true&groupby=name,count&limit=5&filter=status,eq,open",
+            type="horizontalBar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Insight Name", // header of graph
+        );
+        var table2 = cjs_init(
+            selector="chart2",
+            url="/api/agent/data/insight?as_chartjs=true&groupby=severity_label,count&filter=status,eq,open",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Severity", // header of graph
+        );
+        var table2 = cjs_init(
+            selector="chart3",
+            url="/api/agent/data/insight?as_chartjs=true&groupby=module,count&filter=status,eq,open",
+            type="bar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Module", // header of graph
+        );
+        var table2 = cjs_init(
+            selector="chart4",
+            url="/api/agent/data/insight?as_chartjs=true&groupby=category,count&filter=status,eq,open",
+            type="bar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Category", // header of graph
+        );
+        var up = update_init(
+            selector="#statistic-counter",
+            url="/api/agent/data/insight?getcount=true&filter=status,eq,open",
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter2",
+            url="/api/agent/data/insight?getcount=true&filter=status,eq,closed",
+            animate=1 // animate the increment
+        );  
+        var up = update_init(
+            selector="#statistic-counter3",
+            url="/api/agent/data/insight?getcount=true&filter=severity,ge,8",
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter4",
+            url="/api/agent/data/insight?getcount=true&filter=severity,ge,7;ease,ge,6",
+            animate=1 // animate the increment
+        );
+        var table = dt_init(
+            selector="#example", // table id selector
+            url="/api/agent/data/insight?as_datatables=true&groupby=name,count;severity,group;ease,group;affected_assets,group&filter=status,eq,open&limit=100",
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+    });
+  </script>
+  {%endblock%}

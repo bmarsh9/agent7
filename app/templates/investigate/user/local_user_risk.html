@@ -1,0 +1,57 @@
+{% extends "investigate/user/investigate_user_template.html" %}
+
+
+  {%block risk_active%}
+    active
+  {%endblock%}
+
+  {% block tab_data %}
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Password Age</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Password Age</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Logon Outside of work hours</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Logon Outside of Work Hours</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {% endblock %}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        var table2 = cjs_init(
+            selector="chart",
+            url="/api/agent/data/agentuser?as_chartjs=true&groupby=password_age,count&filter=sid,eq,{{user.sid}}",
+            type="horizontalBar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table2 = cjs_init(
+            selector="chart2",
+            url="/api/agent/data/agentlogon?as_chartjs=true&groupby=logontype,count&filter=sid,eq,{{user.sid}};logontime,gt,19",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+    });
+  </script>
+  {%endblock%}

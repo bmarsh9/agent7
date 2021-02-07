@@ -1,0 +1,60 @@
+{% extends "template.html" %}
+
+  {% block head %}
+  {{ super() }}
+
+  {% endblock %}
+
+  {% block style %}
+    {{ super() }}
+
+    button.btn.btn-primary.btn-xs {
+      padding: 10px;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+      <!-- End Navbar -->
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Interact with Agents in real time</h1>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> Agent Console</h3>                
+              </div>
+
+              <form class="form-inline" style="padding:10px" method="GET" action="{{url_for('agent_ui.rtr_shell')}}">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="agent" placeholder="Enter Agent ID">
+                </div>
+                <button type="submit" class="btn btn-primary btn-simple btn-xs">Connect</button>
+              </form>
+
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.rtr_campaign')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Run commands on groups of endpoints</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bank text-purple"></i> Agent Campaigns</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.rtr_audit')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View and Audit sessions</h1>
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-teal"></i> Review Sessions</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+      </div>
+  {% endblock %}
+
+{% block extra_js %}
+<!-- Place Scripts here -->
+{% endblock %}

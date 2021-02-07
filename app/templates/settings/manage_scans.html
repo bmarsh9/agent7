@@ -1,0 +1,299 @@
+{% extends "settings/setting_template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True) }}
+    <script src="{{url_for('static',filename='assets/js/ajax_template.js')}}"></script>
+    <script src="{{url_for('static',filename='assets/js/ajax_send.js')}}"></script>
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block style %}
+    {{ super() }}
+
+    div#checks {
+      padding-bottom: 20px;
+    }
+    th {
+      color: white !important;
+    }
+  {% endblock %}  
+
+  {% block scans_active %}
+      active
+  {% endblock %}
+  {% block tab_data %}
+      <div class="row">
+          <div class="col-md-7">
+            <div class="card">
+              <div class="card-header">
+                <h3 style="float:left;" class="title">Create New Scan</h3>
+                <button style="margin-left:20px;" type="button" class="btn btn-simple btn-sm text-warning" data-toggle="modal" data-target="#exampleModal">
+                  Help
+                </button>
+
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.manage_scans')}}" method="POST">
+                  <div id="checks" class="row">
+                    <div class="col-md-8 pr-md-1">
+                      <div class="form-group">
+                        <label>Scan Start Time (year-month-day hour)</label>
+                        <input id="start_time" placeholder="Default is immediate. Ex. 2020-05-02 16" type="text" class="form-control" name="start_time">
+                      </div>
+                    </div>
+                    <div class="col-md-12 pr-md-1">
+                      <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="once" checked>Run Once
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="daily">Run daily
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="weekly">Run weekly
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="monthly">Run monthly
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="checks" class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="down_hosts">Include offline hosts
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="tcp_ports">Scan All TCP Ports
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="udp_ports">Scan All UDP Ports
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="extra_version">Intense version detection
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="checks" class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="vuln_scan">Scan for Vulnerabilities
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="scripts">Rigorous Detection
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 pl-md-1">
+                      <div class="form-check">
+                        <label class="form-check-label">
+                        <input class="form-check-input" type="checkbox" name="find_os" checked>OS Detection
+                          <span class="form-check-sign">
+                            <span class="check"></span>
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-10 pr-md-1">
+                      <div class="form-group">
+                        <label for="included_hosts">Hosts included in the scan</label>
+                        <textarea name="include" style="border-bottom:1px solid #00f2c3" class="form-control" id="included_hosts" placeholder="Insert hosts separated by commas. Example: 10.100.1.10,10.100.2.0/24,example.com " rows="10" required></textarea>
+                      </div>
+                    </div>
+                  </div>                  
+                  <div class="row">
+                    <div class="col-md-10 pr-md-1">
+                      <div class="form-group">
+                        <label for="excluded_hosts">Hosts excluded from the scan</label>
+                        <textarea name="exclude" style="border-bottom:1px solid red" class="form-control" id="excluded_hosts" placeholder="Insert hosts separated by commas. Example: 10.100.2.10" rows="10"></textarea>
+                      </div>
+                    </div>
+                  </div>                  
+                  <div class="card-footer">
+                    <div>
+                      <button type="submit" class="btn btn-fill btn-simple btn-sm text-success" id="submit">Create</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Scheduled Scans</h3>
+              </div>
+              <div class="card-body">
+                <table class="table">
+                  <thead class="thead">
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Created</th>
+                      <th scope="col">Interval</th>
+                      <th scope="col">Repeat</th>
+                      <th scope="col">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for scan in scheduled_scans %}
+                      {% if "scan" in scan["description"] %}
+                        <tr>
+                          <th scope="row">{{scan["_id"]}}</th>
+                          <td>{{scan["created_at"]}}</td>      
+                          <td>{{scan["meta"]}}</td>      
+                          <td>{{scan["meta"]["repeat"]}}</td>      
+                          <td style="word-break:break-all">{{scan["description"]}}</td>      
+                        </tr>
+                      {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!--  Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLabel">How's this work?</h3>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div style="color:white" class="modal-body">
+                  <div class="card">
+                    <div class="card-body">
+                      <p>{{ user_manager.USER_APP_NAME|upper  }} can perform automatic, frequent (daily,weekly,monthly) and non-disruptive scanning of your external assets.</p>
+                      <br>
+                      <p>Just insert network blocks, IP's and hostnames and the system will start scanning the assets on a chosen schedule.</p>
+                      <br>
+                      <p>Due to the fact that the duration of a scan is highly dependent on the amount of discoverables, it is difficult to estimate the overall time to complete a scan. </p>
+                      <br>
+                      <div class="">
+                        <h4 class="text-blue">Average Scan Duration</h4>
+                          <ol>
+                            <li>Anywhere from 25-60 seconds for a online host</li>
+                            <li>About 1-2 seconds for a offline host</li>
+                            <li>For 10 hosts, expect the scan to complete in 5-10 minutes.</li>
+                          </ol>
+                      </div>
+                      <br>
+                      <div class="">
+                        <h4 class="text-blue">Data Collected</h4>
+                          <ol>
+                            <li>Online and Offline hosts</li>
+                            <li>Open/Closed Ports (all TCP ports by default)</li>
+                            <li>Services, version numbers, banners and headers</li>
+                            <li>Operating System fingerprinting</li>
+                          </ol>
+                      </div>
+                      <br>
+                      <div class="">
+                        <h4 class="text-blue">What it DOES NOT do...</h4>
+                          <ol>
+                            <li>Attempt to exploit any vulnerabilities</li>
+                            <li>Attempt to overwhelm the host</li>
+                            <li>Hosts that have a high memory/cpu utilization may be negatively affected. If you are worried, you can exclude the host.</li>
+                          </ol>
+                      </div>
+                      <p class="text-warning">IMPORTANT: It is illegal to scan assets that you do not own or have written permission. We are not responsible for scanning assets that you do not own.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Cancel Scan</h5>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.cancel_scan')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-6 pr-md-1">
+                      <div class="form-group">
+                        <label>Scan ID</label>
+                        <input type="text" class="form-control" placeholder="Input scan ID to cancel. Found under the 'Scheduled Scans' section above." name="scan_id">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-fill btn-simple btn-sm text-warning" id="submit">Cancel</button>
+                  </div>
+                </form>
+              </div>   
+            </div>
+          </div>
+        </div> 
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}
+

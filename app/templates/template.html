@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/skywalker.png') }}">
+
+  <title>{{ user_manager.USER_APP_NAME|upper }} </title>
+
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/nucleo-icons.css') }}">
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/black-dashboard.min.css') }}">
+
+  {% block head %}{% endblock %}
+
+  <style>
+    {% block style %}
+        .table {
+          border: transparent;
+        }
+    {% endblock %}
+  </style>
+
+</head>
+
+<body id="entire-body" class="sidebar-mini">
+  <div class="wrapper">
+    {% block sidebar %}
+    <div class="sidebar" data="yellow">
+      <div class="sidebar-wrapper">
+        <div class="logo">
+          <a href="javascript:void(0)" class="simple-text logo-mini">
+            A7
+          </a>
+          <a href="javascript:void(0)" class="simple-text logo-normal">
+            {{ user_manager.USER_APP_NAME|upper }}
+          </a>
+        </div>
+         <ul class="nav">
+           {% block nav %}
+             <li class=""><a href="{{url_for('main_ui.dashboard')}}"><i class="tim-icons icon-chart-pie-36"></i><p>Dashboard</p></a></li>
+             <li class=""><a href="{{url_for('main_ui.insight')}}"><i class="tim-icons icon-atom"></i><p>Insight</p></a></li>
+             <li class=""><a href="{{url_for('agent_ui.panels')}}"><i class="tim-icons icon-chart-bar-32"></i><p>Panels</p></a></li>
+             <li class=""><a href="{{url_for('main_ui.investigate')}}"><i class="tim-icons icon-light-3"></i><p>Investigate</p></a></li>
+             <li class=""><a href="{{url_for('agent_ui.agents')}}"><i class="tim-icons icon-spaceship"></i><p>Agents</p></a></li>
+             <li class=""><a href="{{url_for('agent_ui.rtr_home')}}"><i class="tim-icons icon-controller"></i><p>Agent Console</p></a></li>
+             <li class=""><a href="{{url_for('main_ui.configuration')}}"><i class="tim-icons icon-settings"></i><p>Settings</p></a></li>
+           {% endblock %}
+         </ul>
+      </div>
+    </div>
+    {% endblock %}
+    <div class="main-panel">
+      <!-- Navbar -->
+      <nav style="background:#45484b !important" class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+        <div class="container-fluid">
+
+          <div class="navbar-header">
+            <a class="navbar-brand text-white" href="{{url_for('main_ui.dashboard')}}">{{ user_manager.USER_APP_NAME|upper }}</a>
+          </div>
+          <div class="collapse navbar-collapse" id="navigation">
+            <ul class="navbar-nav ml-auto">
+              {% block header %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main_ui.manage_users',id=current_user.id) }}">{{ current_user.username or current_user.email }}</a>
+              </li>
+              <li class="dropdown nav-item">
+                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                  <b class="caret d-none d-lg-block d-xl-block"></b>
+                  <p class="d-lg-none">
+                    Log out
+                  </p>
+                </a>
+                <ul class="dropdown-menu dropdown-navbar">
+                  <li class="nav-link">
+                    <a href="{{ url_for('main_ui.manage_users',id=current_user.id) }}" class="nav-item dropdown-item">Edit</a>
+                  </li>
+                  <li class="dropdown-divider"></li>
+                  <li class="nav-link">
+                    <a href="{{ url_for('user.logout') }}" class="nav-item dropdown-item">Log out</a>
+                  </li>
+                </ul>
+              </li>
+              {% endblock %}
+              <li class="separator d-lg-none"></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Navbar -->
+      <div class="content">
+        <div>
+        {# One-time system messages called Flash messages #}
+        {% block flash_messages %}
+            {%- with messages = get_flashed_messages(with_categories=true) -%}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if not category %}
+                            {% set category='info' %}
+                        {% elif category == 'error' %}
+                            {% set category='warning' %}                        
+                        {% endif %}
+                        <div class="alert alert-{{category}} alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>{{category|upper}}!</strong> {{ message|safe }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {%- endwith %}
+        {% endblock %}
+        </div>
+        {% block body %}{% endblock %}
+      </div>
+      <footer class="footer">
+        <div class="container-fluid">
+          <ul class="nav">
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                {{ user_manager.USER_APP_NAME|upper }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link">
+                About Us
+              </a>
+            </li>
+          </ul>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+<!-- Modal -->
+  <!--   Core JS Files   -->
+  <script src="{{ url_for('static', filename='assets/js/core/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/core/popper.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js') }}"></script>
+<!--  <script src="{{ url_for('static', filename='assets/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> -->
+  <script src="{{ url_for('static', filename='assets/js/plugins/chartjs.min.js') }}"></script>
+
+  <script src="{{ url_for('static', filename='assets/js/plugins/chartjs-plugin-colorschemes.js') }}"></script>
+
+  <!--  Notifications Plugin    -->
+  <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap-notify.js') }}"></script>
+
+  <!-- Control Center for Black Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{{ url_for('static', filename='assets/js/black-dashboard.min.js') }}"></script>
+
+  <script>
+    $(document).ready(function() {
+      $().ready(function() {
+        $sidebar = $('.sidebar');
+        $navbar = $('.navbar');
+        $main_panel = $('.main-panel');
+
+        $full_page = $('.full-page');
+
+        $sidebar_responsive = $('body > .navbar-collapse');
+        sidebar_mini_active = true;
+        white_color = false;
+
+        window_width = $(window).width();
+
+        fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+
+        $('.fixed-plugin a').click(function(event) {
+          if ($(this).hasClass('switch-trigger')) {
+            if (event.stopPropagation) {
+              event.stopPropagation();
+            } else if (window.event) {
+              window.event.cancelBubble = true;
+            }
+          }
+        });
+
+        $('.fixed-plugin .background-color span').click(function() {
+          $(this).siblings().removeClass('active');
+          $(this).addClass('active');
+
+          var new_color = $(this).data('color');
+
+          if ($sidebar.length != 0) {
+            $sidebar.attr('data', new_color);
+          }
+
+          if ($main_panel.length != 0) {
+            $main_panel.attr('data', new_color);
+          }
+
+          if ($full_page.length != 0) {
+            $full_page.attr('filter-color', new_color);
+          }
+
+          if ($sidebar_responsive.length != 0) {
+            $sidebar_responsive.attr('data', new_color);
+          }
+        });
+
+        $('.switch-sidebar-mini input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (sidebar_mini_active == true) {
+            $('body').removeClass('sidebar-mini');
+            sidebar_mini_active = false;
+          } else {
+            $('body').addClass('sidebar-mini');
+            sidebar_mini_active = true;
+          }
+
+          // we simulate the window Resize so the charts will get updated in realtime.
+          var simulateWindowResize = setInterval(function() {
+            window.dispatchEvent(new Event('resize'));
+          }, 180);
+
+          // we stop the simulation of Window Resize after the animations are completed
+          setTimeout(function() {
+            clearInterval(simulateWindowResize);
+          }, 1000);
+        });
+
+        $('.switch-change-color input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (white_color == true) {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').removeClass('white-content');
+            }, 900);
+            white_color = false;
+          } else {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').addClass('white-content');
+            }, 900);
+
+            white_color = true;
+          }
+
+
+        });
+
+        $('.light-badge').click(function() {
+          $('body').addClass('white-content');
+        });
+
+        $('.dark-badge').click(function() {
+          $('body').removeClass('white-content');
+        });
+      });
+    });
+  </script>
+  {% block extra_js %}{% endblock %}
+
+
+</body>
+
+</html>

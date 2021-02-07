@@ -1,0 +1,186 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+
+    <script src="{{url_for('static',filename='assets/js/datatables_template.js')}}"></script>
+    <script src="{{url_for('static',filename='assets/js/chartjs_template.js')}}"></script>
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block style %}
+    {{ super() }}
+    .col-md-3.col-sm-4 {
+      display: contents;
+    }
+  {% endblock %}
+
+  {% block body %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <form action="{{url_for('main_ui.insight')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-1 pr-md-1">
+                      <select name="status" style="font-size:12px" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                        <option value="{{status}}" selected>Status...</option>
+                        <option value="open">Open</option>
+                        <option value="in progress">In Progress</option>
+                        <option value="closed">Closed</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 pr-md-1">
+                      <select name="category" style="font-size:12px" class="custom-select mr-sm-2" id="inlineFormCustomSelect">
+                        <option value="{{category}}" selected>Category...</option>
+                        <option value="hardening">Hardening</option>
+                        <option value="availability">Availability</option>
+                        <option value="anomaly">Anomaly</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 pr-md-1">
+                      <input name="severity" value="{{severity}}" class="form-control" type="number" placeholder="Insert min severity">
+                    </div>
+                    <div class="col-md-2 pr-md-1">
+                      <input name="ease" value="{{ease}}" class="form-control" type="number" placeholder="Insert min ease">
+                    </div>
+                    <div class="col-md-2 pr-md-1">
+                      <input name="confidence" value="{{confidence}}" class="form-control" type="number" placeholder="Insert min confidence">
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <button type="submit" class="btn btn-simple btn-sm text-teal">Filter</button>
+                      <a class="btn btn-simple btn-sm text-warning" href="{{url_for('main_ui.insight')}}" role="button">Reset Filters</a>
+                      <a class="btn btn-simple btn-sm text-green" href="{{url_for('main_ui.insight_stats')}}" role="button">Stats</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div style="margin-top:-20px;margin-bottom:10px;" class="col-12">
+            {% if status and status != "None" %}
+              <span class="badge badge-pill badge-default">Status: {{status}}</span>
+            {% endif %}
+            {% if category and category != "None" %}
+              <span class="badge badge-pill badge-default">Category: {{category}}</span>
+            {% endif %}
+            {% if severity %}
+              <span class="badge badge-pill badge-default">Severity: {{severity}}</span>
+            {% endif %}
+            {% if ease %}
+              <span class="badge badge-pill badge-default">Ease: {{ease}}</span>
+            {% endif %}
+            {% if confidence %}
+              <span class="badge badge-pill badge-default">Confidence: {{confidence}}</span>
+            {% endif %}
+          </div>
+        </div>
+    {% for insight in insights %}
+
+      {% if insight["severity"] <= 4 %}
+        {% set color="#5e72e4" %}
+      {% elif insight["severity"] <= 4 %}
+        {% set color="#2dce89" %}
+      {% elif insight["severity"] < 7 %}
+        {% set color = "#ffd600" %}
+      {% elif insight["severity"] < 9 %}
+        {% set color = "#fb6340" %}
+      {% else %}
+        {% set color = "#f5365c" %}
+      {% endif %}
+      <div class="row">
+        <div class="col-auto text-center flex-column d-none d-sm-flex">
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+            <h5 class="m-2">
+                <span class="badge badge-pill bg-success">&nbsp;</span>
+            </h5>
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-success shadow">
+                <div style="border-left:10px solid {{color}}"class="card-body">
+                    <div class="float-right text-white">{{insight["date_added"]}}</div>
+                    <span style="font-size:18px;float:left;margin-top:3px;color:{{color}}" class="badge badge-pill">{{insight["severity"]}}</span>
+
+                    <h4 class="card-title text-white">{{insight["name"]}}</h4>
+
+                    <div class="col-md-3 col-sm-4">
+                      <i style="font-size:10px" class="btn btn-simple btn-sm text-teal">Ease:{{insight["ease"]}}</i>
+                    </div>
+                    <div class="col-md-3 col-sm-4">
+                      <i style="font-size:10px" class="btn btn-simple btn-sm text-teal">Confidence:{{insight["confidence"]}}</i>
+                    </div>
+                    <div class="col-md-3 col-sm-4">
+                      <i style="font-size:10px" class="btn btn-simple btn-sm text-teal">{{insight["category"]}}</i>
+                    </div>
+                    <br>
+                    <button class="btn btn-sm btn-simple text-teal" type="button" data-target="#t{{loop.index}}_details" data-toggle="collapse">Preview ▼</button>
+                    <button data-id={{insight["id"]}} class="btn btn-sm btn-simple text-warning" style="float:right" type="button" data-toggle="modal" data-target="#exampleModal">Close</button>
+                    <a class="btn btn-sm btn-simple text-teal" href="{{url_for('main_ui.view_insight',id=insight['id'])}}" style="float:right" type="button">View Details</a>
+
+                    <div class="collapse border" id="t{{loop.index}}_details">
+                        <div style="color:white" class="p-2 text-monospace">
+                            <div>Name: {{insight["name"]}}</div>
+                            <div>Description: {{insight["description"]}}</div>
+                            <div>Solution: {{insight["solution"]}}</div>
+                            <div>Severity: {{insight["severity"]}}</div>
+                            <div>Remediation Ease: {{insight["ease"]}}</div>
+                            <div>Confidence: {{insight["confidence"]}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    {% endfor %}
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Please confirm</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-white">
+            Are you sure you want to close this Insight?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+            <form method="POST" action="{{url_for('main_ui.close_insight')}}">
+              <button id="insight_id" name="insight_id" value="" type="submit" class="btn btn-warning btn-sm">Confirm</button>
+            <form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {%endblock%}
+
+  {% block extra_js%}
+    <script>
+      // add insight ID to the modal
+      $('.modal').on('show.bs.modal', function (e) {
+        var $btn_id = $(e.relatedTarget).data('id');
+        $("#insight_id").attr("value",$btn_id);
+      });
+    </script>
+  {%endblock%}
+

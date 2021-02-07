@@ -1,0 +1,24 @@
+# place in /etc/systemd/system/
+# must have uwsgi: pip3 install uwsgi
+# systemctl enable agent7_uwsgi.service
+# systemctl start agent7_uwsgi
+
+[Unit]
+Description = agent7 console
+After = network.target
+After = systemd-user-sessions.service
+After = network-online.target
+
+[Service]
+User = root
+ExecStart = /usr/local/bin/uwsgi --ini /agent7/start.ini --uid root --gid root
+WorkingDirectory = </path/to/app/home>
+TimeoutSec = 30
+Restart = on-failure
+RestartSec = 30
+StartLimitInterval = 350
+StartLimitBurst = 10
+
+[Install]
+WantedBy = multi-user.target
+

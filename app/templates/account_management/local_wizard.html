@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/ww_main_icononly.png') }}">
+
+  <title>{{ user_manager.USER_APP_NAME|upper }} </title>
+
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/nucleo-icons.css') }}">
+
+	<link href="{{ url_for('static', filename='assets/css/wizard/themify-icons.css') }}" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+        <link href="https://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css" rel="stylesheet"> 
+
+  <!-- CSS Files -->
+        <link href="{{ url_for('static', filename='assets/css/wizard/bootstrap.min.css') }}" rel="stylesheet" /> 
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/black-dashboard.min.css') }}">
+        <link href="{{ url_for('static', filename='assets/css/wizard/paper-bootstrap-wizard.css') }}" rel="stylesheet" />
+
+<style>
+    .card label  {
+      font-size: 1.3rem;
+      color: #565656;
+    }
+    .form-control {
+      color: #565656 !important;
+    }
+</style>
+</head>
+<body>
+    <div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+        <div class="container-fluid">
+
+          <!-- disable button for nav expand/shrink
+          <div class="navbar-minimize">
+            <div class="navbar-toggle d-inline">
+              <button id="minimizeSidebar" class="btn btn-default btn-fill btn-round btn-icon">
+                <i class="fa fa-ellipsis-v visible-on-sidebar-regular"></i>
+                <i class="fa fa-ellipsis-v visible-on-sidebar-mini"></i>
+              </button>
+            </div>
+          </div>
+          -->
+
+          <div class="navbar-header">
+            <a class="navbar-brand" style="margin-left:15px" href="{{url_for('main_ui.dashboard')}}"><img src="{{url_for('static', filename='assets/img/2_ww_pam_plus_trans.png')}}" height="35"></a>
+          </div>
+          <div class="collapse navbar-collapse" id="navigation">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('main_ui.manage_users',id=current_user.id) }}">{{ current_user.username or current_user.email }}</a>
+              </li>
+              <li class="separator d-lg-none"></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+
+
+	    <div class="container">
+	        <div class="row">
+		        <div class="col-sm-8 col-sm-offset-2">
+
+		            <!--      Wizard container        -->
+		            <div class="wizard-container">
+		                <div class="card wizard-card" data-color="red" id="wizard">
+		                <form action="{{url_for('main_ui.adv_ob_local_validate')}}" method="POST">
+		                    	<div class="wizard-header">
+		                        	<h3 style="color:#565656">Workflow for Local Accounts</h3>
+		                        	<p class="category">This wizard will allow you to easily create onboarding workflows.</p>
+		                    	</div>
+								<div class="wizard-navigation">
+									<div class="progress-with-circle">
+									    <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="4" style="width: 15%;"></div>
+									</div>
+									<ul>
+			                            <li>
+											<a href="#location" data-toggle="tab">
+												<div class="icon-circle">
+													<i class="ti-map"></i>
+												</div>
+												WorkFlow
+											</a>
+										</li>
+			                            <li>
+											<a href="#facilities" data-toggle="tab">
+												<div class="icon-circle">
+													<i class="ti-panel"></i>
+												</div>
+												Settings
+											</a>
+										</li>
+			                            <li>
+											<a href="#description" data-toggle="tab">
+												<div class="icon-circle">
+													<i class="ti-thumb-up"></i>
+												</div>
+												Validate
+											</a>
+										</li>
+			                        </ul>
+								</div>
+		                        <div class="tab-content">
+		                            <div class="tab-pane" id="location">
+		                            	<div class="row">
+		                                	<div class="col-sm-12">
+		                                    	<h5 style="color:#565656" class="info-text"> Let's set up some target filters.</h5>
+		                            		</div>
+		                                	<div class="col-sm-5 col-sm-offset-1">
+		                                    	<div class="form-group">
+		                                        	<label>Rule Name</label>
+		                                        	<input name="name" type="text" class="form-control" id="name" placeholder="Enter a name for the Rule" required>
+		                                    	</div>
+		                                	</div>
+		                                	<div class="col-sm-5">
+		                                    	<div class="form-group">
+		                                        	<label>Filter by Username</label>
+		                                        	<input name="username" type="text" class="form-control" id="username" placeholder="Example: adm-*">
+		                                    	</div>
+		                                	</div>
+		                                	<div class="col-sm-5 col-sm-offset-1">
+		                                    	<div class="form-group">
+		                                        	<label>Filter by Hostname</label>
+		                                        	<input name="hostname" type="text" class="form-control" id="hostname" placeholder="Example: server-*">
+              	                                    	</div>
+		                                	</div>
+		                                	<div class="col-sm-5">
+		                                    	<div class="form-group">
+		                                        	<label>Filter by System Type</label>
+		                                        	<select name="ostype" class="form-control">
+			                                            <option selected="" value="">- Both -</option>
+			                                            <option value="server">Server only </option>
+			                                            <option value="client">Workstation only</option>
+		                                        	</select>
+              	                                    	</div>
+		                                	</div>
+		                            	</div>
+		                            </div>
+		                            <div class="tab-pane" id="facilities">
+		                                <h5 style="color:#565656" class="info-text">Configure additional settings for the workflow. </h5>
+		                                <div class="row">
+		                                    <div class="col-sm-5 col-sm-offset-1">
+		                                    	<div class="form-group">
+		                                        	<label>Account must be built-in Admin (RID 500)</label>
+		                                        	<select name="builtin" class="form-control">
+			                                            <option selected="" value="false">- No -</option>
+			                                            <option value="true">Yes </option>
+		                                        	</select>
+		                                    	</div>
+		                                    </div>
+		                                    <div class="col-sm-5">
+		                                    	<div class="form-group">
+		                                        	<label>Privileged Account Only</label>
+		                                        	<select name="priv" class="form-control">
+			                                            <option selected="" value="true">- Yes -</option>
+			                                            <option value="false">No </option>
+		                                        	</select>
+		                                    	</div>
+		                                    </div>
+		                                    <div class="col-sm-5 col-sm-offset-1">
+		                                    	<div class="form-group">
+		                                        	<label>Add to a Vault? <a href="{{url_for('main_ui.vaults')}}">Create</a></label>
+		                                        	<select name="vault" class="form-control">
+                                                                  {% if vaults %}
+                                                                    <option value="None"> - No - </option>
+                                                                    {% for vault in vaults %}
+                                                                      <option value="{{vault.id}}">{{vault.name}}</option>
+                                                                    {% endfor %}
+                                                                  {% else %}
+                                                                    <option value="">- Please create one. -</option>
+                                                                  {% endif %}
+		                                        	</select>
+		                                    	</div>
+		                                    </div>
+                                                    <div class="col-sm-5">
+                                                        <div class="form-group">
+                                                                <label>Password Length</label>
+                                                                <select name="length" class="form-control">
+                                                                    <option selected="" value="20">- 20 char -</option>
+                                                                    <option value="16">16 char</option>
+                                                                    <option value="30">30 char </option>
+                                                                </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-5 col-sm-offset-1">
+                                                        <div class="form-group">
+                                                                <label>Rotate Every</label>
+                                                                <select name="rotate" class="form-control">
+                                                                    <option selected="" value="60">- 60 days -</option>
+                                                                    <option value="30">30 days</option>
+                                                                    <option value="90">90 days </option>
+                                                                </select>
+                                                        </div>
+                                                    </div>
+		                                </div>
+		                            </div>
+		                            <div class="tab-pane" id="description">
+     		                                <h5 style="color:#565656" class="info-text">Validate your Workflow & See the Preview</h5>
+		                        	<p style="margin-top:-20px" class="category">Note: Finalizing your Workflow will NOT save the rule.</p><br>
+		                                <div class="row">
+                                                    <div class="col-sm-5 col-sm-offset-1">
+                                                        <div class="form-group">
+                                                                <label>How Often should we run this rule?</label>
+                                                                <select name="interval" class="form-control">
+                                                                    <option selected="" value="3600">- Every Hour -</option>
+                                                                    <option value="86400">Once per Day </option>
+                                                                </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-5">
+                                                        <div class="form-group">
+                                                                <label>Only run this rule once?</label>
+                                                                <select name="runonce" class="form-control">
+                                                                    <option selected="" value="true">- Once -</option>
+                                                                    <option value="false">Continuous</option>
+                                                                </select>
+                                                        </div>
+                                                    </div>
+		                                </div>
+		                            </div>
+		                        </div>
+		                        <div class="wizard-footer">
+	                            	<div class="pull-right">
+	                                    <input type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Next' />
+	                                    <input id="submit" type='submit' class='btn btn-finish btn-fill btn-danger btn-wd' name='finish' value='Finish' />
+									</div>
+
+	                                <div class="pull-left">
+	                                    <input type='button' class='btn btn-previous btn-simple btn-warning btn-wd' name='previous' value='Previous' />
+	                                </div>
+	                                <div class="clearfix"></div>
+		                        </div>
+		                    </form>
+		                </div>
+		            </div> <!-- wizard container -->
+		        </div>
+	        </div> <!-- row -->
+	    </div> <!--  big container -->
+	<!--   Core JS Files   -->
+	<script src="{{ url_for('static', filename='assets/js/wizard/jquery-2.2.4.min.js') }}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='assets/js/wizard/bootstrap.min.js') }}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='assets/js/wizard/jquery.bootstrap.wizard.js') }}" type="text/javascript"></script>
+
+	<!--  Plugin for the Wizard -->
+	<script src="{{ url_for('static', filename='assets/js/wizard/paper-bootstrap-wizard.js') }}" type="text/javascript"></script>
+
+	<!--  More information about jquery.validate here: https://jqueryvalidation.org/	 -->
+	<script src="{{ url_for('static', filename='assets/js/wizard/jquery.validate.min.js') }}" type="text/javascript"></script>
+</body>
+</html>

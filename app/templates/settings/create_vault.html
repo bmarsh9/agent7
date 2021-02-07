@@ -1,0 +1,49 @@
+{% extends "settings/setting_template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {%block vault_active%}
+      active
+  {%endblock%}
+  {% block tab_data %}
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Create Vault </h5>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.create_vault')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <label>Name</label>
+                        <input id="name" placeholder="Insert new vault name" value="" type="text" class="form-control"  name="name" required/>
+                      </div>
+                    </div>
+                    <div class="col-md-3 pl-md-1">
+                      <div class="form-group">
+                        <label>Label</label>
+                        <input id="label" type="text" class="form-control" name="label" value="" placeholder="Insert vault label" required/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div>
+                      <button type="submit" name="add" class="btn btn-simple btn-primary btn-sm" id="submit">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}
+

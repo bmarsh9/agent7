@@ -1,0 +1,76 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+  {% endblock %}
+
+      {% block body %}
+        <div class="alert alert-dark alert-dismissible">
+          <button type="button" class="close"  data-dismiss="alert">&times;</button>
+            <i class="tim-icons icon-light-3 text-success"></i>  Viewing the "What-If" helper. This shows the user accounts that will be added to the selected Vault if you did save this Onboarding Workflow
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div style="border:2px solid #00bf9a" class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">What-If: User Accounts that match your Rule</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">SID</th>
+                        <th scope="col">Domain</th>
+                        <th scope="col">Date Added</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for account in data %}
+                        <tr>
+                          <td>{{loop.index}}</td>
+                          <td>{{account.username or account.samaccountname}}</td>
+                          <td>{{account.sid or account.objectsid}}</td>
+                          <td>{{account.domain or account.host_name}}</td>
+                          <td>{{account.date_added}}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                    </table>   
+                    <form action="{{url_for('main_ui.adv_ob_local_onboard')}}" method="POST">
+                      <div class="row">
+                        <div class="col-md-5 pr-md-1">
+                          <div class="form-group">
+                            <label>How Often we should run this rule?</label>
+                            <select name="interval" style="border:1px solid #2b3553" class="form-control" id="inlineFormCustomSelect">
+                              <option value="3600" selected="">Every hour</option>
+                              <option value="86400">Once per Day</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-5 pr-md-1">
+                          <div class="form-group">
+                            <label>Only Run the rule once?</label>
+                            <select name="runonce" style="border:1px solid #2b3553" class="form-control" id="inlineFormCustomSelect">
+                              <option value="true" selected="">Once</option>
+                              <option value="false">Forever</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <input type="hidden" name="func_dict" value="{{func_dict}}">
+                      <button name="action" value="create" type="submit" class="btn btn-fill btn-simple btn-sm text-warning" id="submit">Final Step: Add to Vault.</button>
+                      <p>Note: This will save the rule. User accounts that match will be added to the Vault</p>
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+
+  {% block extra_js%}
+  {%endblock%}

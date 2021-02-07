@@ -1,0 +1,100 @@
+{% extends "template.html" %}
+
+{% block style %}
+  {{super()}}
+  img.card-img-top {
+      height: 300px;
+  }
+
+  #licensing {
+    fill: green;
+  }
+
+  .link.licensing {
+    stroke: green;
+  }
+
+  .link.resolved {
+    stroke-dasharray: 0,2 1;
+  }
+  text {
+    font: 12px sans-serif;
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+    fill: #fff;    
+  }
+{% endblock %}
+
+      {% block body %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="alert alert-dark alert-dismissible">
+              <button type="button" class="close"  data-dismiss="alert">&times;</button>
+                <i class="tim-icons icon-light-3 text-success"></i> Workflows allow you to create automated rules to onboard accounts. For example, if a Admin account is added anywhere and starts with "ADM-", it will be automatically managed.
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 ml-auto mr-auto">
+            <div class="card card-subcategories card-plain">
+              <div class="card-header">
+                  <h2 class="card-title text-center mt-5">Select an Account<button style="margin-left:20px;" type="button" class="btn btn-simple btn-sm text-warning" data-toggle="modal" data-target="#exampleModal">Help</button></h2>
+                <br>
+              </div>
+              <div class="card-body">
+                <ul class="nav nav-pills nav-pills-primary nav-pills-icons justify-content-center">
+                  <li style="margin-right:25px" class="nav-item">
+                    <a class="nav-link active show" data-toggle="tab" href="#link7">
+                      <i class="tim-icons icon-single-02"></i> Local
+                    </a>
+                  </li>
+                  <li style="margin-left:25px" class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#link8">
+                      <i class="tim-icons icon-bank"></i> Domain
+                    </a>
+                  </li>
+                </ul>
+                <div class="tab-content tab-space tab-subcategories">
+                  <div class="tab-pane active show" style="color:white" id="link7">
+                    Create workflows to onboard local accounts. For example, you may want to create a rule saying "Manage the
+                    account if it is added to the Local Administrators group and starts with ADM-"
+                    <br><a href="{{url_for('main_ui.local_wizard')}}" class="btn btn-primary btn-simple" style="display:block;margin:0 auto;margin-top:20px;width:max-content;">
+                      Begin
+                    </br></a>
+                  </div>
+                  <div class="tab-pane" style="color:white" id="link8">
+                    Create workflows to onboard domain accounts. For example, you may want to create a rule that says "Anytime a privileged account is added to the Server Admins group, let Agent7 automatically manage the account".
+                    <br>
+                    <br>
+                    <br><a href="{{url_for('main_ui.domain_wizard')}}" class="btn btn-primary btn-simple" style="display:block;margin:0 auto;margin-top:20px;width:max-content;">
+                      Begin
+                    </br></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+          <!--  Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLabel">What is Onboarding?</h3>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div style="color:white" class="modal-body">
+                  <p>Advanced Onboarding allows you to create "WorkFlows". With WorkFlows, you can create filters for automatically onboarding current and future accounts. <br><br>For example, if a new privileged account is added to the computer, ServerA, you would
+                  normally have to log into Agent7 and manually onboard the account. A WorkFlow will continuously run and if a account matches your rule, the account will be onboarded automatically.<br><br> The most common use case is you may want to tell
+                  Agent7 to automatically onboard accounts that are added to any computers Local Administrator group.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary btn-simple" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      {% endblock %}

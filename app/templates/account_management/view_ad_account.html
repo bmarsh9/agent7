@@ -1,0 +1,318 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+      {% block body %}
+          {% if not agent_vaulter %}
+            <div class="alert alert-dark alert-dismissible">
+              <button type="button" class="close"  data-dismiss="alert">&times;</button>
+                <i class="tim-icons icon-light-3 text-warning"></i>  There is not a agent set up for Vaulting Domain accounts!
+            </div>
+          {% endif %}
+        <div class="row">
+          <div class="col-lg-4 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Domain Information</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <p class="title">Username</p>
+                          {% if data.managed %}
+                            {% set managed = "Yes" %}
+                            {% set color = "success" %}
+                          {% else %}
+                            {% set managed = "No" %}
+                            {% set color = "yellow" %}
+                          {% endif %}
+                          <p class="text text-{{color}}">{{data.name}} (Managed: {{managed}})</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Domain Account</p>
+                          <p class="text">{{data.domain}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Vault</p>
+                          <p class="text">{{data.vault.name}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Account in Sync</p>
+                          {% if data.managed and data.in_sync %}
+                            <p class="text text-success">{{data.in_sync}}</p>
+                          {% elif data.managed and not data.in_sync %}
+                            <p class="text text-red">{{data.in_sync}}</p>
+                          {% endif %}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Onboard Account</h3>
+                {% if data.managed %}
+                  <p> This account is currently onboarded.</p>
+                {% endif %}
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.edit_managed_ad_account',sid=data.objectsid)}}" method="POST">
+                <div class="form-row">
+                  <div class="form-group col-md-3">
+                    <label for="inputState">Managed</label>
+                    <select id="inputState" name="managed" class="form-control">
+                      <option selected>{{data.managed}}</option>
+                      <option value="true">True</option>
+                      <option value="false">False</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label for="inputState">Password Length</label>
+                    <select id="inputState" name="password_length" class="form-control">
+                      <option selected>{{data.password_length}}</option>
+                      <option type="number" value="16">16</option>
+                      <option type="number" value="20">20</option>
+                      <option type="number" value="30">30</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <label for="inputState">Freq. of Rotation (Days)</label>
+                    <select id="inputState" name="rotation" class="form-control">
+                      <option selected>{{data.password_rotation}}</option>
+                      <option type="number" value="30">30</option>
+                      <option type="number" value="60">60</option>
+                      <option type="number" value="90">90</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <label for="inputState">Rotate Now</label>
+                    <select id="inputState" name="rotate_now" class="form-control">
+                      <option selected>{{data.rotate_now}}</option>
+                      <option value="true">True</option>
+                      <option value="false">False</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="inputState">Rotate After CheckOut</label>
+                    <select id="inputState" name="rotate_after_checkout" class="form-control">
+                      <option selected>{{data.rotate_after_checkout}}</option>
+                      <option value="true">True</option>
+                      <option value="false">False</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="inputState">Rotate Method</label>
+                    <select id="inputState" name="rotate_method" class="form-control">
+                      <option selected>{{data.rotate_method}}</option>
+                      <option value="change">Change</option>
+                      <option value="set">Set</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="inputState">Auto-Reconcile</label>
+                    <select id="inputState" name="reconcile" class="form-control">
+                      <option selected>{{data.reconcile}}</option>
+                      <option value="true">True</option>
+                      <option value="false">False</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label for="inputState">Account disabled</label>
+                    <select id="inputState" name="disabled" class="form-control">
+                      <option selected>{{data.disable}}</option>
+                      <option value="true">True</option>
+                      <option value="false">False</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="inputState">Add to Vault</label>
+                    <select id="inputState" name="vault" class="form-control">
+                      <option value="{{data.vault.id or None}}" selected>{{data.vault.name or None}}</option>
+                      {% for vault in vaults %}
+                        <option value="{{vault.id}}">{{vault.name}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <div class="form-group">
+                      <label for="logon_hosts">Limit which hosts this account can access (by hostname)</label>
+                      <textarea name="logon_hosts" style="border-bottom:1px solid green" class="form-control" id="logon_hosts" placeholder="Insert hosts separated by commas. Example: server1,server2" rows="10">{{data.logon_workstations}}</textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <p class="card-title">Warning: Once a account is onboarded, the password will be immediately managed by Agent7.</p>
+                </div>
+                {% if data.managed %}
+                  <button type="submit" class="btn btn-fill btn-simple btn-sm text-warning" id="submit">Update {{data.username}}</button>
+                {% else %}
+                  <button type="submit" class="btn btn-fill btn-simple btn-sm text-success" id="submit">Onboard {{data.username}}</button>
+                {% endif %}
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% if data.rotate_now %}
+          <div class="alert alert-dark alert-dismissible">
+            <button type="button" class="close"  data-dismiss="alert">&times;</button>
+              <i class="tim-icons icon-light-3 text-success"></i>  Please Wait. Password Sync in Process...
+          </div>
+        {% endif %}
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Password History</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Password</th>
+                        <th scope="col">Successfully Changed</th>
+                        <th scope="col">Date Synced</th>
+                        <th scope="col">Check Out Password</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for pwd in passwords %}
+                       <tr>
+                        <th scope="row">{{pwd.id}}</th>
+                 
+                        {% if pwd.success %}
+                            <td type="password">▪▪▪▪▪▪▪▪▪▪▪▪▪▪</td>
+                        {% else %}
+                            <td type="password">{{pwd.password}}</td>
+                        {% endif %}
+                        {% if pwd.success %}
+                            <td><span class="badge badge-success">{{pwd.success}}</span></td>
+                        {% else %}
+                            <td><span class="badge badge-danger">{{pwd.success}}</span></td>
+                        {% endif %}
+                        <td>{{pwd.date_added}}</td>
+                        {% if pwd.success %}
+                            <td><button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-fill btn-simple btn-sm text-success" id="pwd-submit" value="{{pwd.password}}">Show</button></td>
+                        {% else %}
+                            <td><p class="text text-red">See Error</p></td>
+                        {% endif %}
+                       </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Services Running under this User</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Services running as the user account</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Scheduled Tasks Running under this User</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Scheduled tasks running as the user account</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example2" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLabel">Account Password</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body text-white">
+                
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-simple btn-sm text-warning" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        var table = dt_init(
+            selector="#example", // table id selector
+            url = "/api/agent/data/agentservice?as_datatables=true&filter=username,ilike,*{{data.samaccountname}}*&visible=id,username,image", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var table = dt_init(
+            selector="#example2", // table id selector
+            url = "/api/agent/data/agentschtask?as_datatables=true&filter=username,ilike,*{{data.samaccountname}}*&visible=id,username,image", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+    });
+  </script>
+  <script>
+    $(document).ready(function (){
+      $("button#pwd-submit").click(function() {
+        //alert(this.id); 
+        $('.modal-body').html(this.value);
+        setTimeout(function() {jQuery('#exampleModal').modal('hide');}, 4000);
+      });
+    });
+  </script>
+  {%endblock%}

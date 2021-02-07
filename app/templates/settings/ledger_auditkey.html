@@ -1,0 +1,134 @@
+{% extends "settings/setting_template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {%block auditkey_active%}
+      active
+  {%endblock%}
+  {% block tab_data %}
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Create new Registry Key</h5>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.ledger_create_auditkeys')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <label>Title</label>
+                        <input id="title" placeholder="Ex. Anonymous enumeration of SAM" value="" type="text" class="form-control"  name="title" required>
+                      </div>
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <label>Severity</label>
+                        <input id="severity" placeholder="Insert high,medium or low" value="" type="text" class="form-control"  name="severity" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <label>Path</label>
+                        <input id="path" placeholder="Ex. SYSTEM\CurrentControlSet\Control\Lsa" value="" type="text" class="form-control"  name="path" required>
+                      </div>
+                    </div>
+                    <div class="col-md-3 pl-md-1">
+                      <div class="form-group">
+                        <label>Key Name</label>
+                        <input id="keyname" type="text" class="form-control" name="keyname" value="" placeholder="Ex. RestrictAnonymous">
+                      </div>
+                    </div>
+                    <div class="col-md-3 pl-md-1">
+                      <div class="form-group">
+                        <label>Audit Value</label>
+                        <input id="value" type="text" class="form-control" name="value" value="" placeholder="Ex. 1">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div>
+                      <button type="submit" name="add" class="btn btn-simple btn-primary btn-sm" id="submit">Create</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Delete Registry Key</h5>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.ledger_delete_auditkeys')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <input id="id" placeholder="Insert ID of Audit Key" value="" type="text" class="form-control"  name="id" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div>
+                      <button type="submit" name="add" class="btn btn-simple btn-warning btn-sm" id="submit">Remove</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">AuditKey Ledger</h5>
+              </div>
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Severity</th>
+                      <th scope="col">Full Path</th>
+                      <th scope="col">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for key in keys%}
+                      {% if key.severity == "high" %}
+                        {%set color="#dc3545"%}
+                      {% elif key.severity == "medium" %}
+                        {%set color="#ffc107"%}
+                      {% elif key.severity == "low" %}
+                        {%set color="#28a745"%}
+                      {%endif%}
+                      <tr>
+                        <th scope="row">{{key.id}}</th>
+                        <td>{{key.title}}</td>
+                        <td style="color:{{color}} !important">{{key.severity}}</td>
+                        <td>{{key.full_path}}</td>
+                        <td>{{key.value}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+      </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}
+

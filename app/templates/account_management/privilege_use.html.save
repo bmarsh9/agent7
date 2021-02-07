@@ -1,0 +1,144 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+  {% endblock %}
+
+  {% block style %}
+    {{super()}}
+    .hiddenRow {
+      padding: 0 !important;
+    }
+    td#script {
+      word-break: break-all
+    }
+    .table .thead-dark th {
+      color: white !important;
+    }
+    .card.card-body {
+      border-top: 2px solid grey;
+    }
+    th,td {
+      text-align:center;
+    }
+  {% endblock %}
+
+  {% block body %}
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <form action="{{url_for('main_ui.privilege_use')}}" method="GET">
+                  <div class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <select name="sorted_by" style="font-size:12px" class="form-control" id="inlineFormCustomSelect">
+                        <option value="{{sorted_by}}" selected>Sort By...</option>
+                        <option value="total_priv_logons">Total Priv Logons</option>
+                        <option value="uniq_priv_user_logons">Unique Priv Logons</option>
+                        <option value="percentage_logons_of_priv_users">% of Priv Logons</option>
+                        <option value="total_logons">Total Logons</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <button type="submit" class="btn btn-simple btn-sm text-teal">Filter</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h1 class="card-category">Analytics for privileged account use and where the accounts are used</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-orange"></i> Privileged Account Use per Host</h3>
+              </div>
+
+              <div class="card-body">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Hostname</th>
+                              <th scope="col">Host Type</th>
+                              <th scope="col">Operating System</th>
+                              <th scope="col">Total Priv Logons</th>
+                              <th scope="col">Uniq Priv Logons</th>
+                              <th scope="col">% of Logons that are Privileged</th>
+                              <th scope="col">Total Logons</th>
+                              <th scope="col">Domain User Logons</th>
+                              <th scope="col">Local User Logons</th>
+                              <th scope="col">View Users</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% if hosts %}
+                              {% for host in hosts %}
+                                <tr>
+                                  <td>{{loop.index}}</td>
+                                  <td>{{host["hostname"]}}</td>
+                                  <td>{{host["host_type"]}}</td>
+                                  <td>{{host["os"]}}</td>
+                                  <td>{{host["total_priv_logons"]}}</td>
+                                  <td>{{host["uniq_priv_user_logons"]}}</td>
+                                  <td>{{host["percentage_logons_of_priv_users"]}}</td>
+                                  <td>{{host["total_logons"]}}</td>
+                                  <td>{{host["domain_user_logons"]}}</td>
+                                  <td>{{host["local_user_logons"]}}</td>
+                                  <td><a data-toggle="collapse" href="#collapse_port{{loop.index}}" role="button" aria-expanded="false" aria-controls="#collapse_port{{loop.index}}"><i class="tim-icons icon-world text-teal"></i></a></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="14" class="hiddenRow">
+                                      <!-- places buttons here-->
+                                      <div style="padding-top:10px" class="accordian-body collapse" id="collapse_port{{loop.index}}">
+                                        <div class="card card-body">
+                                            <table class="table script">
+                                              <thead class="thead-dark">
+                                                <tr>
+                                                  <th scope="col">#</th>
+                                                  <th scope="col">Username</th>
+                                                  <th scope="col">Privileged</th>
+                                                  <th scope="col">Local Account</th>
+                                                  <th scope="col">Total Logons</th>
+                                                  <th scope="col">SID</th>
+                                                  <th scope="col">Percentage of Total Logon for Host</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                               {% for user in host["users"] %}
+                                                 <tr>
+                                                   <th style="color:#00f2c3" scope="row">{{loop.index}}</th>
+                                                   <td>{{user["username"]}}</td>
+                                                   {% if user["is_priv"] == "yes" %}
+                                                     <td><i class="tim-icons icon-alert-circle-exc text-red"></i></td>
+                                                   {% else %}
+                                                     <td>No</td>
+                                                   {% endif %}
+                                                   <td>{{user["local_account"]}}</td>
+                                                   <td>{{user["count"]}}</td>
+                                                   <td>{{user["sid"]}}</td>
+                                                   <td>{{user["percentage_of_total_logon"]}}</td>
+                                                 </tr>
+                                                {% endfor %}
+                                               </tbody>
+                                             </table>
+                                         </div>
+                                       </div>
+                                     </td>
+                                 </tr>
+                             {% endfor %}
+                           {% endif %}
+                         </tbody>
+                       </table>
+             </div>
+           </div>
+         </div>                           
+      </div>                           
+
+
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}

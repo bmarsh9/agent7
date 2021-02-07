@@ -1,0 +1,107 @@
+{% extends "settings/setting_template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    <script src="{{url_for('static',filename='assets/js/ajax_template.js')}}"></script>
+    <script src="{{url_for('static',filename='assets/js/ajax_send.js')}}"></script>
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {%block jobs_active%}
+      active
+  {%endblock%}
+  {% block tab_data %}
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Create new Audit</h5>
+              </div>
+              <div class="card-body">
+                <form>
+                  <div class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <label>Audit Name</label>
+                        <input id="name" placeholder="Insert audit name" value="" type="text" class="form-control"  name="name" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 pr-md-1">
+                      <div class="form-group">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Title</th>
+                              <th scope="col">Severity</th>
+                              <th scope="col">Enabled</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {%for key in keys%}
+                            {%set pre_value="0"%}
+                            {% if key.severity == "high" %}
+                              {%set color="#dc3545"%}
+                              {%set pre_value="1"%}
+                            {% elif key.severity == "medium" %}
+                              {%set color="#ffc107"%}
+                            {% elif key.severity == "low" %}
+                              {%set color="#28a745"%}
+                            {%endif%}
+                            <tr>
+                              <th scope="row">{{key.id}}</th>
+                              <td>{{key.title}}</td>
+                              <td style="color:{{color}} !important">{{key.severity}}</td>
+                              <td><input type="number" min="0" max="1" class="form-control" name="enabled" value={{pre_value}}></td>
+                            </tr>
+                          {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div>
+                      <button type="submit" name="add" class="btn btn-primary btn-simple btn-sm" id="submit">Submit</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+  {%endblock%}
+
+  {% block extra_js%}
+    <script>
+    $(document).ready(function() {
+        var table = $("table tbody");
+        $("button#submit").click(function(e){
+            e.preventDefault();
+
+            var name = $("#name").val();
+            var all_data = {"name":name,"keys":[]}
+            // Get all key,value in table
+            table.find('tr').each(function (i, el) {
+                var obj = new Object();
+                var $ths = $(this).find('th');
+                id = $ths.eq(0).text();
+                obj.id = id;
+
+                $(this).closest('tr').find("input").each(function() {
+                    obj[this.name] = this.name;
+                    obj[this.name] = this.value;
+                });
+//haaaaaaaa
+                all_data.keys.push(obj);
+            });
+            ajax_call(url="{{url_for('main_ui.create_audit')}}",method="POST",data=all_data)
+            window.location.replace("{{url_for('main_ui.audit')}}");
+        });
+    });
+    </script>
+  {%endblock%}
+

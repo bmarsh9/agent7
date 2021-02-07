@@ -1,0 +1,220 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block body %}
+        <div class="row">
+          <div class="col-lg-3">
+            <form class="form-inline" style="margin-bottom:10px;" method="GET" action="{{url_for('agent_ui.logon')}}">
+              {% if checked == "1" %}
+                <input type="hidden" type="text" class="form-control" name="priv_view" value="*">
+              {% else %}
+                <input type="hidden" type="text" class="form-control" name="priv_view" value="1">
+              {% endif %}
+
+              {% if checked == "1" %}
+                <button type="submit" class="btn btn-primary btn-simple btn-sm">Privileged View - On</button>
+              {% else %}
+                <button type="submit" class="btn btn-danger btn-simple btn-sm">Privileged View - Off</button>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Top usernames</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Top logged in users</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Frequent methods for logging on</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Top logon methods</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Local account</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Local Account</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Password not changed in 5 years</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Old Passwords</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart4"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Password expires</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Password expires</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart5"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Logged in Users grouped by Host</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Users and where they have been logging on</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example2" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Popular Hosts</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Top hosts with logins</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example3" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Logon Data</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Logon data on Endpoints</h5>
+                <button type="button" style="float:right;display:inline-block;" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title="" data-toggle="modal" data-target="#helpModal">
+                            <i class="tim-icons icon-bulb-63"></i>
+                </button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        var table2 = cjs_init(
+            selector="chart",
+            url="/api/agent/data/agentlogon?as_chartjs=true&groupby=username,count&filter=is_priv,like,{{checked}}",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table3 = cjs_init(
+            selector="chart2",
+            url="/api/agent/data/agentlogon?as_chartjs=true&groupby=logontype,count&filter=is_priv,like,{{checked}}",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table4 = cjs_init(
+            selector="chart3",
+            url="/api/agent/data/agentlogon?as_chartjs=true&groupby=local_account,count&filter=is_priv,like,{{checked}}",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table4 = cjs_init(
+            selector="chart4",
+            url="/api/agent/data/agentlogon?as_chartjs=true&groupby=username,count&filter=password_age,gt,1825;is_priv,like,{{checked}}",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table4 = cjs_init(
+            selector="chart5",
+            url="/api/agent/data/agentlogon?as_chartjs=true&groupby=password_expired,count&filter=is_priv,like,{{checked}}",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table = dt_init(
+            selector="#example2", // table id selector
+            url="/api/agent/data/agentlogon?as_datatables=true&groupby=username,count;host_name,group;sid,group&filter=is_priv,like,{{checked}}",
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=1, // add a column with a edit icon
+            link_url="/ui/logon/user", // link of the icon if the edit attribute is set
+            auto_id=1, // reads id from data and appends it to the link url
+            index=3, // index from array to attach to the link
+            colname="View" // column name
+        );
+        var table = dt_init(
+            selector="#example3", // table id selector
+            url="/api/agent/data/agentlogon?as_datatables=true&groupby=host_name,count&filter=is_priv,like,{{checked}}",
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=1, // add a column with a edit icon
+            link_url="/ui/logon/host", // link of the icon if the edit attribute is set
+            auto_id=1, // reads id from data and appends it to the link url
+            index=1, // index from array to attach to the link
+            colname="View" // column name
+        );
+        // draw datatable
+        var table = dt_init(
+            selector="#example", // table id selector
+            url="/api/agent/data/agentlogon?as_datatables=true&visible=id,local_account,username,domain,logontype,last_password_change,password_age,last_logon,host_name&filter=is_priv,like,{{checked}}&limit=200",
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+    });
+  </script>
+  {%endblock%}
+

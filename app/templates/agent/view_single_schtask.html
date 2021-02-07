@@ -1,0 +1,145 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True,counter=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block body %}
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Number of hosts where this Task was seen on</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Seen on Hosts</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter" class="text-large" style="font-size:5rem;"></h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Number of unique commands per scheduled task image</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Unique Paths for Image</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter2" class="text-large" style="font-size:5rem;"></h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Unique Image by Command</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Unique image by command</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Unique Image by Arguments</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Unique image by arguments</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example3" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Grouped By User</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i> Task by User</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> All Hosts with this SchTask</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Scheduled tasks on hosts</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example2" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        // draw datatable
+        var table = dt_init(
+            selector="#example", // table id selector
+            url = "/api/agent/data/agentschtask?as_datatables=true&filter=image,ilike,*{{name}}*&groupby=base_command,count&limit=200", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var table = dt_init(
+            selector="#example2", // table id selector
+            url = "/api/agent/data/agentschtask?as_datatables=true&filter=image,ilike,*{{name}}*&distinct=host_id&limit=200&visible=host_id,host_name", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var table = dt_init(
+            selector="#example3", // table id selector
+            url = "/api/agent/data/agentschtask?as_datatables=true&filter=image,ilike,*{{name}}*&groupby=arguments,count&limit=200", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var up = update_init(
+            selector="#statistic-counter",
+            url="/api/agent/data/agentschtask?groupby=host_name,count&getcount=true&filter=image,ilike,*{{name}}*",
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter2",
+            url="/api/agent/data/agentschtask?groupby=base_command,count&getcount=true&filter=image,ilike,*{{name}}*",
+            animate=1 // animate the increment
+        );
+        var table2 = cjs_init(
+            selector="chart",
+            url="/api/agent/data/agentschtask?as_chartjs=true&filter=image,ilike,*{{name}}*&groupby=username,count",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Task running as Users", // header of graph
+        );
+    });
+  </script>
+  {%endblock%}
+

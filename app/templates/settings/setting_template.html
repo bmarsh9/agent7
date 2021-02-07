@@ -1,0 +1,45 @@
+{% extends "template.html" %}
+
+{% block style %}
+  {{super()}}
+{% endblock %}
+
+{% block body %}
+{{super()}}
+<div class="row">
+    <div class="col-md">
+        <ul class="nav nav-tabs" id="myNavTabs">
+            <li class="nav-item">
+              <a class="nav-link {%block configuration_active%}{%endblock%}" href="{{ url_for('main_ui.configuration')}}">Configuration</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block users_active%}{%endblock%}" href="{{ url_for('main_ui.users')}}">Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block groups_active%}{%endblock%}" href="{{ url_for('main_ui.groups')}}">Agent Groups</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block jobs_active%}{%endblock%}" href="{{ url_for('main_ui.jobs')}}">Agent Jobs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block commands_active%}{%endblock%}" href="{{ url_for('main_ui.commands')}}">Agent Commands</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block agenthealth_active%}{%endblock%}" href="{{ url_for('agent_ui.agent_health')}}">Health</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block ledger_active%}{%endblock%}" href="{{ url_for('main_ui.manage_ledger')}}">Ledger</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block auditkey_active%}{%endblock%}" href="{{ url_for('main_ui.audit')}}">Audit Keys</a>
+            </li>
+        </ul>
+        {% block tab_data %}{% endblock %}
+    </div>
+  </div>
+ </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
+

@@ -1,0 +1,212 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+  {% endblock %}
+
+  {% block style %}
+    {{super()}}
+    .chartjs-wrapper {
+      margin: 0 auto;
+      width: 32vw;
+      height: auto;
+      padding: 20px;
+    }
+  {% endblock %}
+
+  {% block body %}
+      <div class="row">
+          <div class="col-lg-2">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">insight status</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>Status</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter1" class="text-large" style="font-size:2rem;">{{insight.status}}</h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">insight severity</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>Severity</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter1" class="text-large" style="font-size:2.5rem;">{{insight.severity}}</h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">assets with insight</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>Assets</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter1" class="text-large" style="font-size:2.5rem;">{{insight.affected_assets}}</h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">number of query hits</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Hits</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter" class="text-large" style="font-size:2.5rem;">{{insight.hits}}</h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">remediation ease</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>Ease</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter2" class="text-large" style="font-size:2.5rem;">{{insight.ease}}</h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">confidence in insight</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-yellow"></i>Confidence</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter3" class="text-large" style="font-size:2.5rem;">{{insight.confidence}}</h1>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-8">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Insight</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>{{insight.name}}</h3>
+                <span class="badge badge-warning">{{insight.module}}</span>
+                <span class="badge badge-info">{{insight.category}}</span>
+              </div>
+              <div style="margin-left:15px;" class="card-body">
+                  <h6>Description</h6>
+                  <p>{{insight.description}}</p>
+                  <br>
+                  <h6>Solution</h6>
+                  <p>{{insight.solution}}</p>
+                  <br>
+                  <h6>Module :{{insight.module}}</h6>
+                  <h6>Category: {{insight.category}}</h6>
+                  <h6>Severity: {{insight.severity}}</h6>
+                  <h6>Ease: {{insight.ease}}</h6>
+                  <h6>Confidence: {{insight.confidence}}</h6>
+                  <h6>Status: {{insight.status}}</h6>
+                  <h6>Affected Assets: {{insight.affected_assets}}</h6>
+                  <h6>Hits: {{insight.hits}}</h6>
+                  <br>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Total risk points</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i> Risk Points</h3>
+              </div>
+              <div class="card-body">
+                <div class="chartjs-wrapper">
+                  <canvas class="chartjs-gauge"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-12">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Maturity</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Remediation Phases</h3>
+              </div>
+              <div style="margin-left:15px;" class="card-body">
+                  <p>The 3 phased approach provides a recommended roadmap in order to successfully remediate this Insight and limit the impact to IT and business operations.</p>
+                  <br>
+                  <div class="card-deck">
+                    <div style="border:1px solid #dc3545" class="card">
+                      <div style="padding:20px" class="card-body">
+                        <h4 class="card-title">Maturity 1</h4>
+                        <p class="card-text">{{insight.phase_one}}</p>
+                      </div>
+                    </div>
+                    <div style="border:1px solid #ffc107" class="card">
+                      <div style="padding:20px" class="card-body">
+                        <h4 class="card-title">Maturity 2</h4>
+                        <p class="card-text">{{insight.phase_two}}</p>
+                      </div>
+                    </div>
+                    <div style="border:1px solid #28a745;margin-right:20px;" class="card">
+                      <div style="padding:20px;" class="card-body">
+                        <h4 class="card-title">Maturity 3</h4>
+                        <p class="card-text">{{insight.phase_three}}</p>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Hits</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Hits for the finding</h5>
+                <button type="button" style="float:right;display:inline-block;" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title="" data-toggle="modal" data-target="#helpModal">
+                            <i class="tim-icons icon-bulb-63"></i>
+                </button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+  {%endblock%}
+
+  {% block extra_js%}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels" type="text/javascript" charset="utf-8"></script>
+    <script src="{{url_for('static',filename='assets/js/gauge_template.js')}}"></script>
+
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        // draw datatable
+        var table = dt_init(
+            selector="#example", // table id selector
+            url="/api/main/insight/data/{{insight.id}}",
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var gauge = gauge_init(
+            selector="chartjs-gauge",
+            risk=40
+        );
+    });
+  </script>
+  {%endblock%}
+

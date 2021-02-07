@@ -1,0 +1,3 @@
+If you want to update the agent for windows, update the relevant files in `windows` directory
+
+`templates` holds the configuration file that recieves the values from the app during enrollment 

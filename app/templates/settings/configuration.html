@@ -1,0 +1,141 @@
+{% extends "settings/setting_template.html" %}
+
+{%block configuration_active%}
+active
+{%endblock%}
+{% block tab_data %}
+        <div class="row">
+          <div class="col-lg-6 col-sm-6 text-center">
+            <div class="card card-tasks text-left">
+              <div class="card-header">
+                <h6 class="title d-inline">General Settings</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <p class="title">License</p>
+                          <p class="text">{{site.license}}</p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                            <i class="tim-icons icon-settings"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Site Token</p>
+                          <p class="text">{{site.key}}</p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">
+                            <i class="tim-icons icon-settings"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Console version</p>
+                          <p class="text">{{site.console_version}}</p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task" aria-describedby="tooltip932754">
+                            <i class="tim-icons icon-settings"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Delete Stale Agents: {{site.remove_stale_agents}}</p>
+                          <p class="text">Automatically remove agents from the console if they have not checked in within 30 days</p>
+                        </td>
+                        <td class="td-actions text-right">
+                          <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task" aria-describedby="tooltip528017">
+                            <i class="tim-icons icon-settings"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="card card-contributions">
+              <div class="card-body">
+                <p class="title">Open a support ticket below</p>
+                <p class="text">placeholder</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-sm-6">
+            <div class="card card-timeline card-plain">
+              <div class="card-body">
+                <ul class="timeline timeline-simple">
+                  <li class="timeline-inverted">
+                    <div class="timeline-badge danger">
+                      <i class="tim-icons icon-bag-16"></i>
+                    </div>
+                    <div class="timeline-panel">
+                      <div class="timeline-heading">
+                        <span class="badge badge-danger">Log Feed</span>
+                      </div>
+                      <div class="timeline-body">
+                        <p>Logs are stored in a AWS S3 bucket. Please contact us to receive the feed.</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="timeline-inverted">
+                    <div class="timeline-badge success">
+                      <i class="tim-icons icon-gift-2"></i>
+                    </div>
+                    <div class="timeline-panel">
+                      <div class="timeline-heading">
+                        <span class="badge badge-success">API Token</span>
+                      </div>
+                      <div class="timeline-body">
+                        <p>Generate your API key below</p>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="timeline-inverted">
+                    <div class="timeline-badge info">
+                      <i class="tim-icons icon-planet"></i>
+                    </div>
+                    <div class="timeline-panel">
+                      <div class="timeline-heading">
+                        <span class="badge badge-info">Another Title</span>
+                      </div>
+                      <div class="timeline-body">
+                        <p>Placeholder</p>
+                        <hr>
+                      </div>
+                      <div class="timeline-footer">
+                        <div class="dropdown">
+                          <button type="button" class="btn btn-round btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <i class="tim-icons icon-bullet-list-67"></i>
+                          </button>
+                          <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+{% block script %}
+  {{ super() }}
+<!-- Place Scripts here -->
+{% endblock %}

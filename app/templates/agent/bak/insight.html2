@@ -1,0 +1,161 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+
+
+    <script src="{{url_for('static',filename='assets/js/datatables_template.js')}}"></script>
+    <script src="{{url_for('static',filename='assets/js/chartjs_template.js')}}"></script>
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block style %}
+    {{ super() }}
+
+    .card-body {
+      border-left-color: red;
+      border-left-style: solid;
+    }
+  {% endblock %}
+
+  {% block body %}
+    <div class="row">
+        <!-- timeline item 1 left dot -->
+        <div class="col-auto text-center flex-column d-none d-sm-flex">
+            <div class="row h-50">
+                <div class="col">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+            <h5 class="m-2">
+                <span class="badge badge-pill bg-light border">&nbsp;</span>
+            </h5>
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+        </div>
+        <!-- timeline item 1 event content -->
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-right text-muted">Mon, Jan 9th 2019 7:00 AM</div>
+                    <h4 class="card-title text-muted">Day 1 Orientation</h4>
+                    <p class="card-text">Welcome to the campus, introduction and get started with the tour.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/row-->
+    <!-- timeline item 2 -->
+    <div class="row">
+        <div class="col-auto text-center flex-column d-none d-sm-flex">
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+            <h5 class="m-2">
+                <span class="badge badge-pill bg-success">&nbsp;</span>
+            </h5>
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-success shadow">
+                <div class="card-body">
+                    <div class="float-right text-success">Tue, Jan 10th 2019 8:30 AM</div>
+                    <h4 class="card-title text-success">Day 2 Sessions</h4>
+                    <p class="card-text">Sign-up for the lessons and speakers that coincide with your course syllabus. Meet and greet with instructors.</p>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" data-target="#t1_details" data-toggle="collapse">Show Details ▼</button>
+                    <button class="btn btn-sm btn-outline-success" style="float:right" type="button">Close</button>
+                    <div class="collapse border" id="t1_details">
+                        <div class="p-2 text-monospace">
+                            <div>08:30 - 09:00 Breakfast in CR 2A</div>
+                            <div>09:00 - 10:30 Live sessions in CR 3</div>
+                            <div>10:30 - 10:45 Break</div>
+                            <div>10:45 - 12:00 Live sessions in CR 3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/row-->
+    <!-- timeline item 3 -->
+    <div class="row">
+        <div class="col-auto text-center flex-column d-none d-sm-flex">
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+            <h5 class="m-2">
+                <span class="badge badge-pill bg-light border">&nbsp;</span>
+            </h5>
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-right text-muted">Wed, Jan 11th 2019 8:30 AM</div>
+                    <h4 class="card-title">Day 3 Sessions</h4>
+                    <p class="card-text">Sign-up for the lessons and speakers that coincide with your course syllabus. Meet and greet with instructors.</p>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" data-target="#t2_details" data-toggle="collapse">Show Details ▼</button>
+                    <div class="collapse border" id="t2_details">
+                        <div class="p-2 text-monospace">
+                            <div>08:30 - 09:00 Breakfast in CR 2A</div>
+                            <div>09:00 - 10:30 Live sessions in CR 3</div>
+                            <div>10:30 - 10:45 Break</div>
+                            <div>10:45 - 12:00 Live sessions in CR 3</div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/row-->
+    <!-- timeline item 4 -->
+    <div class="row">
+        <div class="col-auto text-center flex-column d-none d-sm-flex">
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+            <h5 class="m-2">
+                <span class="badge badge-pill bg-light border">&nbsp;</span>
+            </h5>
+            <div class="row h-50">
+                <div class="col">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-right text-muted">Thu, Jan 12th 2019 11:30 AM</div>
+                    <h4 class="card-title">Day 4 Wrap-up</h4>
+                    <p>Join us for lunch in Bootsy's cafe across from the Campus Center.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/row-->
+</div>
+
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}
+

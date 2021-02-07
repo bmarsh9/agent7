@@ -1,0 +1,207 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+
+  {% endblock %}
+
+  {% block body %}
+       <div class="alert alert-dark alert-dismissible">
+         <button type="button" class="close"  data-dismiss="alert">&times;</button>
+           <i class="tim-icons icon-light-3 text-success"></i> Workflows allow you to create automated rules to onboard accounts. For example, if a Admin account is added anywhere and starts with "ADM-", it will be automatically managed.
+       </div>
+       <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Onboarding Workflow for Local Accounts</h3>
+                <p>Create a rule for local accounts. If the rule matches an account, it will be onboarded</p>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.adv_ob_local_validate')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-8 pr-md-1">
+                      <div class="form-group">
+                        <label>Rule Name</label>
+                        <input type="text" class="form-control" placeholder="" name="name" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 pr-md-1">
+                      <div class="form-group">
+                        <label>Username Match</label>
+                        <input type="text" class="form-control" placeholder="Wildcards accepted: i.e. test_acc*" value="" name="username">
+                      </div>
+                    </div>
+                    <div class="col-md-5 pr-md-1">
+                      <div class="form-group">
+                        <label>Hostname Match (only for local accounts)</label>
+                        <input type="text" class="form-control" placeholder="Wildcards accepted: i.e. SRV-*" value="" name="hostname">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4 pr-md-1">
+                      <div class="form-group">
+                        <label>Account must be built-in Admin (RID 500)</label>
+                        <select name="builtin" style="border:1px solid #2b3553" class="form-control" id="inlineFormCustomSelect">
+                          <option value="true" selected="">True</option>
+                          <option value="false">False</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-4 pr-md-1">
+                      <div class="form-group">
+                        <label>Account must be privileged</label>
+                        <select name="priv" style="border:1px solid #2b3553" class="form-control" id="inlineFormCustomSelect">
+                          <option value="true" selected="">True</option>
+                          <option value="false">False</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <label for="inputState">Add to Vault</label>
+                      <select id="inputState" name="vault" class="form-control">
+                        {% if vaults %}
+                          <option value="None">No Vault</option>
+                          {% for vault in vaults %}
+                            <option value="{{vault.id}}">{{vault.name}}</option>
+                          {% endfor %}
+                        {% else %}
+                            <option value="">No Vaults Exist! Please create one.</option>
+                        {% endif %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button name="action" value="whatif" type="submit" class="btn btn-fill btn-simple btn-sm text-success" id="submit">Step 1: Continue</button>
+                    <p>Note: This will not save anything. This will allow you to see what your rule matched.</p>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Onboarding Workflow for Domain Accounts</h3>
+                <p>Create a rule for domain accounts. If the rule matches an account, it will be onboarded</p>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.adv_ob_domain_validate')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-8 pr-md-1">
+                      <div class="form-group">
+                        <label>Rule Name</label>
+                        <input type="text" class="form-control" placeholder="" name="name" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-5 pr-md-1">
+                      <div class="form-group">
+                        <label>Distinguished Name Match</label>
+                        <input type="text" class="form-control" placeholder="Wildcards accepted: *cn=myuser,CN=users*" value="" name="dn">
+                      </div>
+                    </div>
+                    <div class="col-md-1 pr-md-1">
+                      <h3 style="text-align:center;margin-top:20px">OR</h3>
+                    </div>
+                    <div class="col-md-5 pr-md-1">
+                      <div class="form-group">
+                        <label>Memberof Group Match</label>
+                        <input type="text" class="form-control" placeholder="i.e. Domain Admins" value="" name="memberof">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group col-md-5">
+                      <label for="inputState">Add to Vault</label>
+                      <select id="inputState" name="vault" class="form-control">
+                        {% if vaults %}
+                          <option value="None">No Vault</option>
+                          {% for vault in vaults %}
+                            <option value="{{vault.id}}">{{vault.name}}</option>
+                          {% endfor %}
+                        {% else %}
+                            <option value="">No Vaults Exist! Please create one.</option>
+                        {% endif %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button name="action" value="whatif" type="submit" class="btn btn-fill btn-simple btn-sm text-success" id="submit">Step 1: Continue</button>
+                    <p>Note: This will not save anything. This will allow you to see what your rule matched.</p>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+       <!--
+       <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Bulk -> Add users to Vaults</h3>
+                <p>Add Bulk users to Vaults so they can access accounts. You can add specific accounts or leverage groups as well for continuous onboarding
+                </p>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.adv_ob_bulkusers_to_vault')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-4 pr-md-1">
+                      <div class="form-group">
+                        <label>Rule Name</label>
+                        <input type="text" class="form-control" placeholder="" name="name">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <label>Group Match</label>
+                        <input type="text" class="form-control" placeholder="Accepts Wildcards: i.e. Server Admins*" value="" name="group">
+                      </div>
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <label>Group SID</label>
+                        <input type="text" class="form-control" placeholder="SID of the Group" value="" name="sid">
+                      </div>
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <label>Match by Username/SamAccountName</label>
+                        <input type="text" class="form-control" placeholder="User/SAM of the user" value="" name="user">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="inputState">Add to Vault</label>
+                    <select id="inputState" name="vault" class="form-control">
+                      {% if vaults %}
+                          <option value="None">No Vault</option>
+                        {% for vault in vaults %}
+                          <option value="{{vault.id}}">{{vault.name}}</option>
+                        {% endfor %}
+                      {% else %}
+                          <option value="">No Vaults Exist! Please create one.</option>
+                      {% endif %}
+                    </select>
+                  </div>
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-fill btn-simple btn-sm text-warning" id="submit">Save</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        -->
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}
+

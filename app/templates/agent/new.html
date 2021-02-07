@@ -1,0 +1,297 @@
+{% extends "template.html" %}
+
+  {% block head %}
+  {{ super() }}
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+
+      <!-- End Navbar -->
+        <div class="row">
+          <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-5">
+                    <div class="info-icon text-center icon-info">
+                      <i class="tim-icons icon-single-02"></i>
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <div class="numbers">
+                      <p class="card-category">Agent</p>
+                      <h3 class="card-title">10</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="stats">
+                  <i class="tim-icons icon-minimal-up text-success"></i>Last Week
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-5">
+                    <div class="info-icon text-center icon-danger">
+                      <i class="tim-icons icon-molecule-40"></i>
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <div class="numbers">
+                      <p class="card-category">Threats</p>
+                      <h3 class="card-title">150GB</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="stats">
+                  <i class="tim-icons icon-minimal-down text-success"></i>Last Week
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-5">
+                    <div class="info-icon text-center icon-primary" style="background-image:linear-gradient(to bottom left,#edaf05,#fbc531);">
+                      <i class="tim-icons icon-planet"></i>
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <div class="numbers">
+                      <p class="card-category">Honey</p>
+                      <h3 class="card-title">150GB</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="stats">
+                  <i class="tim-icons icon-minimal-up text-danger"></i>Last Week
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-5">
+                    <div class="info-icon text-center icon-success">
+                      <i class="tim-icons icon-trophy"></i>
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <div class="numbers">
+                      <p class="card-category">Score</p>
+                      <h3 class="card-title">150GB</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="stats">
+                  <i class="tim-icons icon-minimal-up text-danger"></i>Last Week
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Top 5 Agent OS</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Operating Systems</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chartpieuser"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h5 class="card-category">Top 5 Agent Versions</h5>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>Version</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chartpiesysmon"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h5 class="card-category">Top 5 Agent Domains</h5>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>Domain</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chartpiewinlogbeat"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> Task Summary</h3>
+                <h4 class="card-title"></i>Summary of recent Agent Tasks</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table tablesorter " id="">
+                    <thead class=" text-primary">
+                      <tr>
+                        <th>
+                          Task Name
+                        </th>
+                        <th>
+                          Agent count
+                        </th>
+                        <th>
+                          Percentage complete
+                        </th>
+                        <th class="text-center">
+                          Complete
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      " block agentsummary "
+                        " for task,value in task_summary.items() "
+                          <tr>
+                            <td>
+                              " task "
+                            </td>
+                            <td>
+                              " value["total"] "
+                            </td>
+                            <td>
+                              " value["percentage"] "
+                            </td>
+                            <td class="text-center">
+                              " if value["percentage"] == 100 "
+                                <span class="badge badge-info">Complete</span>
+                              " else "
+                                <span class="badge badge-danger">Uncomplete</span>
+                              " endif "
+                            </td>
+                          </tr>
+                        " endfor "
+                      " endblock "
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <div class="card ">
+              <div class="card-header">
+                <!-- <h4 class="card-title">SPN tied to Domain Admins</h4> -->
+                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> Domain Functional Level</h3>
+                <h4 class="card-title"></i> " domain_objects["functional_level"]["description"] "</h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table tablesorter " id="">
+                    <thead class=" text-primary">
+                      <tr>
+                        <th>
+                          Functional Level
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      " block funclevel "
+                        " for item in domain_objects["functional_level"]["list"] "
+                          " if loop.index <= 10 "
+                           <tr>
+                             <td>
+                               " item["functionallevel"] "
+                             </td>
+                           </tr>
+                          " endif "
+                        " endfor "
+                      " endblock "
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-6">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-notes text-success"></i> Task Status</h3>
+                <h5 class="card-title"></i> View the status of the recent tasks</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                 <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead>
+                      <tr>
+                        <th>id</th>
+                        <th>taskname</th>
+                        <th># of agents</th>
+                        <th>percentage complete</th>
+                      </tr>
+                    </thead>
+                  </table>
+                 </div
+                </div>
+              </div>
+            </div>
+           </div>
+          </div>
+          <div class="col-lg-6 col-md-6">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-time-alarm text-success"></i> Agent Errors</h3>
+                <h5 class="card-title"></i> Agents that have not checked in within 24 hours</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                 <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                  <table id="example2" class="table table-striped table-bordered"  style="width:100%">
+                    <thead>
+                      <tr>
+                        <th>aid</th>
+                        <th>hostname</th>
+                        <th>last check in</th>
+                      </tr>
+                    </thead>
+                  </table>
+                 </div
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  {% endblock %}
+

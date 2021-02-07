@@ -1,0 +1,255 @@
+{% extends "template.html" %}
+
+  {% block head %}
+      {{ super() }}
+      <link rel="stylesheet" href="{{ url_for('static', filename='webshell.css') }}">
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+      <!-- End Navbar -->
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-time-alarm text-success"></i> Agent Terminal</h3>
+                <h5 class="card-title"></i> Shell access on Agents</h5>
+              </div>
+              <div class="card-body">
+                {% if agent %}
+                  <div class="terminalCont">
+                    <div id="terminalReslutsCont"></div>
+                    <form>
+                      <input id="terminalTextInput" type="text" placeholder="Try typing help... Or Commmands (ex. run job=get-help)" autocomplete="off">
+                    </form>
+                  </div>
+                </div>
+              {% else %}
+                <div class="alert alert-default" role="alert">
+                  Agent is offline. Try again later!
+                </div>
+                <form action=>
+                  <div class="form-row">
+                    <button name="aid" type="submit" class="btn btn-fill btn-primary btn-sm" id="submit">Find</button>
+                    <div class="col">
+                      <input id="aid" type="text" class="form-control" placeholder="Agent ID (AID)">
+                    </div>
+                  </div>
+                </form>
+              {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+  {% endblock %}
+
+{% block extra_js %}
+  {{ super() }}
+<!-- Place Scripts here -->
+<script>
+$(document).ready(function() {
+    $("button#submit").click(function(){
+        var aid = $("input#aid").val();
+        if (aid) {
+          window.location.replace("{{url_for('agent_ui.rtr')}}/"+aid);
+        };
+    }); 
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var pathname = window.location.pathname;
+  var aid = pathname.substring(pathname.lastIndexOf('/') + 1);
+
+
+  document.getElementsByTagName('form')[0].onsubmit = function(evt) {
+    evt.preventDefault(); // Preventing the form from submitting
+    checkWord(); // Do your magic and check the entered word/sentence
+    window.scrollTo(0,150);
+  }
+
+  // Get the focus to the text input to enter a word right away.
+  document.getElementById('terminalTextInput').focus();
+
+  // Getting the text from the input
+  var textInputValue = document.getElementById('terminalTextInput').value.trim();
+
+  //Getting the text from the results div
+  var textResultsValue = document.getElementById('terminalReslutsCont').innerHTML;
+
+  // Clear text input
+  var clearInput = function(){
+    document.getElementById('terminalTextInput').value = "";
+  }
+
+  // Scrtoll to the bottom of the results div
+  var scrollToBottomOfResults = function(){
+    var terminalResultsDiv = document.getElementById('terminalReslutsCont');
+    terminalResultsDiv.scrollTop = terminalResultsDiv.scrollHeight;
+  }
+
+  // Scroll to the bottom of the results
+  scrollToBottomOfResults();
+
+  // Add text to the results div
+  var addTextToResults = function(textToAdd){
+    document.getElementById('terminalReslutsCont').innerHTML += "<p>" + textToAdd + "</p>";
+    scrollToBottomOfResults();
+  }
+
+  // Getting the list of keywords for help & posting it to the screen
+  var postHelpList = function(){
+    // Array of all the help keywords
+    var helpKeyWords = [
+      ":Description: Execute commands on the endpoint. Preface input with `run` to send the command to the agent.",
+      ":Usage: Type (run job=get-help) to view the available commands on the agent.",
+
+      "- Search Google: Type (google keyword)",
+      "- Search VirusTotal: Type (vt ip/domain)",
+    ].join('<br>');
+    addTextToResults(helpKeyWords);
+  }
+
+  // Opening links in a new window
+  var openLinkInNewWindow = function(linkToOpen){
+    window.open(linkToOpen, '_blank');
+    clearInput();
+  }
+  
+// Main function to check the entered text and assign it to the correct function
+  var checkWord = function() {
+    textInputValue = document.getElementById('terminalTextInput').value.trim(); //get the text from the text input to a variable
+    textInputValueLowerCase = textInputValue.toLowerCase(); //get the lower case of the string
+
+//DEMO START
+    var LONG_POLL_DURATION = 60000;
+    var RETRY_AMOUNT = 15;
+    var bail = 0;
+    var bail_msg = 'Hmm.. Something took too long. Please try again or contact an Admin.';
+    function wait_for_update(cmdid) {
+      var loopId = setTimeout(function(){
+        $.ajax({ url: "/api/agent/rtr/"+aid+"?id="+cmdid,
+                 type: "GET",
+                 success: function(result) {
+                     if (result["complete"] === 1) { // complete
+                         display_data(result);
+                     } 
+                     else { // not complete
+                         bail++;
+                         if (bail >= RETRY_AMOUNT) { // failed to get results after 20 tries
+                             $.notify({ message: bail_msg},{type: 'danger', showProgressbar: false,});
+                             addTextToResults("<p style='color:#FF0000 !important;'>Command Failed! </p>");
+                         }
+                         else {
+                             wait_for_update(cmdid);
+                         };
+                     }
+                 },
+                 error: function(result) {
+                     bail++;
+                     if (bail >= RETRY_AMOUNT) { // failed to get results after 20 tries
+                         $.notify({ message: bail_msg},{type: 'danger'});
+                     }
+                     else {
+                         wait_for_update(cmdid);
+                     };
+                 },
+                 timeout:  LONG_POLL_DURATION,
+        });
+     },3000); 
+    };
+    function display_data(data) {
+        $.notify({
+              message: data["message"]
+            },{
+              type: data["type"],
+              delay: 2000
+        });
+        addTextToResults("+++++");
+        addTextToResults(data["data"]); // add data to the cmd console
+        addTextToResults("+++++");
+        addTextToResults("<p style='color:#00f2c3 !important;'>Last Command: <span style=color:white;>"+textInputValue+"</span></p>");
+        addTextToResults("<p style='color:#00f2c3 !important;'>Current Directory: <span style=color:white;>"+data["cwd"]+"</span></p>");
+    }
+    var postData = function(input) {
+     $.ajax({
+        type: "POST",
+        url: "/api/agent/rtr/"+aid,
+//        data : JSON.stringify({"cmd":textInputValueLowerCase}),
+        data : JSON.stringify({"cmd":input}),
+        contentType: 'application/json',
+        success: function(result) {
+            console.log(result);
+            $.notify({
+              message: result["message"]
+            },{
+              type: result["type"],
+      	      showProgressbar: false,
+              delay: 2000
+            });
+            wait_for_update(result["id"]);
+        },
+        error: function(result) {
+            console.log(result);
+            $.notify({
+              // options
+              message: 'An Error occurred. Please contact an Administrator.'
+            },{
+              // settings
+              type: 'danger'
+            });
+        }
+     });
+    }
+    // Having a specific text reply to specific strings
+    var textReplies = function() {
+     switch(textInputValueLowerCase){
+      case "google":
+        clearInput();
+        addTextToResults("Type google + something to search for.");
+        break;
+
+      case "virustotal":
+      case "vt":
+        clearInput();
+        addTextToResults("Type vt + something to search for.");
+        break;
+
+      case "save":
+        clearInput();
+        console.log(document.getElementById('terminalReslutsCont').textContent);
+        break;
+
+      case "help":
+      case "?":
+        clearInput();
+        postHelpList();
+        break;
+
+      default:
+      clearInput();
+      addTextToResults("<p><i>The command " + "<b>" + textInputValue + "</b>" + " was not found. Type <b>Help</b> to see all commands.</i></p>");
+      break;
+     }
+    }
+
+    if (textInputValue != ""){ //checking if text was entered
+      addTextToResults("<p class='userEnteredText' style='color:#00f2c3 !important;'>Command> <span style=color:white;>"+textInputValue+"</span></p>");
+      if (textInputValueLowerCase.substr(0,7) == "google ") {
+        openLinkInNewWindow('https://www.google.com/search?q='+textInputValueLowerCase.substr(7));
+        addTextToResults("<i>Search on Google for " + "<b>" + textInputValue.substr(7) + "</b>" + " it should be opened now.</i>");
+      } else if (textInputValueLowerCase.substr(0,3) == "vt "){
+        openLinkInNewWindow('https://www.virustotal.com/gui/ip-address/'+textInputValueLowerCase.substr(3));
+        addTextToResults("<i>Search on Virustotal for " + "<b>" + textInputValue.substr(3) + "</b>" + " it should be opened now.</i>");
+      } else if (textInputValueLowerCase.substr(0,4) == "run "){ // Send command to agent
+            clearInput();
+            postData(textInputValue.substr(4));
+      } else{
+        textReplies();
+      }
+    }
+  };
+
+});
+</script>
+{% endblock %}

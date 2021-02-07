@@ -1,0 +1,139 @@
+<html>
+<head>
+  <title></title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/jquery.query-builder/2.3.3/css/query-builder.default.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.query-builder/2.3.3/js/query-builder.standalone.min.js"></script>
+</head>
+<body>
+  <div id="builder"></div>
+  <button class="btn btn-success" id="btn-set">Set Rules</button>
+  <button class="btn btn-primary" id="btn-get">Get Rules</button>
+  <button class="btn btn-primary" id="btn-get-sql">Get SQL</button>
+  <button class="btn btn-warning" id="btn-reset">Reset</button>
+</body>
+<script>
+var rules_basic = {
+	  condition: 'AND',
+	  rules: [{
+	    id: 'id',
+	    operator: 'equal',
+	    value: 12345678
+	  }, {
+	    condition: 'OR',
+	    rules: [{
+	      id: 'category',
+	      operator: 'equal',
+	      value: 2
+	    }, {
+	      id: 'category',
+	      operator: 'equal',
+	      value: 1
+	    }]
+	  }]
+	};
+
+    $('#builder').queryBuilder({
+	  plugins: ['bt-tooltip-errors'],
+	  
+	  filters: [{
+	    id: 'name',
+	    label: 'Name',
+	    type: 'string'
+	  }, {
+	    id: 'category',
+	    label: 'Category',
+	    type: 'integer',
+	    input: 'select',
+	    values: {
+	      1: 'Books',
+	      2: 'Movies',
+	      3: 'Music',
+	      4: 'Tools',
+	      5: 'Goodies',
+	      6: 'Clothes'
+	    },
+	    operators: ['equal', 'not_equal', 'in', 'not_in', 'is_null', 'is_not_null']
+	  }, {
+	    id: 'in_stock',
+	    label: 'In stock',
+	    type: 'integer',
+	    input: 'radio',
+	    values: {
+	      1: 'Yes',
+	      0: 'No'
+	    },
+	    operators: ['equal']
+	  }, {
+	    id: 'price',
+	    label: 'Price',
+	    type: 'double',
+	    validation: {
+	      min: 0,
+	      step: 0.01
+	    }
+	  }, {
+	    id: 'id',
+	    label: 'Identifier',
+	    type: 'string',
+	    placeholder: '____-____-____',
+	    operators: ['equal', 'not_equal']
+	  }],
+	  rules: rules_basic
+	});
+    /****************************************************************
+    						Triggers and Changers QueryBuilder
+ *****************************************************************/
+
+	$('#btn-get').on('click', function() {
+	  var result = $('#builder').queryBuilder('getRules');
+	  if (!$.isEmptyObject(result)) {
+	    alert(JSON.stringify(result, null, 2));
+	  }
+	  else{
+	  	console.log("invalid object :");
+	  }
+	  console.log(result);
+	});
+        $('#btn-get-sql').on('click', function() {
+          var result = $('#builder').queryBuilder('getSQL', 'numbered');
+
+          if (result.sql.length) {
+            SendData(result.sql,result.params)
+            //alert(result.sql + '\n\n' + JSON.stringify(result.params, null, 2));
+          }
+        });
+
+	$('#btn-reset').on('click', function() {
+	  $('#builder').queryBuilder('reset');
+	});
+
+	$('#btn-set').on('click', function() {
+	  //$('#builder').queryBuilder('setRules', rules_basic);
+	  var result = $('#builder').queryBuilder('getRules');
+	  if (!$.isEmptyObject(result)) {
+	  	rules_basic = result;
+	  }
+	});
+
+	//When rules changed :
+	$('#builder').on('getRules.queryBuilder.filter', function(e) {
+		//$log.info(e.value);
+	});
+
+        function SendData(sql,params){
+          $.ajax({
+            type : "POST",
+            url : "/ui/jquery",
+            //data: JSON.stringify(data, null, '\t'),
+            data: JSON.stringify({"sql":sql,"params":params}),
+            contentType: 'application/json;charset=UTF-8',
+            success: function(result) {
+              console.log(result);
+            }
+          });
+        }
+</script>
+</html>

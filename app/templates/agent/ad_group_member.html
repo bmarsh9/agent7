@@ -1,0 +1,78 @@
+{% extends "template.html" %}
+
+
+  {% block body %}
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Group</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Group Name</th>
+                        <th scope="col">SID</th>
+                        <th scope="col">Domain</th>
+                        <th scope="col">Members</th>
+                        <th scope="col">Member Of</th>
+                        <th scope="col">Date Added</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>{{group.samaccountname}}</td>
+                          <td>{{group.objectsid}}</td>
+                          <td>{{group.domain}}</td>
+                          <td>{{group.members_count}}</td>
+                          <td>{{group.memberof_count}}</td>
+                          <td>{{group.date_added}}</td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Members</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Account Type</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if group.members %}
+                        {% for atype,d in group.members.items() %}
+                          {% for member in d["list"] %}
+                            <tr>
+                              <td>{{member}}</td>
+                              <td>{{atype}}</td>
+                            </tr>
+                          {% endfor %}
+                        {% endfor %}
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {% endblock %}
+
+  {% block extra_js%}
+  {%endblock%}

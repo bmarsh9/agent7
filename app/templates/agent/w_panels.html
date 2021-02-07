@@ -1,0 +1,64 @@
+{% extends "template.html" %}
+
+  {% block head %}
+  {{ super() }}
+  {% endblock %}
+
+  {% block style %}
+    ul#myTab {
+      padding-bottom: 30px;
+    }
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+      <!-- End Navbar -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link" id="home-tab" href="{{url_for('agent_ui.panels')}}" role="tab" aria-controls="home" aria-selected="true">Agent</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" href="{{url_for('agent_ui.ad_panels')}}" role="tab" aria-controls="profile" aria-selected="false">Active Directory</a>
+          </li>
+        </ul>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-dark alert-dismissible">
+              <button type="button" class="close"  data-dismiss="alert">&times;</button>
+              <i class="tim-icons icon-light-3 text-success"></i>  Watcher allows you to scan your external domain's and IP's. If you want to customize the settings, click <a class="text-success" href="{{url_for('main_ui.manage_scans')}}">Here</a>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.get_scan_stats')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View Scan Dashboard</h1>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>Scan Dashboard</h3>
+              </div></a>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.scans')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View details of specific scans</h1>
+                <h3 class="card-title"><i class="tim-icons icon-align-center text-orange"></i>Scan Details</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.scan_targets')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View all scanned targets</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bullet-list-67 text-red"></i>Targets</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+      </div>
+
+  {% endblock %}
+
+{% block extra_js %}
+<!-- Place Scripts here -->
+{% endblock %}

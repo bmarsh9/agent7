@@ -1,0 +1,96 @@
+{% extends "template.html" %}
+
+{% block style %}
+  {{super()}}
+  img.card-img-top {
+      height: 300px;
+  }
+
+  #licensing {
+    fill: green;
+  }
+
+  .link.licensing {
+    stroke: green;
+  }
+
+  .link.resolved {
+    stroke-dasharray: 0,2 1;
+  }
+  text {
+    font: 12px sans-serif;
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+    fill: #fff;    
+  }
+{% endblock %}
+
+      {% block body %}
+        <div class="row">
+          <div class="col-md-8 ml-auto mr-auto">
+            <div class="card card-subcategories card-plain">
+              <div class="card-header">
+                <h1 class="card-title text-center mt-5">Modules</h1>
+                <br>
+              </div>
+              <div class="card-body">
+                <ul class="nav nav-pills nav-pills-primary nav-pills-icons justify-content-center">
+                  <li class="nav-item">
+                    <a class="nav-link active show" data-toggle="tab" href="#link7">
+                      <i class="tim-icons icon-support-17"></i> Agent
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#link8">
+                      <i class="tim-icons icon-bank"></i> Active Directory 
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#link9">
+                      <i class="tim-icons icon-world"></i> Watcher
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#link10">
+                      <i class="tim-icons icon-lock-circle"></i> Vault
+                    </a>
+                  </li>
+                </ul>
+                <div class="tab-content tab-space tab-subcategories">
+                  <div class="tab-pane active show" style="color:white" id="link7">
+                    Explore agents installed in the environment. Gain insight into logged on users, installed software, processes, services and network shares.
+                    <br><a href="{{url_for('agent_ui.panels')}}" class="btn btn-primary btn-simple" style="display:block;margin:0 auto;margin-top:20px;width:max-content;">
+                      Explore
+                    </br></a>
+                  </div>
+                  <div class="tab-pane" style="color:white" id="link8">
+                    Search across your Active Directory domains for overprivileged users, insecure configurations and more.
+                    <br>
+                    <br>
+                    <br><a href="{{url_for('agent_ui.ad_panels')}}" class="btn btn-primary btn-simple" style="display:block;margin:0 auto;margin-top:20px;width:max-content;">
+                      Explore
+                    </br></a>
+                  </div>
+                  <div class="tab-pane" style="color:white" id="link9">
+                    Perform automated scanning of your external assets. Additionally, Watcher monitors your domain names and IP's for open ports, services, version discovery and more.
+                    <br>
+                    <br>
+                    <br><a href="{{url_for('agent_ui.w_panels')}}" class="btn btn-primary btn-simple" style="display:block;margin:0 auto;margin-top:20px;width:max-content;">
+                      Explore
+                    </br></a>
+                  </div>
+                  <div class="tab-pane" style="color:white" id="link10">
+                    Vault identifies privileged account use on the network and allows you to automatically manage them. Just-in-time privileges, password rotation, account check out.
+                    <br>
+                    <br>
+                    <br><a href="{{url_for('main_ui.vault_panels')}}" class="btn btn-primary btn-simple" style="display:block;margin:0 auto;margin-top:20px;width:max-content;">
+                      Explore
+                    </br></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endblock %}

@@ -1,0 +1,150 @@
+.gradientCont{
+	background-image: linear-gradient(-270deg, #0085FF 0%, #00FBFF 100%);
+}
+
+p {
+    white-space: pre-wrap;
+}
+
+.mainCont{
+	margin: 0 auto;
+}
+
+.mainCont h2{
+	text-align: center;
+	/*text-transform: uppercase;*/
+	font-weight: 300;
+	font-size: 48px;
+	margin: 60px 0 0 0;
+	color: white;
+  opacity: 0;
+
+  animation: fadeInAnimation 1s ease-in-out 0s forwards;
+}
+
+.mainCont h3{
+	text-align: center;
+	font-weight: 400;
+	font-size: 18px;
+	color: rgba(255,255,255,0.75);
+  margin: 0 0 60px 0;
+  opacity: 0;
+
+  animation: fadeInAnimation 1s ease-in-out 0.5s forwards;
+}
+
+.terminalCont {
+  border-radius: 4px;
+  padding:12px 0 0 0;
+  margin-top: -20px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.userEnteredText{
+  color: rgba(255,255,255,0.5);
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+
+#terminalReslutsCont{
+/*	width:100vw; */
+	height: 90vh; 
+	overflow-y: auto;	 
+	padding: 12px;
+	resize: none;
+	border: none;
+	font-size: 14px;
+        line-height: 28px;
+	/*display: block; */
+	color: rgba(255,255,255,0.9);
+}
+
+
+#terminalReslutsCont a{
+  color: rgba(255,255,255,0.9);
+  text-decoration: none;
+}
+
+#terminalReslutsCont a:hover{
+  text-decoration: underline;
+}
+
+#terminalTextInput{
+	border: none;
+	border-top: 1px solid rgba(255,255,255,0.2);
+	border-radius: 0 0 4px 4px;
+	color: white;
+	padding: 18px;
+	font-size: 14px;
+  outline: none;
+  font-family: 'Roboto Mono', monospace;
+}
+
+.footerCont{
+  text-align: center;
+  margin-top: 50px;
+  color:#333;
+  font-size: 12px;
+  opacity: 0;
+  animation: fadeInAnimation 1s ease-in-out 2s forwards;
+}
+
+.footerCont a{
+  color: #037AFF;
+  text-decoration: none;
+}
+
+
+/*
+  Animation habibi
+  Thanks @joericho for the help with this
+*/
+@-webkit-keyframes fadeInAnimation {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-moz-keyframes fadeInAnimation {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-o-keyframes fadeInAnimation {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes fadeInAnimation {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-webkit-keyframes slideDownAnimation {
+  0%   { margin-top: -20px;}
+  100% { margin-top: 0;}
+}
+@-moz-keyframes slideDownAnimation {
+  0%   { margin-top: -20px;}
+  100% { margin-top: 0;}
+}
+@-o-keyframes slideDownAnimation {
+  0%   { margin-top: -20px;}
+  100% { margin-top: 0;}
+}
+@keyframes slideDownAnimation {
+  0%   { margin-top: -20px;}
+  100% { margin-top: 0;}
+}
+
+/* Make me responsive */
+@media screen and (max-width: 1000px){
+  
+  .mainCont h2{
+    font-size: 32px;
+    margin: 40px 0 0 0;
+  }
+  .mainCont h3{
+    font-size: 16px;
+    margin: 0 0 40px 0;
+  }
+
+}
+

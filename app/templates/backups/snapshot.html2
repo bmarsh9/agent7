@@ -1,0 +1,123 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.min.js"></script>
+
+
+    <script src="{{url_for('static',filename='assets/js/datatables_template.js')}}"></script>
+    <script src="{{url_for('static',filename='assets/js/chartjs_template.js')}}"></script>
+    <script src="{{url_for('static',filename='assets/js/update_template.js')}}"></script>
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+  <script src="{{url_for('static',filename='demo_chartjs.js')}}"></script>
+
+
+    <!-- Number counter -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+
+  {% endblock %}
+
+  {% block body %}
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Progress of grade compared to last month</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Grade Progress</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter" class="text-large" style="font-size:5rem;">10</h1>
+                  <span>%</span>
+              </div>              
+            </div>  
+          </div> 
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Progress of Agent</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Agent Score</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter2" class="text-large" style="font-size:5rem;">5</h1>
+                  <span>%</span>
+              </div>
+            </div>  
+          </div> 
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Progress of Active Directory</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Active Directory Score</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter3" class="text-large" style="font-size:5rem;">20</h1>
+                  <span>%</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Progress of Watcher</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Watcher Score</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter6" class="text-large" style="font-size:5rem;">7</h1>
+                  <span>%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-7">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Current score compared to last month</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Score Progress</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Goals for each Module</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Future Goal</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+//haaaaaaaaa
+        $("#statistic-counter").counterUp({delay: 10,time: 1000});
+        $("#statistic-counter2").counterUp({delay: 10,time: 1000});
+        $("#statistic-counter3").counterUp({delay: 10,time: 1000});
+        $("#statistic-counter4").counterUp({delay: 10,time: 1000});
+        var table1 = draw_current_scores(compare_label="Last Month");
+        var table2 = draw_mixed_chart(selector="chart3");
+    });
+  </script>
+  {%endblock%}
+

@@ -1,0 +1,179 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True,counter=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+    <script src="{{url_for('static',filename='assets/js/vault/v_dashboard.js')}}"></script>
+
+  {% endblock %}
+
+  {% block style %}
+    {{super()}}
+  {% endblock %}
+
+  {% block body %}
+      <div class="row">
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Total privileged accounts</h1>
+                <h4 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>Privileged Accounts</h4>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter" class="text-large" style="font-size:2.5rem;"></h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Total, managed accounts</h1>
+                <h4 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>Secured Privileged Accounts</h4>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter2" class="text-large" style="font-size:2.5rem;"></h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Total, unmanaged accounts</h1>
+                <h4 class="card-title"><i class="tim-icons icon-bulb-63 text-red"></i>Insecured Privileged Accounts</h4>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter3" class="text-large" style="font-size:2.5rem;">5</h1>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Privileged domain accounts and if they are managed</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Managed Domain Accounts</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Privileged local accounts and if they are managed</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Managed Local Accounts</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Hosts with the most local accounts that are privileged & unmanaged</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Insecure Hosts</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Privileged Domain Accounts by Group</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Privileged users shown by domain group and if there are managed</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example3" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Status of Privileged Accounts</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Data on privileged accounts & where they were discovered</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example2" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+  {%endblock%}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        vault_dash(
+          selector="chart",
+          url="/api/agent/data/ad_user?filter=is_priv,eq,1&groupby=managed,count&as_chartjs=true"
+        )
+        vault_dash(
+          selector="chart3",
+          url="/api/agent/data/agentuser?filter=is_priv,eq,1&groupby=managed,count&as_chartjs=true"
+        )
+        var table3 = cjs_init(
+            selector="chart2",
+            url="/api/agent/data/agentuser?filter=priv,eq,2;local_account,eq,true;managed,eq,false&groupby=host_name,count&as_chartjs=true",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Services", // header of graph
+        );
+        var up = update_init(
+            selector="#statistic-counter",
+            url="/api/main/vault/privileged/accounts",
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter2",
+            url="/api/main/vault/privileged/managed/accounts",
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter3",
+            url="/api/main/vault/privileged/unmanaged/accounts",
+            animate=1 // animate the increment
+        );
+        var table = dt_init(
+            selector="#example2", // table id selector
+            url="/api/main/vault/privileged/accounts?as_datatables=1",
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var table = dt_init(
+            selector="#example3", // table id selector
+            url="/api/main/vault/privileged/domain/group/metrics",
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+    });
+  </script>
+  {%endblock%}

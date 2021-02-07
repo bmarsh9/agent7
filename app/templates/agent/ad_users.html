@@ -1,0 +1,213 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True,counter=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block body %}
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Users that have not changed their password in 3 years</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Stale Passwords</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter" class="text-large" style="font-size:5rem;"></h1>
+              </div>              
+            </div>  
+          </div> 
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Number of Administrator users</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Admin Users</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter2" class="text-large" style="font-size:5rem;"></h1>
+              </div>
+            </div>  
+          </div> 
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Users that password does not expire</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Non-Expire Password</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter3" class="text-large" style="font-size:5rem;"></h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Users that do not have a password</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Non-Req Password</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter6" class="text-large" style="font-size:5rem;"></h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Users grouped by last password change in days</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Days Since Last Password Change</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Users that are "kerberoastable"</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Roastable Users</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Stale Accounts</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Accounts that have not logged on in over 2 months</h5>
+                <button type="button" style="float:right;display:inline-block;" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title="" data-toggle="modal" data-target="#helpModal">
+                            <i class="tim-icons icon-bulb-63"></i>
+                </button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example2" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Total users in Active Directory</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Total Users</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter4" class="text-large" style="font-size:5rem;"></h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Users that have not logged on in 2 months</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Stale Accounts</h3>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter5" class="text-large" style="font-size:5rem;"></h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Active Directory Users</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> All users collected from AD</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+//haaaaaaaaa
+        var table2 = cjs_init(
+            selector="chart",
+            url="/api/agent/data/ad_user?as_chartjs=true&filter=serviceprincipalname,ne,None;objectclass,eq,user&groupby=cn,count",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Kerb users", // header of graph
+        );
+        // draw datatable
+        var table = dt_init(
+            selector="#example", // table id selector
+            url="/api/agent/data/ad_user?as_datatables=true&visible=id,samaccountname,domain,lastlogon,pwdlastset,is_priv,whencreated&filter=objectclass,eq,user",
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var table = dt_init(
+            selector="#example2", // table id selector
+            url="/api/agent/data/ad_user?as_datatables=true&filter=lastlogon,lt,2 months ago&visible=samaccountname,is_priv,lastlogon,logoncount",
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var up = update_init(
+            selector="#statistic-counter",
+            url="/api/agent/data/ad_user?groupby=pwdlastset,count&getcount=true&filter=objectclass,eq,user",
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter2",
+            url="/api/agent/data/ad_user?groupby=is_priv,count;objectsid,group&getcount=true&filter=is_priv,eq,1",
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter3",
+            url="/api/agent/data/ad_user?as_json=true&filter=useraccountcontrol,ilike,*dont_expire*",            
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter4",
+            url="/api/agent/data/ad_user?getcount=true&filter=objectclass,eq,user",
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter5",
+            url="/api/agent/data/ad_user?filter=lastlogon,lt,2 months ago&getcount=true&filter=objectclass,eq,user",
+            animate=1 // animate the increment
+        );
+        var up = update_init(
+            selector="#statistic-counter6",
+            url="/api/agent/data/ad_user?getcount=true&filter=useraccountcontrol,ilike,*NOTREQD*",
+            animate=1 // animate the increment
+        );
+        var table3 = cjs_init(
+            selector="chart2",
+            url="/api/ad/pwd-last-changed",
+            type="bar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Password Last Changed", // header of graph
+        );
+    });
+  </script>
+  {%endblock%}
+

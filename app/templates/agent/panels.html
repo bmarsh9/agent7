@@ -1,0 +1,196 @@
+{% extends "template.html" %}
+
+  {% block head %}
+  {{ super() }}
+  {% endblock %}
+
+  {% block style %}
+    {{ super() }}
+
+    ul#myTab {
+      padding-bottom: 30px;
+    }
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+      <!-- End Navbar -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" href="{{url_for('agent_ui.panels')}}" role="tab" aria-controls="home" aria-selected="true">Agent</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" href="{{url_for('agent_ui.ad_panels')}}" role="tab" aria-controls="profile" aria-selected="false">Active Directory</a>
+          </li>
+        </ul>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-dark alert-dismissible">
+              <button type="button" class="close"  data-dismiss="alert">&times;</button>
+              <i class="tim-icons icon-light-3 text-success"></i> Agent allows you view collected data from your endpoints. Configure which data is collected <a class="text-success" href="{{url_for('main_ui.jobs')}}"> Here</a>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.fleet')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View information on your endpoints</h1>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>Fleet Data</h3>
+              </div></a>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.service')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Discover services and processes</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bank text-purple"></i>Services & Processes</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.software')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Discover installed and outdated software</h1>
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-teal"></i>Installed Software</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.share')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Search network shares configured</h1>
+                <h3 class="card-title"><i class="tim-icons icon-globe-2 text-teal"></i>Network Shares</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.connections')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View established connections and listening ports</h1>
+                <h3 class="card-title"><i class="tim-icons icon-app text-blue"></i>Network Connections</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.logon')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View users that have recently logged in</h1>
+                <h3 class="card-title"><i class="tim-icons icon-compass-05 text-yellow"></i>Logon Data</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.schtask')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Discover scheduled tasks</h1>
+                <h3 class="card-title"><i class="tim-icons icon-light-3 text-orange"></i>Scheduled Tasks</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.system')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View Operating system information</h1>
+                <h3 class="card-title"><i class="tim-icons icon-chart-bar-32 text-cyan"></i>System Data</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.startup')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View startup tasks</h1>
+                <h3 class="card-title"><i class="tim-icons icon-lock-circle text-blue"></i>Startup Actions</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.pipes')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View information on named pipes</h1>
+                <h3 class="card-title"><i class="tim-icons icon-button-pause text-red"></i>Named Pipes</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.printers')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View local printers</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bag-16 text-orange"></i>Printers</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.auditkeys')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View compliance status based on registry keys</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bullet-list-67 text-orange"></i>Compliance Audit</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.netadapter')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View network adapter information and addresses</h1>
+                <h3 class="card-title"><i class="tim-icons icon-image-02 text-cyan"></i>Network Adapter</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.patch')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View Hot fix data</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bullet-list-67 text-orange"></i>Hot Fix & Patch</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.disk_memory')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View disk and memory statistics</h1>
+                <h3 class="card-title"><i class="tim-icons icon-laptop text-indigo"></i>Disk & Memory Stats</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.local_groups')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Search local groups on the endpoints</h1>
+                <h3 class="card-title"><i class="tim-icons icon-notes text-orange"></i>Local Groups</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.local_users')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Search local users on the endpoints</h1>
+                <h3 class="card-title"><i class="tim-icons icon-single-02 text-yellow"></i>Local Users</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('agent_ui.updates')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Data on installed updates - security issues</h1>
+                <h3 class="card-title"><i class="tim-icons icon-single-02 text-yellow"></i>Missing Updates</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+      </div>
+
+  {% endblock %}
+
+{% block extra_js %}
+<!-- Place Scripts here -->
+{% endblock %}

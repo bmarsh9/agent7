@@ -1,0 +1,35 @@
+{% extends "template.html" %}
+        {% block body %}
+        <div class="row">
+          <div class="col-md">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item">
+	          {% block configuration %}{% endblock %}
+              </li>
+              <li class="nav-item">
+	          {% block users %}{% endblock %}
+              </li>
+              <li class="nav-item">
+	          {% block agents %}{% endblock %}
+              </li>
+              <li class="nav-item">
+	          {% block groups %}{% endblock %}
+              </li>
+              <li class="nav-item">
+	          {% block site %}{% endblock %}
+              </li>
+              <li class="nav-item">
+	          {% block blacklist %}{% endblock %}
+              </li>
+              <li class="nav-item">
+	          {% block whitelist %}{% endblock %}
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                  {% block tab %}{% endblock %}
+            </div>
+           </div>
+          </div>
+        </div>
+      </div>
+{% endblock %}

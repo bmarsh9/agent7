@@ -1,0 +1,81 @@
+{% extends "investigate/user/investigate_user_template.html" %}
+
+
+  {%block logon_active%}
+    active
+  {%endblock%}
+
+  {% block tab_data %}
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Logons grouped by logon time</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i> Logon Time History</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> User Logon Fingerprint</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Fingerprint of past user logons based on the authentication package,logon type and target host</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Logon Type</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i> Logon Type</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {% endblock %}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        var table = dt_init(
+            selector="#example", // table id selector
+            url = "/api/agent/data/agentlogon?as_datatables=true&filter=sid,eq,{{user.sid}}&groupby=username,count;logontype,group;authenticationpackage,group;host_name,group", // data url source  
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var table2 = cjs_init(
+            selector="chart",
+            url = "/api/agent/data/agentlogon?as_chartjs=true&filter=sid,eq,{{user.sid}}&groupby=logontime,count", // data url source  
+            type="bar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="History of Logon Times", // header of graph
+        );
+        var table2 = cjs_init(
+            selector="chart2",
+            url="/api/agent/data/agentlogon?as_chartjs=true&filter=sid,eq,{{user.sid}}&groupby=logontype,count",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="History of Logon Times", // header of graph
+        );
+    });
+  </script>
+  {%endblock%}

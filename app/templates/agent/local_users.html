@@ -1,0 +1,130 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block body %}
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Hosts with most local users</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Hosts with most Local Users</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Hosts where where the local account password does not expire</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Non Expire Passwords</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Hosts where local account password not req.</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Password Not Required</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart4"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Users grouped by last password change in days</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Days Since Last Password Change</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Local Users</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Local users on Endpoints</h5>
+                <button type="button" style="float:right;display:inline-block;" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title="" data-toggle="modal" data-target="#helpModal">
+                            <i class="tim-icons icon-bulb-63"></i>
+                </button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        var table2 = cjs_init(
+            selector="chart",
+            url="/api/agent/data/agentuser?as_chartjs=true&groupby=host_name,count&limit=100",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table2 = cjs_init(
+            selector="chart2",
+            url="/api/agent/data/agentuser?as_chartjs=true&groupby=host_name,count&limit=100&filter=useraccountcontrol,ilike,*DONT_EXPIRE_PASSWORD*",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        var table2 = cjs_init(
+            selector="chart4",
+            url="/api/agent/data/agentuser?as_chartjs=true&groupby=host_name,count&limit=100&filter=useraccountcontrol,ilike,*PASSWD_NOTREQD*",
+            type="doughnut", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Testing", // header of graph
+        );
+        // draw datatable
+        var table = dt_init(
+            selector="#example", // table id selector
+            url = "/api/agent/data/agentuser?as_datatables=true&visible=id,username,domain,local_account,sid,last_password_change,last_logon,host_name&limit=100", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var table3 = cjs_init(
+            selector="chart3",
+            url="/api/agent/local/pwd-last-changed",
+            type="bar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Password Last Changed", // header of graph
+        );
+    });
+  </script>
+  {%endblock%}
+

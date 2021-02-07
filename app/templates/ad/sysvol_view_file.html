@@ -1,0 +1,105 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block body %}
+        <div class="alert alert-dark alert-dismissible">
+          <button type="button" class="close"  data-dismiss="alert">&times;</button>
+            <i class="tim-icons icon-light-3 text-success"></i>  Viewing ACL data from file
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card text-left">
+              <div class="card-header">
+                <h6 class="title d-inline">File MetaData</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <p class="title">FileName</p>
+                          <p class="text">{{file.name}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">File Path on Sysvol</p>
+                          <p class="text">{{file.path}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Hash of File</p>
+                          <p class="text">{{file.hash}}</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p class="title">Created</p>
+                          <p class="text">{{file.create}}</p>
+                          <p class="title">Modified</p>
+                          <p class="text">{{file.modify}}</p>
+                          <p class="title">Accessed</p>
+                          <p class="text">{{file.access}}</p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">ACL Information</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Sid</th>
+                        <th scope="col">Domain</th>
+                        <th scope="col">Account Type</th>
+                        <th scope="col">Ace Type</th>
+                        <th scope="col">Mask</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for ace in file.aces %}
+                        <tr>
+                          <th scope="row">{{loop.index}}</th>
+                          <td>{{ace.username}}</td>
+                          <td>{{ace.sid}}</td>
+                          <td>{{ace.domain}}</td>
+                          <td>{{ace.account_type}}</td>
+                          <td>{{ace.ace_type}}</td>
+                          <td>{{ace.ace_mask}}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}
+

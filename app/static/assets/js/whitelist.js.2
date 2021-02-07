@@ -1,0 +1,54 @@
+$(document).ready(function (){
+   $.noConflict();
+   var table = $('#example').DataTable({
+      'ajax': {
+         'url': '/settings/api/0201'
+      },
+      'columnDefs': [
+      {
+         'targets': 0,
+         'width': "5%"
+      },
+      { // Icon for Actions
+         'targets': -1,
+         'searchable': false,
+         'orderable': false,
+         'width': "10%",
+         'data': null,
+         'render': function (data, type, full, meta){
+               return '<td class="text-right"><button type="button" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title=""><i class="tim-icons icon-settings"></i></button><button type="button" rel="tooltip" class="btn btn-warning btn-link btn-sm " data-original-title="Delete" title=""><i class="tim-icons icon-simple-remove"></i></button></td>'
+         }
+      },
+      { // Icon for Enabled/Disabled
+         'targets': -2,
+         'data': null,
+         'searchable': false,
+         'orderable': false,
+         'width': "1%",
+         'render': function (data, type, full, meta){
+//ahaaaa
+             var enabled = data[data.length-1];
+             console.log(enabled);
+             if ( enabled === true ) {
+               return '<td class="text-right"><button type="button" rel="tooltip" class="btn btn-success btn-link btn-sm btn-icon " data-original-title="Refresh" title=""><i class="tim-icons icon-check-2"></i></button></td>'
+             } else {
+               return '<td class="text-right"><button type="button" rel="tooltip" class="btn btn-warning btn-link btn-sm btn-icon " data-original-title="Refresh" title=""><i class="tim-icons icon-button-power"></i></button></td>'
+             }
+         }
+//         'defaultContent': '<button>Click!</button>'
+      }]
+   });
+   // Handle click on checkbox
+   $('#example tbody').on('click', 'input[type="checkbox"]', function(e){
+      var $row = $(this).closest('tr');
+      //Call Modal and populate it with row data
+      jQuery('#exampleModal').modal('show');
+      jQuery('#exampleModal').on('shown.bs.modal', function (e) {
+          console.log("here2");
+          var data = table.row($row).data();
+          $(e.currentTarget).find('input[name="id"]').val(data[0]);
+          $(e.currentTarget).find('input[name="dataType"]').val(data[1]);
+          $(e.currentTarget).find('input[name="dataValue"]').val(data[2]);
+      });
+   });
+});

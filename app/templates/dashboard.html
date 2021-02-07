@@ -1,0 +1,369 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True,counter=True,sparkline=True,d3=True) }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/easy-pie-chart/2.1.6/jquery.easypiechart.min.js"></script>
+
+  {% endblock %}
+  {% block style %}
+    {{ super() }}
+    path {
+      stroke: white;
+      stroke-width: 0.25px;
+      fill: #778899;
+    }
+    .card-chart .chart-area {
+      height:320px !important;
+    }
+    .jqstooltip {
+      box-sizing: content-box;
+    }
+    .centerdiv {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+.chart {
+    position: relative;
+    display: inline-block;
+    width: 110px;
+    height: 110px;
+    text-align: center;
+}
+.chart canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.percent {
+    display: inline-block;
+    line-height: 110px;
+    z-index: 2;
+    color:white;
+}
+.percent:after {
+    content:'%';
+    margin-left: 0.1em;
+    font-size: .8em;
+}
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+      <!-- End Navbar -->
+        <div class="row">
+          <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-8">
+                    <h4 class="card-title">Privileged Users</h4>
+                    <span id="sparkline4"></span>
+                  </div>
+                  <div class="col-4 centerdiv">
+                    <h3 style="text-align:center;font-size:2rem;" id="priv-counter" class="card-title"></h3>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="stats">
+                  <i class="tim-icons icon-minimal-down text-success"></i>Last Week
+                </div>
+<!--
+                <div class="row stats">
+                  <div class="col-4">
+                    test                                    
+                  </div>
+                  <div class="col-4">
+                    test                                    
+                  </div>
+                  <div class="col-4">
+                    test                  
+                  </div>
+                </div>
+-->
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-8">
+                    <h4 class="card-title">Threats</h4>
+                    <span id="sparkline2"></span>
+                  </div>
+                  <div class="col-4 centerdiv">
+                    <h3 style="text-align:center;font-size:2rem;" class="card-title">0</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="stats">
+                  <i class="tim-icons icon-minimal-down text-success"></i>Last Week
+                  <!-- <i class="tim-icons icon-minimal-up text-danger"></i>Last Week -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-8">
+                    <h4 class="card-title">Insights</h4>
+                    <span id="sparkline3"></span>
+                  </div>
+                  <div class="col-4 centerdiv">
+                    <h3 style="text-align:center;font-size:2rem;" id="insight-counter" class="card-title"></h3>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="stats">
+                  <i class="tim-icons icon-minimal-down text-success"></i>Last Week
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="card card-stats">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-8">
+                    <h4 class="card-title">Agents</h4>
+                    <span id="sparkline1"></span>
+                  </div>
+                  <div class="col-4 centerdiv">
+                    <h3 id="agent-counter" style="text-align:center;font-size:2rem;" class="card-title"></h3>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <hr>
+                <div class="stats">
+                  <i class="tim-icons icon-minimal-down text-success"></i>Last Week
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header">
+                Percentage of Privileged Accounts
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-8">
+                    <h1 id"per-priv-acc" style="font-size:3rem">71%</h1>
+                    <div style="height:3px" class="progress">
+                      <div class="progress-bar bg-orange" role="progressbar" style="width: 71%" aria-valuenow="71" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <br>
+                    <p>Agent7 will continuously discover and track privileged accounts in your network.</p>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="chart-area">
+                      <span id="sparkline5"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card">
+              <div class="card-header">
+                Percentage of Accounts at Risk
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-8">
+                    <h1 style="font-size:3rem">10%</h1>
+                    <div style="height:3px" class="progress">
+                      <div class="progress-bar bg-red" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <br>
+                    <p>Misuse and uncontrolled privileged accounts present a large risk to the business.</p>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="chart-area">
+                      <span id="sparkline6"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-7">
+            <div class="card">
+              <div class="card-header">
+                <h1 class="card-category">Geographic location for all connections</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i> Geo-IP Network Connections</h3>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div id="geochart" class="chart-area">
+                      <div id="map"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="card">
+              <div class="card-header">
+                <h1 class="card-category">Summary of your Asset Inventory</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i> Asset Summary</h3>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div style="margin-bottom:25px" class="col-lg-12">
+                    <h1 style="font-size:2rem;margin-bottom:5px">51</h1>
+                    <p class="card-text">Unique Software Installed</p>
+                    <div class="progress">
+                      <div class="progress-bar bg-blue" role="progressbar" style="width: 51%" aria-valuenow="51" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div style="margin-bottom:25px" class="col-lg-12">
+                    <h1 style="font-size:2rem;margin-bottom:5px">5</h1>
+                    <p class="card-text">Suspicious Domains Contacted</p>
+                    <div class="progress">
+                      <div class="progress-bar bg-blue" role="progressbar" style="width: 5%" aria-valuenow="5" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div style="margin-bottom:25px" class="col-lg-12">
+                    <h1 style="font-size:2rem;margin-bottom:5px">15</h1>
+                    <p class="card-text">Unique Services Running</p>
+                    <div class="progress">
+                      <div class="progress-bar bg-blue" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div style="margin-bottom:25px" class="col-lg-12">
+                    <h1 style="font-size:2rem;margin-bottom:5px">40</h1>
+                    <p class="card-text">Unique Processes Running</p>
+                    <div class="progress">
+                      <div class="progress-bar bg-blue" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-lg-6">
+                    <span style="display:block;margin:0 auto" class="chart" id="easychart1" data-percent="86">
+                      <span class="percent">86</span>
+                    </span>
+                    <h6 style="text-align:center;margin-top:10px">Total Software Installed</h6>
+                  </div>
+                  <div class="col-lg-6">
+                    <span style="display:block;margin:0 auto" class="chart" id="easychart2" data-percent="45">
+                      <span class="percent">45</span>
+                    </span>
+                    <h6 style="text-align:center;margin-top:10px">Total Scheduled Tasks</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  {% endblock %}
+
+{% block extra_js %}
+<!-- Place Scripts here -->
+<script>
+    $(document).ready(function (){
+        $.noConflict();
+        var up = update_init(
+            selector="#priv-counter",
+            url="/api/main/vault/privileged/accounts",
+            animate=1 // animate the increment
+        );
+        var up1 = update_init(
+            selector="#agent-counter",
+            url="/api/agent/data/agent?getcount=true",
+            animate=1, // animate the increment
+        );
+        var up2 = update_init(
+            selector="#insight-counter",
+            url="/api/agent/data/insight?getcount=true",
+            animate=1, // animate the increment
+        );
+/*
+        var up2 = update_init(
+            selector="#per-priv-acc",
+            url="/api/main/privileged/assets/percentages",
+            animate=1, // animate the increment
+        );
+*/
+        sparkline_init(
+          selector="#sparkline1",
+          url="/api/agent/data/agentsoftware?groupby=displayname,count&as_chartjs=true",
+          bar=true
+        );
+        sparkline_init(
+          selector="#sparkline2",
+          url="/api/agent/data/agentsoftware?groupby=displayname,count&as_chartjs=true",
+          bar=true,
+          color="rgba(220,53,69)"
+        );
+        sparkline_init(
+          selector="#sparkline3",
+          url="/api/agent/data/agentsoftware?groupby=displayname,count&as_chartjs=true",
+          bar=true,
+          color="#ffc107"
+        );
+        sparkline_init(
+          selector="#sparkline4",
+          url="/api/agent/data/agentsoftware?groupby=displayname,count&as_chartjs=true",
+          bar=true,
+          color="#17a2b8"
+        );
+        $('#sparkline5').sparkline([10,6,4,6,9,10,12,4,30], {
+          //type: 'bar',
+          //barWidth: 30,
+          height: 90,
+          width: '100%',
+          lineColor: 'rgba(23,162,184)',
+          //chartRangeMax: 12,
+          fillColor: 'rgba(23,162,184,0.2)'
+        });
+        $('#sparkline6').sparkline([10,20,25,6,4,7,12,4,10], {
+          //type: 'bar',
+          //barWidth: 25,
+          height: 90,
+          width: '100%',
+          lineColor: '#dc3545',
+          //chartRangeMax: 12
+          fillColor: 'rgba(220,53,69,0.2)'
+        });
+        $("#easychart1").easyPieChart({
+          "barColor":"green"
+        });
+        $("#easychart2").easyPieChart({
+          "barColor":"red" 
+        });        
+    });
+</script>
+<script>
+  d3map_init("#geochart",{{data|safe}});
+</script>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "template.html" %}
+
+{% block head %}
+  {{ super() }}
+  {% import "macros.html" as macro %}
+  {{ macro.filehelper(datatables=True,chartjs=True) }}
+{% endblock %}
+
+  {% block style %}
+    {{ super() }}
+  {% endblock %}
+
+{% block body %}
+{{super()}}
+<div class="row">
+    <div class="col-md">
+        <ul class="nav nav-tabs" id="myNavTabs">
+            <li class="nav-item">
+              <a class="nav-link {%block overview_active%}{%endblock%}" href="{{url_for('main_ui.investigate_agent',aid=agent.id)}}">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block logon_active%}{%endblock%}" href="{{url_for('main_ui.agent_logon',aid=agent.id)}}">Logon Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block logon_map%}{%endblock%}" href="{{url_for('main_ui.host_logon_map',id=agent.id)}}">Logon Map</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block network_active%}{%endblock%}" href="{{url_for('main_ui.agent_network',aid=agent.id)}}">Network</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block software_active%}{%endblock%}" href="{{url_for('main_ui.agent_software',aid=agent.id)}}">Software</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block shares_active%}{%endblock%}" href="{{url_for('main_ui.agent_shares',aid=agent.id)}}">Shares</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block services_active%}{%endblock%}" href="{{url_for('main_ui.agent_services',aid=agent.id)}}">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block process_active%}{%endblock%}" href="{{url_for('main_ui.agent_process',aid=agent.id)}}">Processes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block schtask_active%}{%endblock%}" href="{{ url_for('main_ui.agent_schtask',aid=agent.id)}}">Sch. Task</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block startup_active%}{%endblock%}" href="{{ url_for('main_ui.agent_startup',aid=agent.id)}}">Startup</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block users_active%}{%endblock%}" href="{{ url_for('main_ui.agent_users',aid=agent.id)}}">Users</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block groups_active%}{%endblock%}" href="{{ url_for('main_ui.agent_groups',aid=agent.id)}}">Groups</a>
+            </li>
+        </ul>
+        <div class="alert alert-dark alert-dismissible">
+          <button type="button" class="close"  data-dismiss="alert">&times;</button>
+            <h4 class="card-title"><i class="tim-icons icon-light-3 text-success"></i>  Host Investigation</h4>
+            <h5 class="card-title">Hostname: {{agent.hostname}}</h5>
+            <h5 class="card-title">Agent ID: {{agent.id}}</h5>
+        </div>
+        {% block tab_data %}{% endblock %}
+    </div>
+  </div>
+ </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
+

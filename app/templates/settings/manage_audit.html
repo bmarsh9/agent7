@@ -1,0 +1,80 @@
+{% extends "settings/setting_template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {%block auditkey_active%}
+      active
+  {%endblock%}
+  {% block tab_data %}
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Audit Name: {{key.name}}</h5>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Audit Keys</h5>
+              </div>
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Key Path</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for path in key.data["keys"]%}
+                      <tr>
+                        <th scope="row">{{loop.index}}</th>
+                        <td>{{path}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Delete Audit</h5>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.delete_audit',id=key.id)}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <input id="id" placeholder="Insert `delete` to confirm" value="" type="text" class="form-control"  name="id" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div>
+                      <button type="submit" value="{{key.id}}" name="remove" class="btn btn-simple btn-warning btn-sm" id="submit">Remove</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}
+

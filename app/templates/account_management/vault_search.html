@@ -1,0 +1,143 @@
+{% extends "template.html" %}
+
+      {% block body %}
+        <div class="alert alert-dark alert-dismissible">
+          <button type="button" class="close"  data-dismiss="alert">&times;</button>
+            <i class="tim-icons icon-light-3 text-success"></i>  Find Local Accounts for Onboarding
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Find accounts for onboarding by Agent ID</h1>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>By Agent ID</h3>
+                  <form class="form-inline" style="padding:10px" method="GET" action="{{url_for('main_ui.vault_search')}}">
+                    <div class="form-group">
+                      <input type="number" class="form-control" name="aid" placeholder="Enter Agent ID">
+                    </div>
+                    <button name="search_type" value="byaid" type="submit" style="margin-left:10px" class="btn btn-primary btn-simple btn-sm">Search</button>
+                  </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Find accounts for onboarding by hostname</h1>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>By Hostname</h3>
+                  <form class="form-inline" style="padding:10px" method="GET" action="{{url_for('main_ui.vault_search')}}">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="hostname" placeholder="Enter Hostname">
+                    </div>
+                    <button name="search_type" value="byhostname" type="submit" style="margin-left:10px" class="btn btn-primary btn-simple btn-sm">Search</button>
+                  </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Find accounts for onboarding by username</h1>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>By Username</h3>
+                  <form class="form-inline" style="padding:10px" method="GET" action="{{url_for('main_ui.vault_search')}}">
+                    <div class="form-group">
+                      <input type="text" class="form-control" name="username" placeholder="Enter Username">
+                    </div>
+                    <button name="search_type" value="byusername" type="submit" style="margin-left:10px" class="btn btn-primary btn-simple btn-sm">Search</button>
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% if not byusername and not byhostname and not byaid %}
+          <div class="alert alert-info alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+              No data found! Search for accounts by Agent ID, Computer hostname or username
+          </div>            
+        {% endif %}
+        {% if byusername %}
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Onboard Accounts</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Managed</th>
+                        <th scope="col">Local Account</th>
+                        <th scope="col">Found on Host</th>
+                        <th scope="col">Discovered</th>
+                        <th scope="col">Vault</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for record in byusername %}
+                        <tr>
+                          <th scope="row">{{loop.index}}</th>
+                          <td>{{record.username}}</td>
+                          {% if record.managed %}
+                            <td><i class="tim-icons icon-check-2 text-green"></i>  Yes</td>
+                          {% else %}
+                            <td><i class="tim-icons icon-alert-circle-exc text-yellow"></i>  No</td>
+                          {% endif %}
+
+                          <td>{{record.local_account}}</td>
+                          <td>{{record.host_name}}</td>
+                          <td>{{record.date_added}}</td>
+                          <td><a href="{{url_for('main_ui.view_account',aid=record.host_id,username=record.username)}}"><i class="tim-icons icon-zoom-split text-green"></i></a></td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>   
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% if byaid %}
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Onboard Accounts</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">AID</th>
+                        <th scope="col">Hostname</th>
+                        <th scope="col">FQDN</th>
+                        <th scope="col">Operating System</th>
+                        <th scope="col">View Users</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for record in byaid %}
+                        <tr>
+                          <th scope="row">{{loop.index}}</th>
+                          <td>{{record.id}}</td>
+                          <td>{{record.hostname}}</td>
+                          <td>{{record.fqdn}}</td>
+                          <td>{{record.edition}}</td>
+                          <td><a href="{{url_for('main_ui.manage_accounts',aid=record.id)}}"><i class="tim-icons icon-zoom-split text-green"></i></a></td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>   
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      {% endblock %}

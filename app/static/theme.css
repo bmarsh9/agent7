@@ -1,0 +1,191 @@
+.text-blue {
+    color: #5e72e4 !important;
+}
+.text-indigo {
+    color: #5603ad !important;
+}
+.text-purple {
+    color: #8965e0 !important;
+}
+.text-pink {
+    color: #1E1E28 !important;
+}
+.text-red {
+    color: #f5365c !important;
+}
+.text-orange {
+    color: #fb6340 !important;
+}
+.text-yellow {
+    color: #ffd600 !important;
+}
+.text-green {
+    color: #2dce89 !important;
+}
+.text-teal {
+    color: #11cdef !important;
+}
+.text-cyan {
+    color: #2bffc6 !important;
+}
+.text-gray {
+    color: #6c757d !important;
+}
+
+ul#myNavTabs {
+    padding-bottom: 20px;
+}
+
+div.dt-button-collection {
+  position: inherit !important; 
+  overflow: visible !important; 
+  margin-top: 3px !important; 
+  max-height: 200px;
+  overflow-y: scroll !important;
+}
+
+input.form-control.form-control-sm {
+    width: 300px !important;
+}
+
+option {
+  background-color: #2b3553;
+}
+
+button.dt-button.buttons-csv.buttons-html5,button.dt-button.buttons-collection.buttons-colvis,button.dt-button.buttons-csv.buttons-html5:hover,button.dt-button.buttons-collection.buttons-colvis:hover {
+  border-color: #344675;
+  background: transparent;
+  color: #00f2c3;
+  margin: 10px;
+}
+
+button#dropdown {
+    float: left;
+    font-size: 10px;
+}
+ul.pagination {
+    float: right;
+}
+.sidebar-wrapper {
+/*
+    background-color: rgb(255, 205, 86) !important;
+    border-radius: 2px;
+    border-width: 2px; 
+*/
+    background-color: #1e1e2f; 
+    border-radius: 1px;
+    border-color: #00f2c3 !important;
+/*    border-color: #00f2c3 !important;*/
+    border-style: solid !important;
+    border-width: 0.5px !important;
+}
+i.tim-icons.icon-zoom-split {
+    color: #00f2c3;
+}
+
+.pagination .page-item.active>.page-link, .pagination .page-item.active>.page-link:focus, .pagination .page-item.active>.page-link:hover {
+
+    background-image: linear-gradient(to bottom left,#00f2c3,black,#00f2c3) !important;
+}
+.sidebar .nav li.active>a:not([data-toggle="collapse"]) i, .sidebar .nav li.active>a:not([data-toggle="collapse"]) p, .off-canvas-sidebar .nav li.active>a:not([data-toggle="collapse"]) i, .off-canvas-sidebar .nav li.active>a:not([data-toggle="collapse"]) p {
+/*    color: #00f2c3 !important; */
+    color: #00f2c3 !important;
+}
+
+p, a.simple-text.logo-mini, a.simple-text.logo-normal {
+    color: white !important;
+}
+
+.notification {
+    background: yellow !important;
+}
+
+.btn-secondary {
+    background: rgba(0,0,0,0.4) !important;
+    border-color: #00f2c3 !important;
+    border-style: solid !important;
+    border-width: 1px !important;
+    color: grey !important;
+    font-family: 'Nunito', sans-serif !important;
+}
+
+span.tweak {
+    color: #00f2c3;
+}
+
+button#minimizeSidebar {
+    border-color: #00f2c3 !important;
+    border-style: solid !important;
+    border-width: 0.5px !important;
+    background: rgba(0,0,0,0.4) !important;
+}
+
+  .modal-content {
+    background: #27293d !important;
+    position: relative;
+    width: 100%;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 20px 0 rgba(0,0,0,.1);
+    border-width: 1px;
+    border-color: #00f2c3 !important;;
+  }
+  .modal-content .modal-header .modal-title {
+    color: white !important;
+  }
+  .col-form-label {
+    color: white !important;
+  }
+  .close>span:not(.sr-only) {
+    color: white !important;
+  }
+  .table-responsive,.sidebar-wrapper {
+      overflow: hidden !important;
+  }
+  li > a:hover {
+    color: white;
+  }
+  h4 {
+    color: #00f2c3
+  }
+  img.card-img-top {
+      height: 300px;
+  }
+  .main-panel {
+      border-top: 2px solid #00f2c3 !important;
+  }
+  .link {
+    fill: none;   
+    stroke: #00f2c3;
+    stroke-width: 1.5px;
+  }
+
+  #licensing {
+    fill: green;
+  }
+  .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+    color: white;
+  }
+
+  .link.licensing {
+    stroke: green;
+  }
+
+  .link.resolved {
+    stroke-dasharray: 0,2 1;
+  }
+
+  circle {
+    fill: #ccc;
+    stroke: #00f2c3;
+    stroke-width: 1.5px;
+  }
+
+  text {
+    font: 12px sans-serif;
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+    fill: #fff;
+  }
+  .icon-bell-55::before {   
+    color:#00f2c3;
+  }

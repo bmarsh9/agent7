@@ -1,0 +1,65 @@
+{% extends "template.html" %}
+
+{% block head %}
+  {{ super() }}
+  {% import "macros.html" as macro %}
+  {{ macro.filehelper(datatables=True,chartjs=True) }}
+{% endblock %}
+
+{% block body %}
+{{super()}}
+<div class="row">
+    <div class="col-md">
+        <ul class="nav nav-tabs" id="myNavTabs">
+            <li class="nav-item">
+              <a class="nav-link {%block overview_active%}{%endblock%}" href="{{url_for('main_ui.investigate_local_user',id=user.id)}}">Overview</a>
+            </li>
+<!--
+            <li class="nav-item">
+              <a class="nav-link {%block risk_active%}{%endblock%}" href="{{ url_for('main_ui.local_user_risk',id=user.id)}}">Risk</a>
+            </li>
+-->
+            <li class="nav-item">
+              <a class="nav-link {%block logon_active%}{%endblock%}" href="{{ url_for('main_ui.local_user_logon_history',id=user.id)}}">Logon History</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block logonmap_active%}{%endblock%}" href="{{ url_for('main_ui.user_logon_map',accounttype='local',sid=user.sid)}}">Logon Map</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block dependencies_active%}{%endblock%}" href="{{ url_for('main_ui.local_user_dependencies',id=user.id)}}">Dependencies</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block network_active%}{%endblock%}" href="{{ url_for('main_ui.local_user_network',id=user.id)}}">Net. Connections</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block process_active%}{%endblock%}" href="{{ url_for('main_ui.local_user_process',id=user.id)}}">Process</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block service_active%}{%endblock%}" href="{{ url_for('main_ui.local_user_service',id=user.id)}}">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block schtask_active%}{%endblock%}" href="{{ url_for('main_ui.local_user_schtask',id=user.id)}}">Sch. Task</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block startup_active%}{%endblock%}" href="{{ url_for('main_ui.local_user_startup',id=user.id)}}">Start Up Actions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block memberof_active%}{%endblock%}" href="{{ url_for('main_ui.local_user_memberof',id=user.id)}}">Group Membership</a>
+            </li>
+        </ul>
+        <div class="alert alert-dark alert-dismissible">
+          <button type="button" class="close"  data-dismiss="alert">&times;</button>
+            <h4 class="card-title"><i class="tim-icons icon-light-3 text-success"></i>  User Investigation</h4>
+            <h5 class="card-title">Username: {{user.username}}</h5>
+            <h5 class="card-title">Local User: True. Account found on host: {{user.host_name}}</h5>
+          
+        </div>
+        {% block tab_data %}{% endblock %}
+    </div>
+  </div>
+ </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
+

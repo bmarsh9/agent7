@@ -1,0 +1,93 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+  {% endblock %}
+
+      {% block body %}
+        <div class="alert alert-dark alert-dismissible">
+          <button type="button" class="close"  data-dismiss="alert">&times;</button>
+            <i class="tim-icons icon-light-3 text-success"></i>  Viewing the "What-If" helper. This shows the current accounts that would be onboarded if you did save this Workflow. 
+        </div>
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Number of accounts that matched your rule</h1>
+                <h4 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Accounts Matched</h4>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter" class="text-large" style="font-size:2.5rem;">{{count}}</h1>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Your query for this workflow</h1>
+                <h4 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Rule Query</h4>
+              </div>
+              <div class="card-body text-center">
+                  <h1 id="statistic-counter" class="text-large" style="font-size:1rem;">{{func_dict}}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div style="border:1px solid #00bf9a" class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">What-If: Accounts that match your Rule </h3>
+                <p style="color:gray !important">Note: Only showing 50 accounts</p>
+              </div>
+              <div class="card-body">
+                {% if data %}
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Account Name</th>
+                        <th scope="col">Local Account</th>
+                        <th scope="col">Privileged</th>
+                        <th scope="col">SID</th>
+                        <th scope="col">Discovered On</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for account in data %}
+                       <tr>
+
+                          <td>{{loop.index}}</td>
+                          <td>{{account.username}}</td>
+                          <td>{{account.local_account}}</td>
+                          {% if account.is_priv == "1" %}
+                            <td><i class="tim-icons icon-alert-circle-exc text-red"></i> Yes</td>
+                          {% else %}
+                            <td> No </td>
+                          {% endif %}
+                          <td>{{ account.sid }}</td>
+                          <td>{{account.host_name}}</td>
+                         </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>   
+                {% else %}
+                  <p class="text-yellow">Your rule does not match any current accounts. If you save this rule and it matches future accounts, they will be onboarded</p>
+                {% endif %}
+                    <form action="{{url_for('main_ui.adv_ob_local_onboard')}}" method="POST">
+                      <input type="hidden" name="func_dict" value="{{func_dict}}">
+                      <input type="hidden" name="interval" value="{{interval}}">
+                      <input type="hidden" name="runonce" value="{{runonce}}">
+                      <button name="action" value="create" type="submit" class="btn btn-fill btn-simple btn-sm text-success" id="submit">Save Rule</button>
+                      <a class="btn btn-fill btn-simple btn-sm text-blue" href="{{url_for('main_ui.advanced_onboarding')}}" role="button">Cancel</a>
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+
+  {% block extra_js%}
+  {%endblock%}

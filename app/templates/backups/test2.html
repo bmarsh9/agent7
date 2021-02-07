@@ -1,0 +1,83 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+<!--  <script src=""></script> -->
+
+  <link rel="apple-touch-icon" sizes="76x76" href="../static/assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../static/img/black_flag.png">
+  <title>
+    HoneyAD
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link href="../static/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href="../static/assets/css/black-dashboard.min.css?v=1.0.0" rel="stylesheet" />
+
+  <link href="../static/theme.css" rel="stylesheet" />
+  <script src="../static/assets/js/plugins/chartjs.min.js"></script>
+
+</head>
+<body>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chartpieuser"></canvas>
+                </div>
+              </div>
+</body>
+
+
+<script>
+// PIE CHARTS
+var chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(231,233,237)'
+};
+var color = Chart.helpers.color;
+var os_value = ["here"]
+var os_count = [1]
+//var osgraph = {{ winlogbeat_graph|safe }}
+//var arrayLength = osgraph.length;
+//for (var i = 0; i < arrayLength; i++) {
+//    os_count.push(osgraph[i][0]);
+//    os_value.push(osgraph[i][1]);
+//}
+new Chart(document.getElementById("chartpieuser"), {
+    type: 'pie',
+    data: {
+      labels: os_value,
+      datasets: [{
+        //label: "Path to DA",
+        backgroundColor: [color(chartColors.red).alpha(0.4).rgbString(),color(chartColors.blue).alpha(0.2).rgbString()],
+//        backgroundColor:os_color,
+        borderColor: "white",
+        borderWidth: 1,
+        data: os_count
+      }]   
+    },   
+    options: {
+      responsive:true,
+      maintainAspectRatio: false,
+      animation: {  
+        duration: 3000
+      },
+      legend: {
+        labels: {
+          fontColor:"white"
+        }
+      }
+    }
+});
+</script>
+</html>

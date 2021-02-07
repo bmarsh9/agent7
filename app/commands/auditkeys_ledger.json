@@ -1,0 +1,1748 @@
+[
+    {
+        "severity": "high", 
+        "title": "Autoplay must be turned off for non-volume devices.", 
+        "value": "1", 
+        "keyname": "NoAutoplayfornonVolume", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer\\NoAutoplayfornonVolume"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Autoplay must be disabled for all drives.", 
+        "value": "255", 
+        "keyname": "NoDriveTypeAutoRun", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\policies\\Explorer", 
+        "full_path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\policies\\Explorer\\NoDriveTypeAutoRun"
+    }, 
+    {
+        "severity": "high", 
+        "title": "The default autorun behavior must be configured to prevent autorun commands.", 
+        "value": "1", 
+        "keyname": "NoAutorun", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 
+        "full_path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoAutorun"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Anonymous enumeration of SAM accounts must not be allowed.", 
+        "value": "1", 
+        "keyname": "RestrictAnonymousSAM", 
+        "hive": "hklm", 
+        "path": "SYSTEM\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "SYSTEM\\CurrentControlSet\\Control\\Lsa\\RestrictAnonymousSAM"
+    }, 
+    {
+        "severity": "high", 
+        "title": "The LanMan authentication level must be set to send NTLMv2 response only", 
+        "value": "5", 
+        "keyname": "LmCompatibilityLevel", 
+        "hive": "hklm", 
+        "path": "SYSTEM\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "SYSTEM\\CurrentControlSet\\Control\\Lsa\\LmCompatibilityLevel"
+    }, 
+    {
+        "severity": "high", 
+        "title": "The Windows Remote Management (WinRM) service must not use Basic authentication.", 
+        "value": "0", 
+        "keyname": "AllowBasic", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Service", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Service\\AllowBasic"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Anonymous enumeration of shares must be restricted.", 
+        "value": "1", 
+        "keyname": "RestrictAnonymous", 
+        "hive": "hklm", 
+        "path": "SYSTEM\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "SYSTEM\\CurrentControlSet\\Control\\Lsa\\RestrictAnonymous"
+    }, 
+    {
+        "severity": "high", 
+        "title": "The Windows Remote Management (WinRM) client must not use Basic authentication.", 
+        "value": "0", 
+        "keyname": "AllowBasic", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Client", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows\\WinRM\\Client\\AllowBasic"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Do not allow storage of passwords and credentials for network authentication", 
+        "value": "1", 
+        "keyname": "disabledomaincreds", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\disabledomaincreds"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check WDigestAuthentication is disabled", 
+        "value": "0", 
+        "keyname": "uselogoncredential", 
+        "hive": "hklm", 
+        "path": "SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\Wdigest", 
+        "full_path": "SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\Wdigest\\uselogoncredential"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check Turn on Virtualisation Based Security", 
+        "value": "1", 
+        "keyname": "EnableVirtualizationBasedSecurity", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard\\EnableVirtualizationBasedSecurity"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check Secure Boot and DMA Protection", 
+        "value": "3", 
+        "keyname": "RequirePlatformSecurityFeatures", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuardRequirePlatformSecurityFeatures"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check UEFI Lock is enabled for device guard", 
+        "value": "1", 
+        "keyname": "LsaCfgFlags", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuardLsaCfgFlags"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check Controlled Folder Access for Exploit Guard is Enabled", 
+        "value": "1", 
+        "keyname": "EnableControlledFolderAccess", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Microsoft\\Windows Defender\\Exploit Guard\\Controlled Folder Access", 
+        "full_path": "SOFTWARE\\Microsoft\\Windows Defender\\Exploit Guard\\Controlled Folder AccessEnableControlledFolderAccess"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Check Enumerate local users on domain joined computers", 
+        "value": "0", 
+        "keyname": "EnumerateLocalUsers", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\System", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\SystemEnumerateLocalUsers"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Check Do not display the password reveal button", 
+        "value": "1", 
+        "keyname": "DisablePasswordReveal", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\CredUI", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\CredUIDisablePasswordReveal"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check Enumerate administrator accounts on elevation", 
+        "value": "0", 
+        "keyname": "EnumerateAdministrators", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUIEnumerateAdministrators"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check Require trusted path for credential entry", 
+        "value": "1", 
+        "keyname": "EnableSecureCredentialPrompting", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\CredUI", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\CredUIEnableSecureCredentialPrompting"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Check Sign-in last interactive user automatically after a system-initiated restart", 
+        "value": "1", 
+        "keyname": "DisableAutomaticRestartSignOn", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemDisableAutomaticRestartSignOn"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Check Interactive logon: Do not require CTRL+ALT+DEL", 
+        "value": "0", 
+        "keyname": "DisableCAD", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemDisableCAD"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Check Interactive logon: Don't display username at sign-in", 
+        "value": "1", 
+        "keyname": "DontDisplayLastUserName", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemDontDisplayLastUserName"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Check ELAM Configuration", 
+        "value": "8 or 2", 
+        "keyname": "DriverLoadPolicy", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Policies\\EarlyLaunch", 
+        "full_path": "System\\CurrentControlSet\\Policies\\EarlyLaunchDriverLoadPolicy"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "User Account Control: Admin Approval Mode for the Built-in Administrator account", 
+        "value": "1", 
+        "keyname": "FilterAdministratorToken", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemFilterAdministratorToken"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "User Account Control: Allow UIAccess applications to prompt for elevation without using the secure desktop", 
+        "value": "0", 
+        "keyname": "EnableUIADesktopToggle", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemEnableUIADesktopToggle"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "User Account Control: Behavior of the elevation prompt for administrators in Admin Approval Mode", 
+        "value": "1", 
+        "keyname": "ConsentPromptBehaviorAdmin", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemConsentPromptBehaviorAdmin"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "User Account Control: Behavior of the elevation prompt for standard users", 
+        "value": "1", 
+        "keyname": "ConsentPromptBehaviorUser", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemConsentPromptBehaviorUser"
+    }, 
+    {
+        "severity": "high", 
+        "title": "User Account Control: Detect application installations and prompt for elevation", 
+        "value": "1", 
+        "keyname": "EnableInstallerDetection", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemEnableInstallerDetection"
+    }, 
+    {
+        "severity": "low", 
+        "title": "User Account Control: Only elevate UIAccess applications that are installed in secure locations", 
+        "value": "1", 
+        "keyname": "EnableSecureUIAPaths", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemEnableSecureUIAPaths"
+    }, 
+    {
+        "severity": "high", 
+        "title": "User Account Control: Run all administrators in Admin Approval Mode", 
+        "value": "1", 
+        "keyname": "EnableLUA", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemEnableLUA"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "User Account Control: Switch to the secure desktop when prompting for elevation", 
+        "value": "1", 
+        "keyname": "PromptOnSecureDesktop", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\SystemPromptOnSecureDesktop"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Use a common set of exploit protection settings", 
+        "value": "1", 
+        "keyname": "ExploitProtectionSettings", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows Defender ExploitGuard\\Exploit Protection", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows Defender ExploitGuard\\Exploit ProtectionExploitProtectionSettings"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Prevent users from modifying settings", 
+        "value": "1", 
+        "keyname": "DisallowExploitProtectionOverride", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\App and Browser protection", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\App and Browser protectionDisallowExploitProtectionOverride"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Turn off Data Execution Prevention for Explorer", 
+        "value": "0", 
+        "keyname": "NoDataExecutionPrevention", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\Explorer", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\ExplorerNoDataExecutionPrevention"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Enabled Structured Exception Handling Overwrite Protection (SEHOP)", 
+        "value": "0", 
+        "keyname": "DisableExceptionChainValidation", 
+        "hive": "hklm", 
+        "path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel", 
+        "full_path": "SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel\\DisableExceptionChainValidation"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Apply UAC restrictions to local accounts on network logons", 
+        "value": "0", 
+        "keyname": "LocalAccountTokenFilterPolicy", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LocalAccountTokenFilterPolicy"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Allow Adobe Flash", 
+        "value": "0", 
+        "keyname": "FlashPlayerEnabled", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\MicrosoftEdge\\Addons", 
+        "full_path": "Software\\Policies\\Microsoft\\MicrosoftEdge\\Addons\\FlashPlayerEnabled"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Configure Windows Defender SmartScreen", 
+        "value": "1", 
+        "keyname": "EnableSmartScreen", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\System", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\System\\EnableSmartScreen"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Prevent users and apps from accessing dangerous websites", 
+        "value": "1", 
+        "keyname": "EnableNetworkProtection", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows Defender\\Windows Defender Exploit Guard\\Network Protection", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows Defender\\Windows Defender Exploit Guard\\Network Protection\\EnableNetworkProtection"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Automatic Updates immediate installation", 
+        "value": "1", 
+        "keyname": "AutoInstallMinorUpdates", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\\AutoInstallMinorUpdates"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Configure Automatic Updates", 
+        "value": "0", 
+        "keyname": "NoAutoUpdate", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\\NoAutoUpdate"
+    }, 
+    {
+        "severity": "low", 
+        "title": "check Do not include drivers with Windows Updates", 
+        "value": "0", 
+        "keyname": "ExcludeWUDriversInQualityUpdate", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\ExcludeWUDriversInQualityUpdate"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "No auto-restart with logged on users for scheduled automatic updates installations", 
+        "value": "1", 
+        "keyname": "NoAutoRebootWithLoggedOnUsers", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AUNoAutoRebootWithLoggedOnUsers"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check configuration for Remove access to use all Windows Update features", 
+        "value": "0", 
+        "keyname": "SetDisableUXWUAccess", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\SetDisableUXWUAccess"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Check configuration for Turn on recommended updates via Automatic Updates", 
+        "value": "1", 
+        "keyname": "IncludeRecommendedUpdates", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU\\IncludeRecommendedUpdates"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Check: Turn on convenience PIN sign-in", 
+        "value": "0", 
+        "keyname": "AllowDomainPINLogon", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\System", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\System\\AllowDomainPINLogon"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check: Limit local account use of blank passwords to console logon only", 
+        "value": "1", 
+        "keyname": "LimitBlankPasswordUse", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\LsaLimitBlankPasswordUse"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Enable insecure guest logons", 
+        "value": "1", 
+        "keyname": "AllowInsecureGuestAuth", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\LanmanWorkstation", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\LanmanWorkstation\\AllowInsecureGuestAuth"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Network access: Do not allow anonymous enumeration of SAM accounts", 
+        "value": "0", 
+        "keyname": "RestrictAnonymousSAM", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\RestrictAnonymousSAM"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Network access: Do not allow anonymous enumeration of SAM accounts and shares", 
+        "value": "1", 
+        "keyname": "restrictanonymous", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\restrictanonymous"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Network access: Let Everyone permissions apply to anonymous users", 
+        "value": "0", 
+        "keyname": "EveryoneIncludesAnonymous", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\EveryoneIncludesAnonymous"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Network access: Restrict anonymous access to Named Pipes and Shares", 
+        "value": "1", 
+        "keyname": "RestrictNullSessAccess", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters\\RestrictNullSessAccess"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Network security: Allow Local System to use computer identity for NTLM", 
+        "value": "1", 
+        "keyname": "UseMachineId", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\UseMachineId"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check configuration: Allow LocalSystem NULL session fallback is not configured", 
+        "value": "0", 
+        "keyname": "allownullsessionfallback", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0\\allownullsessionfallback"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Turn off Windows Defender Antivirus", 
+        "value": "0", 
+        "keyname": "DisableAntiSpyware", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows Defender", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows Defender\\DisableAntiSpyware"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Select cloud protection level", 
+        "value": "1", 
+        "keyname": "MpCloudBlockLevel", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows Defender\\MpEngine", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows Defender\\MpEngine\\MpCloudBlockLevel"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Configure local setting override for scanning all downloaded files and attachments", 
+        "value": "1", 
+        "keyname": "LocalSettingOverrideDisableIOAVProtection", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection\\LocalSettingOverrideDisableIOAVProtection"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Turn off real-time protection", 
+        "value": "0", 
+        "keyname": "DisableRealtimeMonitoring", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection\\DisableRealtimeMonitoring"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Turn on behavior monitoring", 
+        "value": "0", 
+        "keyname": "DisableBehaviorMonitoring", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows Defender\\Real-Time ProtectionDisableBehaviorMonitoring"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Turn on process scanning whenever real-time protection", 
+        "value": "0", 
+        "keyname": "DisableScanOnRealtimeEnable", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection\\DisableScanOnRealtimeEnable"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Configure removal of items from Quarantine folder", 
+        "value": "0", 
+        "keyname": "PurgeItemsAfterDelay", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows Defender\\Quarantine", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows Defender\\QuarantinePurgeItemsAfterDelay"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check configuration: Allow users to pause scan", 
+        "value": "0", 
+        "keyname": "AllowPause", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan", 
+        "full_path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan\\AllowPause"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Check for the latest virus and spyware definitions before running a scheduled scan", 
+        "value": "1", 
+        "keyname": "CheckForSignaturesBeforeRunningScan", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan", 
+        "full_path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan\\CheckForSignaturesBeforeRunningScan"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Check configuration: Scan archive files", 
+        "value": "0", 
+        "keyname": "DisableArchiveScanning", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan", 
+        "full_path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan\\DisableArchiveScanning"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Scan packed executables", 
+        "value": "0", 
+        "keyname": "DisablePackedExeScanning", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan", 
+        "full_path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan\\DisablePackedExeScanning"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Scan removable drives", 
+        "value": "0", 
+        "keyname": "DisableRemovableDriveScanning", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan", 
+        "full_path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan\\DisableRemovableDriveScanning"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Turn on e-mail scanning", 
+        "value": "0", 
+        "keyname": "DisableEmailScanning", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan", 
+        "full_path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan\\DisableEmailScanning"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Check configuration: Turn on heuristics", 
+        "value": "0", 
+        "keyname": "DisableHeuristics", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan", 
+        "full_path": "Software\\Policies\\Microsoft\\Microsoft Antimalware\\Scan\\DisableHeuristics"
+    }, 
+    {
+        "severity": "high", 
+        "title": "AUDIT EVENT MANAGEMENT", 
+        "value": "1", 
+        "keyname": "ProcessCreationIncludeCmdLine_Enabled", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Audit", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Audit\\ProcessCreationIncludeCmdLine_Enabled"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Specify the maximum log file size (KB) for the Application Log", 
+        "value": "lt 65536", 
+        "keyname": "MaxSize", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\EventLog\\Application", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\EventLog\\Application\\MaxSize"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Specify the maximum log file size (KB) for the Security Log", 
+        "value": "lt 65536", 
+        "keyname": "MaxSize", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\EventLog\\Security", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\EventLog\\Security\\MaxSize"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Specify the maximum log file size (KB) for the System Log", 
+        "value": "lt 65536", 
+        "keyname": "MaxSize", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\EventLog\\System", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\EventLog\\System\\MaxSize"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Specify the maximum log file size (KB) for the Setup Log", 
+        "value": "lt 65536", 
+        "keyname": "MaxSize", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\EventLog\\Setup", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\EventLog\\Setup\\MaxSize"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings", 
+        "value": "1", 
+        "keyname": "SCENoApplyLegacyAuditPolicy", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\SCENoApplyLegacyAuditPolicy"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Set the default behavior for AutoRun", 
+        "value": "1", 
+        "keyname": "NoAutorun", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoAutorun"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Turn off Autoplay", 
+        "value": "255", 
+        "keyname": "NoDriveTypeAutoRun", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\NoDriveTypeAutoRun"
+    }, 
+    {
+        "severity": "sometimes this doesn\u2019t exist", 
+        "title": "Prohibit installation and configuration of Network Bridge on your DNS domain network", 
+        "value": "0", 
+        "keyname": "NC_AllowNetBridge_NLA", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\Network Connections", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\Network Connections\\NC_AllowNetBridge_NLA"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "All Removable Storage classes: Deny all access is not configured in local machine group policy", 
+        "value": "1", 
+        "keyname": "Deny_All", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\RemovableStorageDevices", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\RemovableStorageDevices\\Deny_All"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Prevent the computer from joining a homegroup", 
+        "value": "1", 
+        "keyname": "DisableHomeGroup", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\HomeGroup", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\HomeGroup\\DisableHomeGroup"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Configure security policy processing", 
+        "value": "0", 
+        "keyname": "NoGPOListChanges", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\Group Policy\\{827D319E-6EAC-11D2-A4EA-00C04F79F83A}", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\Group Policy\\{827D319E-6EAC-11D2-A4EA-00C04F79F83A}\\NoGPOListChanges"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Configure registry policy processing", 
+        "value": "0", 
+        "keyname": "NoGPOListChanges", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\Group Policy\\{35378EAC-683F-11D2-A89A-00C04FBBCFA2}", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\Group Policy\\{35378EAC-683F-11D2-A89A-00C04FBBCFA2}\\NoGPOListChanges"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Turn off background refresh of Group Policy", 
+        "value": "0", 
+        "keyname": "DisableBkGndGroupPolicy", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DisableBkGndGroupPolicy"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Turn off Local Group Policy Objects processing", 
+        "value": "1", 
+        "keyname": "DisableLGPOProcessing", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\System", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\SystemDisableLGPOProcessing"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "SmartScreen is not configured", 
+        "value": "Block", 
+        "keyname": "ShellSmartScreenLevel", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\System", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\System\\ShellSmartScreenLevel"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Allow user control over installs", 
+        "value": "0", 
+        "keyname": "EnableUserControl", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\Installer", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\Installer\\EnableUserControl"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Always install with elevated privileges", 
+        "value": "0", 
+        "keyname": "AlwaysInstallElevated", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\Installer", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\Installer\\AlwaysInstallElevated"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Turn off printing over HTTP", 
+        "value": "1", 
+        "keyname": "DisableHTTPPrinting", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows NT\\Printers", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows NT\\Printers\\DisableHTTPPrinting"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Prevent the usage of OneDrive for file storage", 
+        "value": "1", 
+        "keyname": "DisableFileSyncNGSC", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\OneDrive", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\OneDrive\\DisableFileSyncNGSC"
+    }, 
+    {
+        "severity": "low", 
+        "title": "(DisableIPSourceRouting) IP source routing protection level", 
+        "value": "2", 
+        "keyname": "DisableIPSourceRouting", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Tcpip\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\DisableIPSourceRouting"
+    }, 
+    {
+        "severity": "low", 
+        "title": "(DisableIPSourceRouting IPv6) IP source routing protection level", 
+        "value": "2", 
+        "keyname": "DisableIPSourceRouting", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Tcpip6\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Tcpip6\\ParametersDisableIPSourceRouting"
+    }, 
+    {
+        "severity": "low", 
+        "title": "(EnableICMPRedirect) Allow ICMP redirects to override OSPF generated routes", 
+        "value": "0", 
+        "keyname": "EnableICMPRedirect", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Tcpip\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\EnableICMPRedirect"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Network security: Configure encryption types allowed for Kerberos", 
+        "value": "24", 
+        "keyname": "SupportedEncryptionTypes", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Kerberos\\Parameters", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Kerberos\\Parameters\\SupportedEncryptionTypes"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Network security: LAN Manager authentication level", 
+        "value": "5", 
+        "keyname": "LMCompatibilityLevel", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\LMCompatibilityLevel"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Network security: Minimum session security for NTLM SSP based (including secure RPC) clients", 
+        "value": "537395200", 
+        "keyname": "NTLMMinClientSec", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0\\NTLMMinClientSec"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Network security: Minimum session security for NTLM SSP based (including secure RPC) servers", 
+        "value": "537395200", 
+        "keyname": "NTLMMinServerSec", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0\\NTLMMinServerSec"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Network security: Do not store LAN Manager hash value on next password change", 
+        "value": "1", 
+        "keyname": "noLMHash", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\noLMHash"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Require a password when a computer wakes (on battery)", 
+        "value": "1", 
+        "keyname": "DCSettingIndex", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Power\\PowerSettings\\0e796bdb-100d-47d6-a2d5-f7d2daa51f51", 
+        "full_path": "Software\\Policies\\Microsoft\\Power\\PowerSettings\\0e796bdb-100d-47d6-a2d5-f7d2daa51f51DCSettingIndex"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Turn on PowerShell Script Block Logging", 
+        "value": "1", 
+        "keyname": "EnableScriptBlockLogging", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging\\EnableScriptBlockLogging"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Turn on PowerShell Script Block Invocation Logging", 
+        "value": "1", 
+        "keyname": "EnableScriptBlockInvocationLogging", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging\\EnableScriptBlockInvocationLogging"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Turn on Script Execution", 
+        "value": "", 
+        "keyname": "EnableScripts", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\PowerShell", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\PowerShellEnableScripts"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Script Execution", 
+        "value": "0", 
+        "keyname": "ExecutionPolicy", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\PowerShell", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\PowerShell\\ExecutionPolicy"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Configure Offer Remote Assistance", 
+        "value": "0", 
+        "keyname": "fAllowUnsolicited", 
+        "hive": "hklm", 
+        "path": "Software\\policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "Software\\policies\\Microsoft\\Windows NT\\Terminal Services\\fAllowUnsolicited"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Configure Solicited Remote Assistance", 
+        "value": "0", 
+        "keyname": "fAllowToGetHelp", 
+        "hive": "hklm", 
+        "path": "Software\\policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "Software\\policies\\Microsoft\\Windows NT\\Terminal Services\\fAllowToGetHelp"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Allow users to connect remotely by using Remote Desktop Services", 
+        "value": "0", 
+        "keyname": "fDenyTSConnections", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services\\fDenyTSConnections"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Remote host allows delegation of non-exportable credentials", 
+        "value": "1", 
+        "keyname": "AllowProtectedCreds", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\CredentialsDelegation", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\CredentialsDelegationAllowProtectedCreds"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Configure server authentication for client", 
+        "value": "1", 
+        "keyname": "AuthenticationLevel", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services\\AuthenticationLevel"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Deny logoff of an administrator logged in to the console session", 
+        "value": "1", 
+        "keyname": "fDisableForcibleLogoff", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services\\fDisableForcibleLogoff"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Do not allow passwords to be saved", 
+        "value": "1", 
+        "keyname": "DisablePasswordSaving", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services\\DisablePasswordSaving"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Do not allow drive redirection", 
+        "value": "1", 
+        "keyname": "fDisableCdm", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services\\fDisableCdm"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Require secure RPC communication", 
+        "value": "1", 
+        "keyname": "fEncryptRPCTraffic", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services\\fEncryptRPCTraffic"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Require use of specific security layer for remote (RDP) connections", 
+        "value": "2", 
+        "keyname": "SecurityLayer", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services\\SecurityLayer"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Require user authentication for remote connections by using Network Level Authentication", 
+        "value": "1", 
+        "keyname": "UserAuthentication", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services\\UserAuthentication"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Set client connection encryption level", 
+        "value": "3", 
+        "keyname": "MinEncryptionLevel", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services\\MinEncryptionLevel"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Restrict Unauthenticated RPC clients is not configured", 
+        "value": "1", 
+        "keyname": "RestrictRemoteClients", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows NT\\Rpc", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows NT\\Rpc\\RestrictRemoteClients"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Turn off Inventory Collector", 
+        "value": "1", 
+        "keyname": "DisableInventory", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\AppCompat", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\AppCompat\\DisableInventory"
+    }, 
+    {
+        "severity": "low", 
+        "title": "Allow Telemetry", 
+        "value": "0", 
+        "keyname": "AllowTelemetry", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\DataCollection", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\DataCollectionAllowTelemetry"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Block Non-Administrators in Safe Mode", 
+        "value": "1", 
+        "keyname": "SafeModeBlockNonAdmins", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\SafeModeBlockNonAdmins"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Domain member: Digitally encrypt or sign secure channel data (always) is not configured", 
+        "value": "1", 
+        "keyname": "RequireSignOrSeal", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\RequireSignOrSeal"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Domain member: Digitally encrypt secure channel data (when possible)", 
+        "value": "1", 
+        "keyname": "SealSecureChannel", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\SealSecureChannel"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Domain member: Digitally sign secure channel data (when possible)", 
+        "value": "1", 
+        "keyname": "SignSecureChannel", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\SignSecureChannel"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Domain member: Require strong (Windows 2000 or later) session key", 
+        "value": "1", 
+        "keyname": "RequireStrongKey", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\RequireStrongKey"
+    }, 
+    {
+        "severity": "medium", 
+        "title": "Turn off shell protocol protected mode", 
+        "value": "0", 
+        "keyname": "PreXPSP2ShellProtocolBehavior", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\PreXPSP2ShellProtocolBehavior"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Domain member: Disable machine account password changes", 
+        "value": "0", 
+        "keyname": "DisablePasswordChange", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\DisablePasswordChange"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Domain member: Maximum machine account password age", 
+        "value": "30", 
+        "keyname": "MaximumPasswordAge", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\MaximumPasswordAge"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Configure SMB v1 client driver", 
+        "value": "4", 
+        "keyname": "Start", 
+        "hive": "hklm", 
+        "path": "SYSTEM\\CurrentControlSet\\Services\\MrxSmb10", 
+        "full_path": "SYSTEM\\CurrentControlSet\\Services\\MrxSmb10\\Start"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Configure SMB v1 server", 
+        "value": "0", 
+        "keyname": "SMB1", 
+        "hive": "hklm", 
+        "path": "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters", 
+        "full_path": "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters\\SMB1"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Microsoft Network Client: Digitally sign communications (always)", 
+        "value": "1", 
+        "keyname": "RequireSecuritySignature", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters\\RequireSecuritySignature"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Microsoft network client: Digitally sign communications (if server agrees)", 
+        "value": "1", 
+        "keyname": "EnableSecuritySignature", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters\\EnableSecuritySignature"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Microsoft network client: Send unencrypted password to third-party SMB servers", 
+        "value": "0", 
+        "keyname": "EnablePlainTextPassword", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters\\EnablePlainTextPassword"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Microsoft network server: Digitally sign communications (always)", 
+        "value": "1", 
+        "keyname": "RequireSecuritySignature", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters\\RequireSecuritySignature"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Microsoft network server: Digitally sign communications (if client agrees)", 
+        "value": "1", 
+        "keyname": "EnableSecuritySignature", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters\\EnableSecuritySignature"
+    }, 
+    {
+        "severity": "low", 
+        "title": "inactivity timeout", 
+        "value": "900", 
+        "keyname": "inactivitytimeoutsecs", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\inactivitytimeoutsecs"
+    }, 
+    {
+        "severity": "high", 
+        "title": "System cryptography: Force strong key protection for user keys stored on the computer", 
+        "value": "2", 
+        "keyname": "ForceKeyProtection", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\Policies\\Microsoft\\Cryptography", 
+        "full_path": "SOFTWARE\\Policies\\Microsoft\\CryptographyForceKeyProtection"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Allow Basic authentication WinRM", 
+        "value": "0", 
+        "keyname": "AllowBasic", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Client", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Client\\AllowBasic"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Allow unencrypted traffic WinRM", 
+        "value": "0", 
+        "keyname": "AllowUnencryptedTraffic", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Client", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Client\\AllowUnencryptedTraffic"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Disallow Digest authentication", 
+        "value": "0", 
+        "keyname": "AllowDigest", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Client", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Client\\AllowDigest"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Allow Basic authentication", 
+        "value": "0", 
+        "keyname": "AllowBasic", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Service", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Service\\AllowBasic"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Allow unencrypted traffic", 
+        "value": "0", 
+        "keyname": "AllowUnencryptedTraffic", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Service", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\ServiceAllowUnencryptedTraffic"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Disallow WinRM from storing RunAs credentials", 
+        "value": "1", 
+        "keyname": "DisableRunAs", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Service", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Service\\DisableRunAs"
+    }, 
+    {
+        "severity": "high", 
+        "title": "Allow Remote Shell Access", 
+        "value": "0", 
+        "keyname": "AllowRemoteShellAccess", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Service\\WinRS", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\WinRM\\Service\\WinRS\\AllowRemoteShellAccess"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network access: Named Pipes that can be accessed anonymously", 
+        "value": "", 
+        "keyname": "NullSessionPipes", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters\\NullSessionPipes"
+    }, 
+    {
+        "severity": "", 
+        "title": "Devices: Allow undock without having to log on", 
+        "value": "", 
+        "keyname": "UndockWithoutLogon", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\UndockWithoutLogon"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive logon: Do not require CTRL+ALT+DELETE", 
+        "value": "", 
+        "keyname": "DisableCAD", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DisableCAD"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive logon: Prompt user to change password before expiration", 
+        "value": "", 
+        "keyname": "PasswordExpiryWarning", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", 
+        "full_path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\PasswordExpiryWarning"
+    }, 
+    {
+        "severity": "", 
+        "title": "Accounts: Limit local account use of blank passwords to console logon only", 
+        "value": "", 
+        "keyname": "LimitBlankPasswordUse", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\LimitBlankPasswordUse"
+    }, 
+    {
+        "severity": "", 
+        "title": "Devices: Restrict CD-ROM access to locally logged-on user only", 
+        "value": "", 
+        "keyname": "AllocateCDRoms", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", 
+        "full_path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\AllocateCDRoms"
+    }, 
+    {
+        "severity": "", 
+        "title": "Shutdown: Clear virtual memory pagefile", 
+        "value": "", 
+        "keyname": "ClearPageFileAtShutdown", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Session Manager\\Memory Management", 
+        "full_path": "System\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\ClearPageFileAtShutdown"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: LDAP client signing requirements", 
+        "value": "", 
+        "keyname": "LDAPClientIntegrity", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LDAP", 
+        "full_path": "System\\CurrentControlSet\\Services\\LDAP\\LDAPClientIntegrity"
+    }, 
+    {
+        "severity": "", 
+        "title": "Microsoft network server: Server SPN target name validation level", 
+        "value": "", 
+        "keyname": "SmbServerNameHardeningLevel", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters\\SmbServerNameHardeningLevel"
+    }, 
+    {
+        "severity": "", 
+        "title": "System cryptography: Use FIPS compliant algorithms for encryption, hashing, and signing", 
+        "value": "", 
+        "keyname": "FIPSAlgorithmPolicy", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\FIPSAlgorithmPolicy"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive logon: Number of previous logons to cache (in case domain controller is not available)", 
+        "value": "", 
+        "keyname": "CachedLogonsCount", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", 
+        "full_path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\CachedLogonsCount "
+    }, 
+    {
+        "severity": "", 
+        "title": "Network access: Remotely accessible registry paths", 
+        "value": "", 
+        "keyname": "Machine", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\SecurePipeServers\\Winreg\\AllowedPaths", 
+        "full_path": "System\\CurrentControlSet\\Control\\SecurePipeServers\\Winreg\\AllowedPaths\\Machine"
+    }, 
+    {
+        "severity": "", 
+        "title": "System settings: Use Certificate Rules on Windows Executables for Software Restriction Policies", 
+        "value": "", 
+        "keyname": "AuthenticodeEnabled", 
+        "hive": "hklm", 
+        "path": "Software\\Policies\\Microsoft\\Windows\\Safer\\CodeIdentifiers", 
+        "full_path": "Software\\Policies\\Microsoft\\Windows\\Safer\\CodeIdentifiers\\AuthenticodeEnabled"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network access: Shares that can be accessed anonymously", 
+        "value": "", 
+        "keyname": "NullSessionShares", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters\\NullSessionShares "
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: Restrict NTLM: Add server exceptions in this domain", 
+        "value": "", 
+        "keyname": "DCAllowedNTLMServers", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\DCAllowedNTLMServers"
+    }, 
+    {
+        "severity": "", 
+        "title": "Audit: Audit the use of Backup and Restore privilege", 
+        "value": "", 
+        "keyname": "FullPrivilegeAuditing", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\FullPrivilegeAuditing"
+    }, 
+    {
+        "severity": "", 
+        "title": "System settings: Optional subsystems", 
+        "value": "", 
+        "keyname": "optional", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Session Manager\\SubSystems", 
+        "full_path": "System\\CurrentControlSet\\Control\\Session Manager\\SubSystems\\optional"
+    }, 
+    {
+        "severity": "", 
+        "title": "Audit: Shut down system immediately if unable to log security audits", 
+        "value": "", 
+        "keyname": "CrashOnAuditFail", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\CrashOnAuditFail"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive Logon: Display user information when session is locked", 
+        "value": "", 
+        "keyname": "System, value=DontDisplayLockedUserId", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System, value=DontDisplayLockedUserId"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: Restrict NTLM: Incoming NTLM traffic", 
+        "value": "", 
+        "keyname": "RestrictReceivingNTLMTraffic", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0\\RestrictReceivingNTLMTraffic"
+    }, 
+    {
+        "severity": "", 
+        "title": "Devices: Unsigned driver installation behavior", 
+        "value": "", 
+        "keyname": "Policy", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Driver Signing", 
+        "full_path": "Software\\Microsoft\\Driver Signing\\Policy"
+    }, 
+    {
+        "severity": "", 
+        "title": "Recovery console: Allow floppy copy and access to all drives and all folders", 
+        "value": "", 
+        "keyname": "SetCommand", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Setup\\RecoveryConsole", 
+        "full_path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Setup\\RecoveryConsole\\SetCommand"
+    }, 
+    {
+        "severity": "", 
+        "title": "DCOM: HKEY_LOCAL_MACHINE Access Restrictions in Security Descriptor Definition Language (SDDL) syntax", 
+        "value": "", 
+        "keyname": "MachineAccessRestriction", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\policies\\Microsoft\\windows NT\\DCOM", 
+        "full_path": "SOFTWARE\\policies\\Microsoft\\windows NT\\DCOM\\MachineAccessRestriction"
+    }, 
+    {
+        "severity": "", 
+        "title": "System objects: Require case insensitivity for non-Windows subsystems", 
+        "value": "", 
+        "keyname": "ObCaseInsensitive", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Session Manager\\Kernel", 
+        "full_path": "System\\CurrentControlSet\\Control\\Session Manager\\Kernel\\ObCaseInsensitive"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network access: Restrict anonymous access to Named Pipes and Shares", 
+        "value": "", 
+        "keyname": "NullSessionShares", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters\\NullSessionShares"
+    }, 
+    {
+        "severity": "", 
+        "title": "Shutdown: Allow system to be shut down without having to log on", 
+        "value": "", 
+        "keyname": "ShutdownWithoutLogon", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\ShutdownWithoutLogon"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive logon: Do not display last user name", 
+        "value": "", 
+        "keyname": "DontDisplayLastUserName", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\DontDisplayLastUserName"
+    }, 
+    {
+        "severity": "", 
+        "title": "Devices: Prevent users from installing printer drivers", 
+        "value": "", 
+        "keyname": "AddPrinterDrivers", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Print\\Providers\\LanMan Print Services\\Servers", 
+        "full_path": "System\\CurrentControlSet\\Control\\Print\\Providers\\LanMan Print Services\\Servers\\AddPrinterDrivers"
+    }, 
+    {
+        "severity": "", 
+        "title": "Devices: Restrict floppy access to locally logged-on user only", 
+        "value": "", 
+        "keyname": "AllocateFloppies", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", 
+        "full_path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\AllocateFloppies"
+    }, 
+    {
+        "severity": "", 
+        "title": "Audit: Audit the accesss of global system objects", 
+        "value": "", 
+        "keyname": "AuditBaseObjects", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\AuditBaseObjects"
+    }, 
+    {
+        "severity": "", 
+        "title": "Microsoft network server: Disconnect clients when logon hours expire", 
+        "value": "", 
+        "keyname": "EnableForcedLogOff", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters\\EnableForcedLogOff"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network access: Do not allow anonymous enumeration of SAM accounts and shares", 
+        "value": "", 
+        "keyname": "RestrictAnonymous", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\RestrictAnonymous"
+    }, 
+    {
+        "severity": "", 
+        "title": "DCOM: HKEY_LOCAL_MACHINE Launch Restrictions in Security Descriptor Definition Language (SDDL) syntax", 
+        "value": "", 
+        "keyname": "MachineLaunchRestriction", 
+        "hive": "hklm", 
+        "path": "SOFTWARE\\policies\\Microsoft\\windows NT\\DCOM", 
+        "full_path": "SOFTWARE\\policies\\Microsoft\\windows NT\\DCOM\\MachineLaunchRestriction"
+    }, 
+    {
+        "severity": "", 
+        "title": "System objects: Strengthen default permissions of internal system objects (e.g., Symbolic Links)", 
+        "value": "", 
+        "keyname": "ProtectionMode", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Session Manager", 
+        "full_path": "System\\CurrentControlSet\\Control\\Session Manager\\ProtectionMode"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: Restrict NTLM: Add remote server exceptions for NTLM authentication", 
+        "value": "", 
+        "keyname": "ClientAllowedNTLMServers", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0\\ClientAllowedNTLMServers"
+    }, 
+    {
+        "severity": "", 
+        "title": "Domain controller: LDAP server signing requirements", 
+        "value": "", 
+        "keyname": "LDAPServerIntegrity", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\NTDS\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\NTDS\\Parameters\\LDAPServerIntegrity"
+    }, 
+    {
+        "severity": "", 
+        "title": "Recovery console: Allow automatic administrative logon", 
+        "value": "", 
+        "keyname": "SecurityLevel", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Setup\\RecoveryConsole", 
+        "full_path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Setup\\RecoveryConsole\\SecurityLevel"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: Allow LocalSystem NULL session fallback", 
+        "value": "", 
+        "keyname": "MSV1_0\u0007llownullsessionfallback", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0\u0007llownullsessionfallback"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive logon: Require smart card", 
+        "value": "", 
+        "keyname": "ScForceOption", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\ScForceOption"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: Restrict NTLM: Audit Incoming NTLM Traffic", 
+        "value": "", 
+        "keyname": "AuditReceivingNTLMTraffic", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0\\AuditReceivingNTLMTraffic"
+    }, 
+    {
+        "severity": "", 
+        "title": "Devices: Allowed to format and eject removable media", 
+        "value": "", 
+        "keyname": "AllocateDASD", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", 
+        "full_path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\AllocateDASD"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network access: Sharing and security model for local accounts", 
+        "value": "", 
+        "keyname": "ForceGuest", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\ForceGuest"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: Restrict NTLM: Outgoing NTLM traffic to remote servers", 
+        "value": "", 
+        "keyname": "RestrictSendingNTLMTraffic", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\MSV1_0\\RestrictSendingNTLMTraffic"
+    }, 
+    {
+        "severity": "", 
+        "title": "Domain controller: Allow server operators to schedule tasks", 
+        "value": "", 
+        "keyname": "SubmitControl", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\SubmitControl"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive logon: Message title for users attempting to logon", 
+        "value": "", 
+        "keyname": "LegalNoticeCaption", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LegalNoticeCaption"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network access: Do not allow storage of credentials or .NET Passports for network authentication", 
+        "value": "", 
+        "keyname": "DisableDomainCreds", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\DisableDomainCreds"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: Restrict NTLM:  NTLM authentication in this domain", 
+        "value": "", 
+        "keyname": "RestrictNTLMInDomain", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\RestrictNTLMInDomain"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive logon: Smart card removal behavior", 
+        "value": "", 
+        "keyname": "ScRemoveOption", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", 
+        "full_path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\ScRemoveOption"
+    }, 
+    {
+        "severity": "", 
+        "title": "System objects: Default owner for objects created by members of the Administrators group", 
+        "value": "", 
+        "keyname": "NoDefaultAdminOwner", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\NoDefaultAdminOwner"
+    }, 
+    {
+        "severity": "", 
+        "title": "Domain controller: Refuse HKEY_LOCAL_MACHINE account password changes", 
+        "value": "", 
+        "keyname": "RefusePasswordChange", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\RefusePasswordChange"
+    }, 
+    {
+        "severity": "", 
+        "title": "Microsoft network server: Amount of idle time required before suspending session", 
+        "value": "", 
+        "keyname": "AutoDisconnect", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\LanManServer\\Parameters\\AutoDisconnect"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: Allow PKU2U authentication requests to this computer to use online identities.", 
+        "value": "", 
+        "keyname": "AllowOnlineID", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Control\\Lsa\\pku2u", 
+        "full_path": "System\\CurrentControlSet\\Control\\Lsa\\pku2u\\AllowOnlineID"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive logon: Message text for users attempting to logon", 
+        "value": "", 
+        "keyname": "LegalNoticeText", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System", 
+        "full_path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\LegalNoticeText"
+    }, 
+    {
+        "severity": "", 
+        "title": "Interactive logon: Require Domain Controller authentication to unlock workstation", 
+        "value": "", 
+        "keyname": "ForceUnlockLogon", 
+        "hive": "hklm", 
+        "path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", 
+        "full_path": "Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\ForceUnlockLogon"
+    }, 
+    {
+        "severity": "", 
+        "title": "Network security: Restrict NTLM: Audit NTLM authentication in this domain", 
+        "value": "", 
+        "keyname": "AuditNTLMInDomain", 
+        "hive": "hklm", 
+        "path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters", 
+        "full_path": "System\\CurrentControlSet\\Services\\Netlogon\\Parameters\\AuditNTLMInDomain"
+    }
+]

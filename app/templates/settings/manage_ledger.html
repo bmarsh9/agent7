@@ -1,0 +1,242 @@
+{% extends "settings/setting_template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True) }}
+    <script src="{{url_for('static',filename='assets/js/ajax_template.js')}}"></script>
+    <script src="{{url_for('static',filename='assets/js/ajax_send.js')}}"></script>
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block style %}
+    {{ super() }}
+
+    div#checks {
+      padding-bottom: 20px;
+    }
+    th {
+      color: white !important;
+    }
+  {% endblock %}  
+
+  {% block ledger_active %}
+      active
+  {% endblock %}
+  {% block tab_data %}
+      <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 style="float:left;" class="title">Manage AuditKey Ledger</h3>
+              </div>
+              <div class="card-body">
+                <a class="btn btn-fill btn-simple btn-sm text-blue" href="{{url_for('main_ui.ledger_auditkeys')}}" role="button">Manage</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 style="float:left;" class="title">Manage RunKey Ledger</h3>
+              </div>
+              <div class="card-body">
+                <a class="btn btn-fill btn-simple btn-sm text-blue" href="{{url_for('main_ui.ledger_auditkeys')}}" role="button">Manage</a>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-7">
+            <div class="card">
+              <div class="card-header">
+                <h3 style="float:left;" class="title">Add/Remove Software from Ledger</h3>
+                <button style="margin-left:20px;" type="button" class="btn btn-simple btn-sm text-blue" data-toggle="modal" data-target="#exampleModal">
+                  Help
+                </button>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.manage_software_ledger')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-10 pr-md-1">
+                      <div class="form-group col-md-4">
+                        <select name="host_type" style="margin-bottom:20px;font-size:12px" class="form-control" id="inlineFormCustomSelect">
+                          <option value="3" selected>Host Type</option>
+                          <option value="1">Server</option>
+                          <option value="2">Workstation</option>
+                          <option value="3">Both (default)</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="software">Add or remove software to/from the software ledger. Insight's will use this data to produce enhanced findings</label>
+                        <textarea name="software" style="border-bottom:1px solid #00f2c3" class="form-control" id="software" placeholder="Insert software, separated by comma's" rows="10" required></textarea>
+                      </div>
+                    </div>
+                  </div>                  
+                  <div class="card-footer">
+                    <div>
+                      <button name="add" type="submit" class="btn btn-fill btn-simple btn-sm text-blue" id="submit">Add</button>
+                      <button name="remove" type="submit" class="btn btn-fill btn-simple btn-sm text-warning" id="submit">Remove</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Software Ledger</h3>
+              </div>
+              <div class="card-body">
+                <table class="table">
+                  <thead class="thead">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Host Type</th>
+                      <th scope="col">Approved</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for software in s_ledger %}
+                      <tr>
+                        <th scope="row">{{software["id"]}}</th>
+                        <td>{{software["name"]}}</td>      
+                        <td>{{software["host_type"]}}</td>      
+                        <td>{{software["approved"]}}</td>      
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-7">
+            <div class="card">
+              <div class="card-header">
+                <h3 style="float:left;" class="title">Add/Remove Privileged Assets</h3>
+                <button style="margin-left:20px;" type="button" class="btn btn-simple btn-sm text-blue" data-toggle="modal" data-target="#exampleModal">
+                  Help
+                </button>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.manage_asset_ledger')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-10 pr-md-1">
+                      <div class="form-group col-md-4">
+                        <select name="objectclass" style="margin-bottom:20px;font-size:12px" class="form-control" id="inlineFormCustomSelect">
+                          <option value="1" selected>Object Class</option>
+                          <option value="1">user (default)</option>
+                          <option value="2">group</option>
+                          <option value="3">computer</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="software">Add or remove assets to/from the ledger. Insight's will use this data to produce enhanced findings</label>
+                        <textarea name="asset" style="border-bottom:1px solid #00f2c3" class="form-control" id="asset" placeholder="Insert asset, separated by comma's" rows="10" required></textarea>
+                      </div>
+                    </div>
+                  </div>                  
+                  <div class="card-footer">
+                    <div>
+                      <button name="add" type="submit" class="btn btn-fill btn-simple btn-sm text-blue" id="submit">Add</button>
+                      <button name="remove" type="submit" class="btn btn-fill btn-simple btn-sm text-warning" id="submit">Remove</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-5">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Asset Ledger</h3>
+              </div>
+              <div class="card-body">
+                <table class="table">
+                  <thead class="thead">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Object Class</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for asset in a_ledger %}
+                      <tr>
+                        <th scope="row">{{asset["id"]}}</th>
+                        <td>{{asset["name"]}}</td>      
+                        <td>{{asset["objectclass"]}}</td>      
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!--  Modal -->
+          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLabel">How's this work?</h3>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div style="color:white" class="modal-body">
+                  <div class="card">
+                    <div class="card-body">
+                      <p>{{ user_manager.USER_APP_NAME|upper  }} can perform automatic, frequent (daily,weekly,monthly) and non-disruptive scanning of your external assets.</p>
+                      <br>
+                      <p>Just insert network blocks, IP's and hostnames and the system will start scanning the assets on a chosen schedule.</p>
+                      <br>
+                      <p>Due to the fact that the duration of a scan is highly dependent on the amount of discoverables, it is difficult to estimate the overall time to complete a scan. </p>
+                      <br>
+                      <div class="">
+                        <h4 class="text-blue">Average Scan Duration</h4>
+                          <ol>
+                            <li>Anywhere from 25-60 seconds for a online host</li>
+                            <li>About 1-2 seconds for a offline host</li>
+                            <li>For 10 hosts, expect the scan to complete in 5-10 minutes.</li>
+                          </ol>
+                      </div>
+                      <br>
+                      <div class="">
+                        <h4 class="text-blue">Data Collected</h4>
+                          <ol>
+                            <li>Online and Offline hosts</li>
+                            <li>Open/Closed Ports (all TCP ports by default)</li>
+                            <li>Services, version numbers, banners and headers</li>
+                            <li>Operating System fingerprinting</li>
+                          </ol>
+                      </div>
+                      <br>
+                      <div class="">
+                        <h4 class="text-blue">What it DOES NOT do...</h4>
+                          <ol>
+                            <li>Attempt to exploit any vulnerabilities</li>
+                            <li>Attempt to overwhelm the host</li>
+                            <li>Hosts that have a high memory/cpu utilization may be negatively affected. If you are worried, you can exclude the host.</li>
+                          </ol>
+                      </div>
+                      <p class="text-warning">IMPORTANT: It is illegal to scan assets that you do not own or have written permission. We are not responsible for scanning assets that you do not own.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}
+

@@ -1,0 +1,456 @@
+{% extends "settings/setting_template.html" %}
+  {% block head %}
+   {{ super() }}
+   <link href="../static/checks.css" rel="stylesheet" />
+  {% endblock %}
+
+                {% block data %}
+                  {{ super() }}
+                          <button style="margin-top:20px" type="submit" class="btn btn-warning btn-simple" data-toggle="modal" data-target="#exampleModal">
+                            Sync Schema
+                          </button>
+                <div class="row">
+                  <div class="col-lg-4">
+                      <div class="boxes">
+                        <h4>User Model</h4>
+                        {% if get_netuser %}
+                         {% for attr,checked in get_netuser.items() %}
+                          <input type="checkbox" name="box1" value="{{attr}}" id="box1-{{attr}}" {{checked}}>
+                          <label for="box1-{{attr}}">{{attr}}</label>
+                         {% endfor %}
+                        {% endif %}
+                        <button id="button1" type="submit" class="btn btn-secondary">Update</button>
+                      </div>
+                  </div>
+                  <div class="col-lg-4">
+                      <div class="boxes">
+                        <h4>Computer Model</h4>
+                        {% if get_netcomputer %}
+                         {% for attr,checked in get_netcomputer.items() %}
+                          <input type="checkbox" name="box2" value="{{attr}}" id="box2-{{attr}}" {{checked}}>
+                          <label for="box2-{{attr}}">{{attr}}</label>
+                         {% endfor %}
+                        {% endif %}
+                        <button id="button2" type="submit" class="btn btn-secondary">Update</button>
+                      </div>
+                  </div>
+                  <div class="col-lg-4">
+                      <div class="boxes">
+                        <h4>Group Model</h4>
+                        {% if get_netgroup %}
+                         {% for attr,checked in get_netgroup.items() %}
+                          <input type="checkbox" name="box3" value="{{attr}}" id="box3-{{attr}}" {{checked}}>
+                          <label for="box3-{{attr}}">{{attr}}</label>
+                         {% endfor %}
+                        {% endif %}
+                        <button id="button3" type="submit" class="btn btn-secondary">Update</button>
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4">
+                      <div class="boxes">
+                        <h4>OU Model</h4>
+                        {% if get_netou %}
+                         {% for attr,checked in get_netou.items() %}
+                          <input type="checkbox" name="box4" value="{{attr}}" id="box4-{{attr}}" {{checked}}>
+                          <label for="box4-{{attr}}">{{attr}}</label>
+                         {% endfor %}
+                        {% endif %}
+                        <button id="button4" type="submit" class="btn btn-secondary">Update</button>
+                      </div>
+                  </div>
+                  <div class="col-lg-4">
+                      <div class="boxes">
+                        <h4>GPO Model</h4>
+                        {% if get_netgpo %}
+                         {% for attr,checked in get_netgpo.items() %}
+                          <input type="checkbox" name="box5" value="{{attr}}" id="box5-{{attr}}" {{checked}}>
+                          <label for="box5-{{attr}}">{{attr}}</label>
+                         {% endfor %}
+                        {% endif %}
+                        <button id="button5" type="submit" class="btn btn-secondary">Update</button>
+                      </div>
+                  </div>
+                  <div class="col-lg-4">
+                      <div class="boxes">
+                        <h4>GPO Group Model</h4>
+                        {% if get_netgpogroup %}
+                         {% for attr,checked in get_netgpogroup.items() %}
+                          <input type="checkbox" name="box6" value="{{attr}}" id="box6-{{attr}}" {{checked}}>
+                          <label for="box6-{{attr}}">{{attr}}</label>
+                         {% endfor %}
+                        {% endif %}
+                        <button id="button6" type="submit" class="btn btn-secondary">Update</button>
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-4">
+                      <div class="boxes">
+                        <h4>DC Model</h4>
+                        {% if get_netdomaincontroller %}
+                         {% for attr,checked in get_netdomaincontroller.items() %}
+                          <input type="checkbox" name="box7" value="{{attr}}" id="box7-{{attr}}" {{checked}}>
+                          <label for="box7-{{attr}}">{{attr}}</label>
+                         {% endfor %}
+                        {% endif %}
+                        <button id="button7" type="submit" class="btn btn-secondary">Update</button>
+                      </div>
+                  </div>
+                </div>
+              </div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">WARNING</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Warning: Refreshing the schema will fetch any new attributes from the Active Directory Schema!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+        <button id="button0" type="button" class="btn btn-danger">Sync</button>
+      </div>
+    </div>
+  </div>
+</div>
+                {% endblock %}
+{% block script %}
+  {{ super() }}
+
+  <script>
+//  $.noConflict();
+$(document).ready(function () {
+  $("#button0").click(function(e) {
+    //haaaaaaaaaaaa
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/settings/sync",
+        success: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'Successful Sync. Page will be refreshed in 5 seconds.'
+            },{
+      	      // settings
+	      type: 'warning'
+            });
+            setTimeout(function() {
+                location.reload();
+            }, 5000);
+        },
+        error: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'An Error occurred. Please contact an Administrator.'
+            },{
+      	      // settings
+	      type: 'danger'
+            });
+        }
+    });
+});
+});
+  </script>
+  <script>
+//  $.noConflict();
+$(document).ready(function () {
+  $("#button1").click(function(e) {
+    var data = {"get_netuser":{}};
+//    $.each($("input[name='box1']:checked"), function(){            
+    $.each($("input[name='box1']"), function(){            
+      if (this.checked) {
+          data["get_netuser"][$(this).val()] = "on"
+      }
+      else {
+          data["get_netuser"][$(this).val()] = "off"
+      }
+    });
+    //haaaaaaaaaaaa
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/settings/schema",
+        data : JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'Successfully updated.'
+            },{
+      	      // settings
+	      type: 'success'
+            });
+        },
+        error: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'An Error occurred. Please contact an Administrator.'
+            },{
+      	      // settings
+	      type: 'danger'
+            });
+        }
+    });
+});
+});
+  </script>
+  <script>
+//  $.noConflict();
+$(document).ready(function () {
+  $("#button2").click(function(e) {
+    var data = {"get_netcomputer":{}};
+    $.each($("input[name='box2']"), function(){
+      if (this.checked) {
+          data["get_netcomputer"][$(this).val()] = "on"
+      }
+      else {
+          data["get_netcomputer"][$(this).val()] = "off"
+      }
+    });
+    //haaaaaaaaaaaa
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/settings/schema",
+        data : JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'Successfully updated.'
+            },{
+      	      // settings
+	      type: 'success'
+            });
+        },
+        error: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'An Error occurred. Please contact an Administrator.'
+            },{
+      	      // settings
+	      type: 'danger'
+            });
+        }
+    });
+});
+});
+  </script>
+  <script>
+//  $.noConflict();
+$(document).ready(function () {
+  $("#button3").click(function(e) {
+    var data = {"get_netgroup":{}};
+    $.each($("input[name='box3']"), function(){
+      if (this.checked) {
+          data["get_netgroup"][$(this).val()] = "on"
+      }
+      else {
+          data["get_netgroup"][$(this).val()] = "off"
+      }
+    });
+    //haaaaaaaaaaaa
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/settings/schema",
+        data : JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'Successfully updated.'
+            },{
+      	      // settings
+	      type: 'success'
+            });
+        },
+        error: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'An Error occurred. Please contact an Administrator.'
+            },{
+      	      // settings
+	      type: 'danger'
+            });
+        }
+    });
+});
+});
+  </script>
+  <script>
+//  $.noConflict();
+$(document).ready(function () {
+  $("#button4").click(function(e) {
+    var data = {"get_netou":{}};
+    $.each($("input[name='box4']"), function(){
+      if (this.checked) {
+          data["get_netou"][$(this).val()] = "on"
+      }
+      else {
+          data["get_netou"][$(this).val()] = "off"
+      }
+    });
+    //haaaaaaaaaaaa
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/settings/schema",
+        data : JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'Successfully updated.'
+            },{
+      	      // settings
+	      type: 'success'
+            });
+        },
+        error: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'An Error occurred. Please contact an Administrator.'
+            },{
+      	      // settings
+	      type: 'danger'
+            });
+        }
+    });
+});
+});
+  </script>
+  <script>
+//  $.noConflict();
+$(document).ready(function () {
+  $("#button5").click(function(e) {
+    var data = {"get_netgpo":{}};
+    $.each($("input[name='box4']"), function(){
+      if (this.checked) {
+          data["get_netgpo"][$(this).val()] = "on"
+      }
+      else {
+          data["get_netgpo"][$(this).val()] = "off"
+      }
+    });
+    //haaaaaaaaaaaa
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/settings/schema",
+        data : JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'Successfully updated.'
+            },{
+      	      // settings
+	      type: 'success'
+            });
+        },
+        error: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'An Error occurred. Please contact an Administrator.'
+            },{
+      	      // settings
+	      type: 'danger'
+            });
+        }
+    });
+});
+});
+  </script>
+  <script>
+//  $.noConflict();
+$(document).ready(function () {
+  $("#button6").click(function(e) {
+    var data = {"get_netgpogroup":{}};
+    $.each($("input[name='box6']"), function(){
+      if (this.checked) {
+          data["get_netgpogroup"][$(this).val()] = "on"
+      }
+      else {
+          data["get_netgpogroup"][$(this).val()] = "off"
+      }
+    });
+    //haaaaaaaaaaaa
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/settings/schema",
+        data : JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'Successfully updated.'
+            },{
+      	      // settings
+	      type: 'success'
+            });
+        },
+        error: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'An Error occurred. Please contact an Administrator.'
+            },{
+      	      // settings
+	      type: 'danger'
+            });
+        }
+    });
+});
+});
+  </script>
+  <script>
+//  $.noConflict();
+$(document).ready(function () {
+  $("#button7").click(function(e) {
+    var data = {"get_netdomaincontroller":{}};
+    $.each($("input[name='box7']"), function(){
+      if (this.checked) {
+          data["get_netdomaincontroller"][$(this).val()] = "on"
+      }
+      else {
+          data["get_netdomaincontroller"][$(this).val()] = "off"
+      }
+    });
+    //haaaaaaaaaaaa
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/settings/schema",
+        data : JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'Successfully updated.'
+            },{
+      	      // settings
+	      type: 'success'
+            });
+        },
+        error: function(result) {
+            $.notify({
+       	      // options
+      	      message: 'An Error occurred. Please contact an Administrator.'
+            },{
+      	      // settings
+	      type: 'danger'
+            });
+        }
+    });
+});
+});
+  </script>
+{% endblock %}

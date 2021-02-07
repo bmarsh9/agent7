@@ -1,0 +1,202 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True,counter=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {% block style %}
+    {{ super() }}
+    .col-md-3.col-sm-4 {
+      display: contents;
+    }
+  {% endblock %}
+
+  {% block body %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-body">
+                <form action="{{url_for('main_ui.insight')}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-1 pr-md-1">
+                      <select name="status" style="font-size:12px" class="form-control" id="inlineFormCustomSelect">
+                        <option value="{{status}}" selected>Status...</option>
+                        <option value="open">Open</option>
+                        <option value="in progress">In Progress</option>
+                        <option value="closed">Closed</option>
+                        <option value="None">Clear</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 pr-md-1">
+                      <select name="module" style="font-size:12px" class="form-control" id="inlineFormCustomSelect">
+                        <option value="{{module}}" selected>Module...</option>
+                        <option value="agent">Agent</option>
+                        <option value="active_directory">Active Directory</option>
+                        <option value="watcher">Watcher</option>
+                        <option value="None">Clear</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 pr-md-1">
+                      <select name="severity" style="font-size:12px" class="form-control" id="inlineFormCustomSelect">
+                        <option value="{{severity}}" selected>Severity...</option>
+                        <option value="critical">Critical</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                        <option value="None">Clear</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 pr-md-1">
+                      <select name="ease" style="font-size:12px" class="form-control" id="inlineFormCustomSelect">
+                        <option value="{{ease}}" selected>Ease...</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                        <option value="None">Clear</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2 pr-md-1">
+                      <select name="confidence" style="font-size:12px" class="form-control" id="inlineFormCustomSelect">
+                        <option value="{{confidence}}" selected>Confidence...</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                        <option value="None">Clear</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3 pr-md-1">
+                      <button type="submit" class="btn btn-simple btn-sm text-teal">Filter</button>
+                      <a class="btn btn-simple btn-sm text-warning" href="{{url_for('main_ui.insight')}}" role="button">Reset Filters</a>
+                      <a class="btn btn-simple btn-sm text-green" href="{{url_for('main_ui.insight_stats')}}" role="button">Stats</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div style="margin-top:-20px;margin-bottom:10px;" class="col-12">
+            {% if status and status != "None" %}
+              <span class="badge badge-pill badge-default">Status: {{status}}</span>
+            {% endif %}
+            {% if module and module != "None" %}
+              <span class="badge badge-pill badge-default">module: {{module}}</span>
+            {% endif %}
+            {% if severity and severity != "None" %}
+              <span class="badge badge-pill badge-default">Severity: {{severity}}</span>
+            {% endif %}
+            {% if ease and ease != "None" %}
+              <span class="badge badge-pill badge-default">Ease: {{ease}}</span>
+            {% endif %}
+            {% if confidence and confidence != "None" %}
+              <span class="badge badge-pill badge-default">Confidence: {{confidence}}</span>
+            {% endif %}
+          </div>
+        </div>
+    {% for insight in insights %}
+      {% set colorha = colors[insight["severity"]] %}
+      {% if insight["severity_label"] == "low" %}
+        {% set color="#5e72e4" %}
+      {% elif insight["severity_label"] == "medium" %}
+        {% set color="#ffd600" %}
+      {% elif insight["severity_label"] == "high" %}
+        {% set color = "#fb6340" %}
+      {% elif insight["severity_label"] == "critical" %}
+        {% set color = "#f5365c" %}
+      {% else %}
+        {% set color = "#2dce89" %}
+      {% endif %}
+      <div class="row">
+        <div class="col-auto text-center flex-column d-none d-sm-flex">
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+            <h5 class="m-2">
+                <span class="badge badge-pill bg-success">&nbsp;</span>
+            </h5>
+            <div class="row h-50">
+                <div class="col border-right">&nbsp;</div>
+                <div class="col">&nbsp;</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-success shadow">
+                <div style="border-left:10px solid {{colorha}}"class="card-body">
+                    <div class="float-right text-white">{{insight["date_added"]}}</div>
+                    <span style="font-size:18px;float:left;margin-top:3px;color:{{colorha}}" class="badge badge-pill">{{insight["severity"]}}</span>
+
+                    <h4 class="card-title text-white">{{insight["name"]}}</h4>
+
+                    <div class="col-md-3 col-sm-4">
+                      <i style="font-size:10px" class="btn btn-simple btn-sm text-teal">Impacted Assets: {{insight["affected_assets"]}}</i>
+                    </div>
+                    <div class="col-md-3 col-sm-4">
+                      <i style="font-size:10px" class="btn btn-simple btn-sm text-green">Ease: {{insight["ease_label"]}}</i>
+                    </div>
+                    <div class="col-md-3 col-sm-4">
+                      <i style="font-size:10px" class="btn btn-simple btn-sm text-orange">Confidence: {{insight["confidence_label"]}}</i>
+                    </div>
+                    <div class="col-md-3 col-sm-4">
+                      <i style="font-size:10px" class="btn btn-simple btn-sm text-white">{{insight["module"]}}</i>
+                    </div>
+                    <br>
+                    <button class="btn btn-sm btn-simple text-teal" type="button" data-target="#t{{loop.index}}_details" data-toggle="collapse">Preview ▼</button>
+                    <button data-id={{insight["id"]}} class="btn btn-sm btn-simple text-warning" style="float:right" type="button" data-toggle="modal" data-target="#exampleModal">Close</button>
+                    <a class="btn btn-sm btn-simple text-teal" href="{{url_for('main_ui.view_insight',id=insight['id'])}}" style="float:right" type="button">View Details</a>
+
+                    <div class="collapse border" id="t{{loop.index}}_details">
+                        <div style="color:white" class="p-2 text-monospace">
+                            <div style="font-size:12px">Name: {{insight["name"]}}</div>
+                            <div style="font-size:12px">Affected Assets: {{insight["affected_assets"]}}</div>
+                            <div style="font-size:12px">Description: {{insight["description"]}}</div>
+                            <div style="font-size:12px">Solution: {{insight["solution"]}}</div>
+                            <div style="font-size:12px">Severity: {{insight["severity"]}}</div>
+                            <div style="font-size:12px">Remediation Ease: {{insight["ease"]}}</div>
+                            <div style="font-size:12px">Confidence: {{insight["confidence"]}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    {% endfor %}
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Please confirm</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-white">
+            Are you sure you want to close this Insight?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancel</button>
+            <form method="POST" action="{{url_for('main_ui.close_insight')}}">
+              <button id="insight_id" name="insight_id" value="" type="submit" class="btn btn-warning btn-sm">Confirm</button>
+            <form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {%endblock%}
+
+  {% block extra_js%}
+    <script>
+      // add insight ID to the modal
+      $('.modal').on('show.bs.modal', function (e) {
+        var $btn_id = $(e.relatedTarget).data('id');
+        $("#insight_id").attr("value",$btn_id);
+      });
+    </script>
+  {%endblock%}
+

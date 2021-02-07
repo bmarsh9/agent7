@@ -1,0 +1,29 @@
+#server {
+    # listen on port 80 (http)
+    #listen 80;
+    #server_name 0.0.0.0;
+    #location / {
+    #    # redirect any requests to the same URL but on https
+    #    return 301 https://$host$request_uri;
+    #}
+#}
+server {
+    # listen on port 443 (https)
+    listen 5000 ssl;
+    server_name 0.0.0.0;
+
+    # location of the self-signed SSL certificate
+    ssl_certificate /agent7/server_config/certs/nginx.crt;
+    ssl_certificate_key /agent7/server_config/certs/nginx.key;
+
+    # write access and error logs to /var/log
+    #access_log /var/log/flask_access.log;
+    #error_log /var/log/flask_error.log;
+
+    location / {
+      include proxy_params;
+      proxy_pass_request_headers on;
+      include uwsgi_params;
+      uwsgi_pass unix:/tmp/app.sock;        
+    }
+}

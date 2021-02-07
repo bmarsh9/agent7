@@ -1,0 +1,100 @@
+{% extends "template.html" %}
+
+  {% block head %}
+  {{ super() }}
+  {% endblock %}
+
+  {% block style %}
+    ul#myTab {
+      padding-bottom: 30px;
+    }
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+      <!-- End Navbar -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-dark alert-dismissible">
+              <button type="button" class="close"  data-dismiss="alert">&times;</button>
+              <i class="tim-icons icon-light-3 text-success"></i> Welcome to PAM! We can automatically discover privileged local/domain accounts and let you on-board them. Start by selecting "Privileged Accounts" or View the "Dashboard"
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.my_vault')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View and check out accounts</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bank text-yellow"></i>My Vault</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.vault_dashboard')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Dashboard for onboarding accounts</h1>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>Dashboard</h3>
+              </div></a>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.vault_accounts')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> View all (local/domain) Privileged Accounts</h1>
+                <h3 class="card-title"><i class="tim-icons icon-coins text-teal"></i>Privileged Accounts</h3>
+              </div></a>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.start_wizard')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Automatically manage & onboard accounts</h1>
+                <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-green"></i>Create WorkFlows</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.vault_search')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Search and onboard local accounts</h1>
+                <h3 class="card-title"><i class="tim-icons icon-paper text-orange"></i>Onboard Local Accounts</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.manage_ad_accounts')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Search and onboard privileged domain accounts</h1>
+                <h3 class="card-title"><i class="tim-icons icon-planet text-red"></i>Onboard Domain Accounts</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.privilege_use_host')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Analytics for your privilege accounts by host</h1>
+                <h3 class="card-title"><i class="tim-icons icon-coins text-yellow"></i>Host Analytics</h3>
+              </div>
+            </div></a>
+          </div>
+          <div class="col-lg-4">
+            <a href="{{url_for('main_ui.privilege_use_user')}}"><div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category"> Analytics for your privilege accounts by user</h1>
+                <h3 class="card-title"><i class="tim-icons icon-badge text-blue"></i>User Analytics</h3>
+              </div>
+            </div></a>
+          </div>
+        </div>
+      </div>
+
+  {% endblock %}
+
+{% block extra_js %}
+<!-- Place Scripts here -->
+{% endblock %}

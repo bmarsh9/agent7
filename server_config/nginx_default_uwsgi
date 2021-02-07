@@ -1,0 +1,37 @@
+# Rename this file to `default` and place in /etc/nginx/sites-available/
+# Generate certificate: openssl req -new -newkey rsa:4096 -days 365 -nodes -x509   -keyout certs/key.pem -out certs/cert.pem
+server {
+    # listen on port 80 (http)
+    listen 80;
+    server_name <hostname or ip address>;
+    location / {
+        # redirect any requests to the same URL but on https
+        return 301 https://$host$request_uri;
+    }
+}
+server {
+    # listen on port 443 (https)
+    listen 443 ssl;
+    server_name <hostname or ip address>;
+
+    # location of the self-signed SSL certificate
+    ssl_certificate </path/to/cert.pem>;
+    ssl_certificate_key </path/to/key.pem>;
+
+    # write access and error logs to /var/log
+    #access_log /var/log/flask_access.log;
+    #error_log /var/log/flask_error.log;
+
+    location / {
+      include proxy_params;
+      proxy_pass_request_headers on;
+      include uwsgi_params;
+      uwsgi_pass unix:/tmp/app.sock;        
+    }
+
+    location /static {
+      # handle static files directly, without forwarding to the application
+      alias </path/to/flaskfolder/static>;
+      expires 30d;
+    }
+}

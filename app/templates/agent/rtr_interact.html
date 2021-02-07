@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/ww_main_icononly.png') }}">
+
+  <title>{{ user_manager.USER_APP_NAME|upper }} </title>
+
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <!-- Nucleo Icons -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/nucleo-icons.css') }}">
+
+  <!-- CSS Files -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/black-dashboard.min.css') }}">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='webshell.css') }}">
+  <style>
+    html {
+      overflow: hidden
+    }
+    #terminalTextInput {
+      background:#1b1b1b;
+      border-top: 1px solid #00f2c3 !important;
+      width: 100%;
+      height:10vh;
+    }
+    .terminalCont {
+      background:#1b1b1b;
+      width:100vw;
+    }
+    .fixed-plugin .dropdown-menu {
+      height:50vh;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="fixed-plugin">
+      <div class="dropdown show-dropdown">
+        <a href="#" data-toggle="dropdown">
+          <i class="fa fa-cog fa-2x"> </i>
+        </a>
+        <ul class="dropdown-menu">
+          <li class="header-title" style="color:#00f2c3"> Connected To: {{agent.hostname}}</li>
+          <li class="header-title"> Started: {{date_started}}</li>
+          <li class="adjustments-line">
+            <h6>Agent ID: {{agent.id}}</h6>
+            <h6>Domain: {{agent.domain}}</h6>
+            <h6>Operating System: {{agent.edition}}</h6>
+            <h6>Local Addr: {{agent.local_addr}}</h6>
+            <a class="btn btn-primary btn-sm" style="color:white" href="{{url_for('main_ui.manage_agents',id=agent.id)}}" role="button">End Session</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="terminalCont">
+      <span id="is_connected" style="margin-right:10px;color:#00f2c3;padding: 10px;position: fixed;right: 0;">Connected: {{agent.fqdn}}</span>
+      <br>
+      <span style="margin-right:10px;padding: 10px;position: fixed;right: 0;">Session Started: {{date_started}}</span>
+      <div id="terminalReslutsCont"></div>
+    </div>
+    <form>
+      <input id="terminalTextInput" type="text" placeholder="Try typing help... Or Commmands (ex. run job=get-help)" autocomplete="off">
+    </form>
+  </div>
+</body>
+  <!--  Notifications Plugin    -->
+  <script src="{{ url_for('static', filename='assets/js/plugins/bootstrap-notify.js') }}"></script>
+  <!--   Core JS Files   -->
+  <script src="{{ url_for('static', filename='assets/js/core/popper.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js') }}"></script>
+
+<script>
+
+    $(document).ready(function() {
+      $().ready(function() {
+        $sidebar = $('.sidebar');
+        $navbar = $('.navbar');
+        $main_panel = $('.main-panel');
+
+        $full_page = $('.full-page');
+
+        $sidebar_responsive = $('body > .navbar-collapse');
+        sidebar_mini_active = true;
+        white_color = false;
+
+        window_width = $(window).width();
+
+        fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+
+        $('.fixed-plugin a').click(function(event) {
+          if ($(this).hasClass('switch-trigger')) {
+            if (event.stopPropagation) {
+              event.stopPropagation();
+            } else if (window.event) {
+              window.event.cancelBubble = true;
+            }
+          }
+        });
+
+        $('.fixed-plugin .background-color span').click(function() {
+          $(this).siblings().removeClass('active');
+          $(this).addClass('active');
+
+          var new_color = $(this).data('color');
+
+          if ($sidebar.length != 0) {
+            $sidebar.attr('data', new_color);
+          }
+
+          if ($main_panel.length != 0) {
+            $main_panel.attr('data', new_color);
+          }
+
+          if ($full_page.length != 0) {
+            $full_page.attr('filter-color', new_color);
+          }
+
+          if ($sidebar_responsive.length != 0) {
+            $sidebar_responsive.attr('data', new_color);
+          }
+        });
+
+        $('.switch-sidebar-mini input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (sidebar_mini_active == true) {
+            $('body').removeClass('sidebar-mini');
+            sidebar_mini_active = false;
+          } else {
+            $('body').addClass('sidebar-mini');
+            sidebar_mini_active = true;
+          }
+
+          // we simulate the window Resize so the charts will get updated in realtime.
+          var simulateWindowResize = setInterval(function() {
+            window.dispatchEvent(new Event('resize'));
+          }, 180);
+
+          // we stop the simulation of Window Resize after the animations are completed
+          setTimeout(function() {
+            clearInterval(simulateWindowResize);
+          }, 1000);
+        });
+
+        $('.switch-change-color input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (white_color == true) {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').removeClass('white-content');
+            }, 900);
+            white_color = false;
+          } else {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').addClass('white-content');
+            }, 900);
+
+            white_color = true;
+          }
+
+
+        });
+
+        $('.light-badge').click(function() {
+          $('body').addClass('white-content');
+        });
+
+        $('.dark-badge').click(function() {
+          $('body').removeClass('white-content');
+        });
+      });
+    });
+  
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+//  var pathname = window.location.pathname;
+//  var aid = pathname.substring(pathname.lastIndexOf('/') + 1);
+
+
+  document.getElementsByTagName('form')[0].onsubmit = function(evt) {
+    evt.preventDefault(); // Preventing the form from submitting
+    checkWord(); // Do your magic and check the entered word/sentence
+    window.scrollTo(0,150);
+  }
+
+  // Get the focus to the text input to enter a word right away.
+  document.getElementById('terminalTextInput').focus();
+
+  // Getting the text from the input
+  var textInputValue = document.getElementById('terminalTextInput').value.trim();
+
+  //Getting the text from the results div
+  var textResultsValue = document.getElementById('terminalReslutsCont').innerHTML;
+
+  // Clear text input
+  var clearInput = function(){
+    document.getElementById('terminalTextInput').value = "";
+  }
+
+  // Scrtoll to the bottom of the results div
+  var scrollToBottomOfResults = function(){
+    var terminalResultsDiv = document.getElementById('terminalReslutsCont');
+    terminalResultsDiv.scrollTop = terminalResultsDiv.scrollHeight;
+  }
+
+  // Scroll to the bottom of the results
+  scrollToBottomOfResults();
+
+  // Add text to the results div
+  var addTextToResults = function(textToAdd){
+    document.getElementById('terminalReslutsCont').innerHTML += "<p>" + textToAdd + "</p>";
+    scrollToBottomOfResults();
+  }
+
+  // Getting the list of keywords for help & posting it to the screen
+  var postHelpList = function(){
+    // Array of all the help keywords
+    var helpKeyWords = [
+      ":Description: Execute commands on the endpoint. Preface input with `run` to send the command to the agent.",
+      ":Usage: Type (run job=get-help) to view the available commands on the agent.",
+
+      "- Search Google: Type (google keyword)",
+      "- Search VirusTotal: Type (vt ip/domain)",
+    ].join('<br>');
+    addTextToResults(helpKeyWords);
+  }
+
+  // Opening links in a new window
+  var openLinkInNewWindow = function(linkToOpen){
+    window.open(linkToOpen, '_blank');
+    clearInput();
+  }
+  
+// Main function to check the entered text and assign it to the correct function
+  var checkWord = function() {
+    textInputValue = document.getElementById('terminalTextInput').value.trim(); //get the text from the text input to a variable
+    textInputValueLowerCase = textInputValue.toLowerCase(); //get the lower case of the string
+
+    var LONG_POLL_DURATION = 60000;
+    var RETRY_AMOUNT = 15;
+    var bail = 0;
+    var bail_msg = 'Hmm.. Something took too long. Please try again or contact an Admin.';
+    function wait_for_update(cmdid) {
+      var loopId = setTimeout(function(){
+        $.ajax({ url: "/api/agent/rtr/"+{{agent.id}}+"?id="+cmdid,
+                 type: "GET",
+                 success: function(result) {
+                     if (result["complete"] === 1) { // complete
+                         display_data(result);
+                     } 
+                     else { // not complete
+                         bail++;
+                         if (bail >= RETRY_AMOUNT) { // failed to get results after 20 tries
+                             $.notify({ message: bail_msg},{type: 'danger', showProgressbar: false,});
+                             addTextToResults("<p style='color:#FF0000 !important;'>Command Failed! </p>");
+                         }
+                         else {
+                             wait_for_update(cmdid);
+                         };
+                     }
+                 },
+                 error: function(result) {
+                     bail++;
+                     if (bail >= RETRY_AMOUNT) { // failed to get results after 20 tries
+                         $.notify({ message: bail_msg},{type: 'danger'});
+                     }
+                     else {
+                         wait_for_update(cmdid);
+                     };
+                 },
+                 timeout:  LONG_POLL_DURATION,
+        });
+     },3000); 
+    };
+    function display_data(data) {
+        $.notify({
+              message: data["message"]
+            },{
+              type: data["type"],
+              delay: 2000
+        });
+        addTextToResults("+++++");
+        addTextToResults(data["data"]); // add data to the cmd console
+        addTextToResults("+++++");
+        addTextToResults("<p style='color:#00f2c3 !important;'>Last Command: <span style=color:white;>"+textInputValue+"</span></p>");
+        addTextToResults("<p style='color:#00f2c3 !important;'>Current Directory: <span style=color:white;>"+data["cwd"]+"</span></p>");
+    }
+    var postData = function(input) {
+     $.ajax({
+        type: "POST",
+        url: "/api/agent/rtr/"+{{agent.id}},
+//        data : JSON.stringify({"cmd":textInputValueLowerCase}),
+        data : JSON.stringify({"cmd":input,"username":"{{ current_user.username or current_user.email }}","session":"{{session}}","host_name":"{{agent.fqdn}}"}),
+        contentType: 'application/json',
+        success: function(result) {
+            console.log(result);
+            $.notify({
+              message: result["message"]
+            },{
+              type: result["type"],
+      	      showProgressbar: false,
+              delay: 2000
+            });
+            wait_for_update(result["id"]);
+        },
+        error: function(result) {
+            console.log(result);
+            $.notify({
+              // options
+              message: 'An Error occurred. Please contact an Administrator.'
+            },{
+              // settings
+              type: 'danger'
+            });
+        }
+     });
+    }
+    // Having a specific text reply to specific strings
+    var textReplies = function() {
+     switch(textInputValueLowerCase){
+      case "google":
+        clearInput();
+        addTextToResults("Type google + something to search for.");
+        break;
+
+      case "virustotal":
+      case "vt":
+        clearInput();
+        addTextToResults("Type vt + something to search for.");
+        break;
+
+      case "save":
+        clearInput();
+        console.log(document.getElementById('terminalReslutsCont').textContent);
+        break;
+
+      case "help":
+      case "?":
+        clearInput();
+        postHelpList();
+        break;
+
+      default:
+      clearInput();
+      addTextToResults("<p><i>The command " + "<b>" + textInputValue + "</b>" + " was not found. Type <b>Help</b> to see all commands.</i></p>");
+      break;
+     }
+    }
+
+    if (textInputValue != ""){ //checking if text was entered
+      addTextToResults("<p class='userEnteredText' style='color:#00f2c3 !important;'>Command> <span style=color:white;>"+textInputValue+"</span></p>");
+      if (textInputValueLowerCase.substr(0,7) == "google ") {
+        openLinkInNewWindow('https://www.google.com/search?q='+textInputValueLowerCase.substr(7));
+        addTextToResults("<i>Search on Google for " + "<b>" + textInputValue.substr(7) + "</b>" + " it should be opened now.</i>");
+      } else if (textInputValueLowerCase.substr(0,3) == "vt "){
+        openLinkInNewWindow('https://www.virustotal.com/gui/ip-address/'+textInputValueLowerCase.substr(3));
+        addTextToResults("<i>Search on Virustotal for " + "<b>" + textInputValue.substr(3) + "</b>" + " it should be opened now.</i>");
+      } else if (textInputValueLowerCase.substr(0,4) == "run "){ // Send command to agent
+            clearInput();
+            postData(textInputValue.substr(4));
+      } else{
+        textReplies();
+      }
+    }
+  };
+
+});
+</script>
+
+<script>
+
+var hostname = "{{agent.fqdn}}"
+
+$(document).ready(function() {
+    setInterval(ajaxd, 8000);
+});
+
+function ajaxd() { 
+    $.ajax({
+         type: "GET",
+         url: "/api/agent/data/agent?filter=id,eq,{{agent.id}};last_active,gt,15 seconds ago",
+         contentType: 'application/json',
+         success: function(result) {
+            if (!result["count"]) {
+                $("#is_connected").text("Host Offline: "+hostname);
+                $("#is_connected").css("color","red");
+            } else {
+                $("#is_connected").text("Connected: "+hostname);
+                $("#is_connected").css("color","#00f2c3");
+            }
+         },
+         error: function(result) {
+            console.log(result);
+         }
+    });
+}
+</script>
+</html>

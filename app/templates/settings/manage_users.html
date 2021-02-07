@@ -1,0 +1,147 @@
+{% extends "settings/setting_template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True) }}
+    <link href="{{url_for('static',filename='assets/css/table.css')}}" rel="stylesheet" />
+
+  {% endblock %}
+
+  {%block users_active%}
+      active
+  {%endblock%}
+  {% block tab_data %}
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Edit Profile</h3>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.update_user',id=user.id)}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-4 pr-md-1">
+                      <div class="form-group">
+                        <label>Email address</label>
+                        <input type="email" class="form-control" placeholder="{{user.email}}" name="email" readonly>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4 pr-md-1">
+                      <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" class="form-control" placeholder="{{user.first_name}}" value="" name="first">
+                      </div>
+                    </div>
+                    <div class="col-md-4 pl-md-1">
+                      <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" class="form-control" placeholder="{{user.last_name}}" value="" name="last">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-3 pr-md-1">
+                      <div class="form-group">
+                        <label>User Enabled</label>
+                        <select name="active" style="border:1px solid #2b3553" class="form-control" id="inlineFormCustomSelect">
+                          <option value="{{user.active}}" selected="">{{user.active}}</option>
+                          <option value="true">Yes</option>
+                          <option value="false">No</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <a class="btn btn-fill btn-simple btn-sm text-warning" href="{{ user_manager.USER_CHANGE_PASSWORD_URL }}" role="button">Change Password</a>
+                  <a class="btn btn-fill btn-simple btn-sm text-warning" href="{{ user_manager.USER_FORGOT_PASSWORD_URL }}" role="button">Forgot Password</a>
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-fill btn-simple btn-sm text-success" id="submit">Save</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Edit Roles</h3>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.edit_user_roles',id=user.id)}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-8 pr-md-1">
+                      <div class="form-group">
+                        <label>Available Roles</label>
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Role name</th>
+                              <th scope="col">User contains</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for role in all_roles %}
+                              <tr>
+                                <th scope="row">{{role.id}}</th>
+                                <td>{{role.name}}</td>
+                                {% if role in user_roles %}
+                                  <td><i class="tim-icons icon-check-2"></i></td>
+                                {% else %}
+                                  <td><i class="tim-icons icon-simple-remove"></i></td>
+                                {% endif %}
+                              </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="form-group">
+                        <label>Add/Remove Role to user</label>
+                        <input type="number" class="form-control" placeholder="Enter the role id to add/remove." name="role_id">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div>
+                      <button name="add" type="submit" class="btn btn-fill btn-simple btn-sm text-success" id="submit">Add</button>
+                      <button name="remove" type="submit" class="btn btn-fill btn-simple btn-sm text-warning" id="submit">Remove</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Delete Profile</h3>
+              </div>
+              <div class="card-body">
+                <form action="{{url_for('main_ui.delete_user',id=user.id)}}" method="POST">
+                  <div class="row">
+                    <div class="col-md-6 pr-md-1">
+                      <div class="form-group">
+                        <label>Delete Account</label>
+                        <input type="text" class="form-control" placeholder="Type `delete` to verify" name="delete">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-fill btn-simple btn-sm text-warning" id="submit">Delete</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+  {%endblock%}
+
+  {% block extra_js%}
+  {%endblock%}
+

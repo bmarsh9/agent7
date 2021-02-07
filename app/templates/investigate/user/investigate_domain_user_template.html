@@ -1,0 +1,57 @@
+{% extends "template.html" %}
+
+{% block head %}
+  {{ super() }}
+  {% import "macros.html" as macro %}
+  {{ macro.filehelper(datatables=True,chartjs=True) }}
+{% endblock %}
+
+{% block body %}
+{{super()}}
+<div class="row">
+    <div class="col-md">
+        <ul class="nav nav-tabs" id="myNavTabs">
+            <li class="nav-item">
+              <a class="nav-link {%block overview_active%}{%endblock%}" href="{{url_for('main_ui.investigate_domain_user',id=user.id)}}">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block logon_active%}{%endblock%}" href="{{ url_for('main_ui.domain_user_logon_history',id=user.id)}}">Logon History</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block logonmap_active%}{%endblock%}" href="{{ url_for('main_ui.user_logon_map',accounttype='domain',sid=user.objectsid)}}">Logon Map</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block dependencies_active%}{%endblock%}" href="{{ url_for('main_ui.domain_user_dependencies',id=user.id)}}">Dependencies</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block network_active%}{%endblock%}" href="{{ url_for('main_ui.domain_user_network',id=user.id)}}">Net. Connections</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block process_active%}{%endblock%}" href="{{ url_for('main_ui.domain_user_process',id=user.id)}}">Process</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block service_active%}{%endblock%}" href="{{ url_for('main_ui.domain_user_service',id=user.id)}}">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block schtask_active%}{%endblock%}" href="{{ url_for('main_ui.domain_user_schtask',id=user.id)}}">Sch. Task</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {%block startup_active%}{%endblock%}" href="{{ url_for('main_ui.domain_user_startup',id=user.id)}}">Start Up Actions</a>
+            </li>
+        </ul>
+        <div class="alert alert-dark alert-dismissible">
+          <button type="button" class="close"  data-dismiss="alert">&times;</button>
+            <h4 class="card-title"><i class="tim-icons icon-light-3 text-success"></i>  User Investigation</h4>
+            <h5 class="card-title">Username: {{user.samaccountname}}</h5>
+            <h5 class="card-title">Domain User: True. Account found on domain: {{user.domain}}</h5>
+          
+        </div>
+        {% block tab_data %}{% endblock %}
+    </div>
+  </div>
+ </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}{% endblock %}
+

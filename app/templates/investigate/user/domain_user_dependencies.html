@@ -1,0 +1,63 @@
+{% extends "investigate/user/investigate_domain_user_template.html" %}
+
+
+  {%block dependencies_active%}
+    active
+  {%endblock%}
+
+  {% block tab_data %}
+        <div class="row">
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Services Running under this User</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Services running as the user account</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Scheduled Tasks Running under this User</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Scheduled tasks running as the user account</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example2" class="table table-striped table-bordered"  style="width:100%">
+                    <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {% endblock %}
+
+  {% block extra_js%}
+  <script>
+    $(document).ready(function (){
+        $.noConflict();
+        var table = dt_init(
+            selector="#example", // table id selector
+            url = "/api/agent/data/agentservice?as_datatables=true&filter=sid,eq,{{user.objectsid}}", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+        var table = dt_init(
+            selector="#example2", // table id selector
+            url = "/api/agent/data/agentservice?as_datatables=true&filter=sid,eq,{{user.objectsid}}", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+    });
+  </script>
+  {%endblock%}

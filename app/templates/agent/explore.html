@@ -1,0 +1,118 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {% import "macros.html" as macro %}
+    {{ macro.filehelper(datatables=True,chartjs=True) }}
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+      <!-- End Navbar -->
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h1 class="card-category">Recent accounts that have logged in.</h1>
+                <h3 class="card-title"><i class="tim-icons icon-bulb-63 text-success"></i>Authenticated Users</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart1"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h5 class="card-category">Recent file shares found on hosts.</h5>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>File Shares</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart2"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3">
+            <div class="card card-chart">
+              <div class="card-header">
+                <h5 class="card-category">Recent scheduled tasks on hosts.</h5>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i>Scheduled Tasks</h3>
+              </div>
+              <div class="card-body">
+                <div class="chart-area">
+                  <canvas id="chart3"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-md-12">
+            <div class="card ">
+              <div class="card-header">
+                <h3 class="card-title"><i class="tim-icons icon-book-bookmark text-success"></i> Connections</h3>
+                <h5 class="card-title" style="display:inline-block;"></i> Network connections on agents</h5>
+                <button type="button" style="float:right;display:inline-block;" rel="tooltip" class="btn btn-primary btn-link btn-sm btn-icon " data-original-title="Refresh" title="" data-toggle="modal" data-target="#helpModal">
+                            <i class="tim-icons icon-bulb-63"></i>
+                </button>
+              </div>
+
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="example" class="table table-striped table-bordered"  style="width:100%">
+                      <thead><tr></tr></thead>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+  {% endblock %}
+
+{% block extra_js %}
+<!-- Place Scripts here -->
+<script>
+    $(document).ready(function (){
+        $.noConflict();
+
+        // draw datatable
+        var table = dt_init(
+            selector="#example", // table id selector
+            url = "/api/agent/data/agentnet?as_datatables=true&exc_fields=date_updated,date_added,host_id&limit=1000", // data url source
+            dt_ajax=0, // 1=render columns manually (requires render_cols="col1,col2,col3", 0=render columns dynamically
+            render_cols=0, // columns rendered (only used when dt_ajax=1)
+            edit=0, // add a column with a edit icon
+        );
+
+        // draw chartjs
+        var table1 = cjs_init(
+            selector="chart1",
+            url="{{url_for('agent_api.get_agent_events',model='agentsession')}}?as_chartjs=true&groupby=username,count&limit=10",
+            type="bar", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Logged in users", // header of graph
+        );  
+        // draw chartjs
+        var table2 = cjs_init(
+            selector="chart2",
+            url="{{url_for('agent_api.get_agent_events',model='agentshare')}}?as_chartjs=true&groupby=caption,count&filter=caption,ne,Remote IPC&limit=5",
+            type="pie", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Chart2", // header of graph
+        );  
+        // draw chartjs
+        var table3 = cjs_init(
+            selector="chart3",
+            url="{{url_for('agent_api.get_agent_events',model='agentstartup')}}?as_chartjs=true&groupby=name,count&limit=5",
+            type="pie", // type of graph (line,pie,bar,doughnut,polarArea)
+            graph_label="Chart3", // header of graph
+        );  
+    });
+</script>
+{% endblock %}

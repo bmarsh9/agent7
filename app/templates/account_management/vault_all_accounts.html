@@ -1,0 +1,98 @@
+{% extends "template.html" %}
+
+  {% block head %}
+    {{ super() }}
+  {% endblock %}
+
+      {% block body %}
+        <div class="alert alert-dark alert-dismissible">
+          <button type="button" class="close"  data-dismiss="alert">&times;</button>
+            <i class="tim-icons icon-light-3 text-success"></i>  Viewing all privileged accounts. For a better visual, try your <a class="text-success" href="{{url_for('main_ui.vault_dashboard')}}"> Dashboard</a>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Discovered, Privileged Accounts</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Account Name</th>
+                        <th scope="col">Account Type</th>
+                        <th scope="col">Managed</th>
+                        <th scope="col">In Sync</th>
+                        <th scope="col">Vault</th>
+                        <th scope="col">Last Password Sync</th>
+                        <th scope="col">Discovered On</th>
+                        <th scope="col">Manage</th>
+                        <th scope="col">Investigate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for account in data %}
+                       <tr>
+
+                        {% if account.managed %}
+                          <th scope="row"><i class="tim-icons icon-check-2 text-green"></i></th>
+                        {% elif not account.managed and account.priv == 2 or account.samaccountname %}
+                          <td><i class="tim-icons icon-alert-circle-exc text-red"></i></td>
+                        {% else %}
+                          <th scope="row"><i class="tim-icons icon-button-power text-yellow"></i></th>
+                        {% endif %}
+                          <td>{{account.username or account.samaccountname}}</td>
+                        {% if account.samaccountname %}
+                              <td>Domain</td>
+                        {% else %}
+                              <td>Local</td>
+                        {% endif %}
+                          {% if account.managed %}
+                            <td> Yes </td>
+                          {% else %}
+                            <td> No </td>
+                          {% endif %}
+                          {% if account.managed and not account.in_sync %}
+                            <td><i class="tim-icons icon-alert-circle-exc text-red"></i></td>  
+                          {% elif account.managed and account.in_sync %}
+                            <td><i class="tim-icons icon-check-2 text-green"></i></td>  
+                          {% else %}
+                            <td></td>
+                          {% endif %}
+                          <td>{{ account.vault.name }}</td>
+                          <td>{{account.last_password_sync or ""}}</td>
+                          <td>{{account.host_name or account.domain}}</td>
+                          {% if account.managed %}
+                            {% if account.objectsid %}
+                                <td><a href="{{url_for('main_ui.view_ad_account',sid=account.objectsid)}}"><i class="tim-icons icon-lock-circle text-green"></i></a></td>
+                            {% else %}
+                                <td><a href="{{url_for('main_ui.view_account',aid=account.host_id,username=account.username)}}"><i class="tim-icons icon-lock-circle text-green"></i></a></td>  
+                            {% endif %}
+                          {% else %}
+                            {% if account.objectsid %}
+                                <td><a href="{{url_for('main_ui.view_ad_account',sid=account.objectsid)}}"><i class="tim-icons icon-lock-circle text-yellow"></i></a></td>
+                            {% else %}
+                                <td><a href="{{url_for('main_ui.view_account',aid=account.host_id,username=account.username)}}"><i class="tim-icons icon-lock-circle text-yellow"></i></a></td>  
+                            {% endif %}
+                          {% endif %}
+                          {% if account.local_account %}
+                            <td><a href="{{url_for('main_ui.investigate_local_user',id=account.id)}}"><i class="tim-icons icon-zoom-split text-orange"></i></a></td>
+                          {%else%}
+                            <td><a href="{{url_for('main_ui.investigate_domain_user',id=account.id)}}"><i class="tim-icons icon-zoom-split text-orange"></i></a></td>
+                          {% endif %}
+
+                         </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>   
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endblock %}
+
+  {% block extra_js%}
+  {%endblock%}

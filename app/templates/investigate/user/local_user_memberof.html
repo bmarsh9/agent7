@@ -1,0 +1,41 @@
+{% extends "investigate/user/investigate_user_template.html" %}
+
+
+  {%block memberof_active%}
+    active
+  {%endblock%}
+
+  {% block tab_data %}
+        <div class="row">
+          <div class="col-lg-12 col-sm-6 text-center">
+            <div class="card card text-left">
+              <div class="card-header">
+                <h3 class="title d-inline">Group Membership</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-full-width table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Group Name</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for group in user.groups %}
+                        <tr>
+                          <th scope="row">{{loop.index}}</th>
+                          <td>{{group}}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  {% endblock %}
+
+  {% block extra_js%}
+  {%endblock%}

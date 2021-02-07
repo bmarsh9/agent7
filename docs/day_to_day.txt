@@ -1,0 +1,22 @@
+## Help file for day to day tasks
+
+# list all routes in flask app
+flask routes
+
+# dev mode with ssl
+flask run --cert=adhoc -h 10.5.200.82 -p 5000
+
+# start app
+manage runserver -h <ip>
+
+# init database
+manage init_db
+
+# shell
+manage shell
+
+# migrate
+manage db migrate
+
+# access Postgres
+psql -h localhost -U <user> -d <database>

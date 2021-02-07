@@ -1,0 +1,82 @@
+{% extends "template.html" %}
+
+  {% block head %}
+  {{ super() }}
+
+  {% endblock %}
+
+  {% block style %}
+    {{ super() }}
+
+    button.btn.btn-primary.btn-xs {
+      padding: 10px;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+  {% endblock %}
+
+  {% block body %}
+  {{ super() }}
+      <!-- End Navbar -->
+        <div class="row">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Create Campaign</h5>
+              </div>
+              <div class="card-body">
+                <form action="" method="POST">
+                  <div class="row">
+                    <div class="col-md-6 pr-md-1">
+                      <div class="form-group">
+                        <label>The command or script is executed by every agent in the group. It is recommended to test the command against a single agent before running it on a entire group.</label>
+                        <input type="text" class="form-control" placeholder="Ex. job=get-hash;path=C:\users\myuser\file.txt" name="command" required>
+                      </div>
+                    </div>
+                    <div class="col-md-6 pr-md-1">
+                      <div class="form-group">
+                        <label>Select group to be apart of this campaign</label>
+                        <input type="number" class="form-control" placeholder="Insert group ID" name="group" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-warning btn-sm btn-simple" id="submit">Run Campaign</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="title">Available Groups</h5>
+              </div>
+              <div class="card-body">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Group Name</th>
+                      <th scope="col">Number of Agents</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for group in data %}
+                      <tr>
+                        <td>{{group["id"]}}</td>
+                        <td>{{group["name"]}}</td>
+                        <td>{{group["count"]}}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+  {% endblock %}
+
+{% block extra_js %}
+<!-- Place Scripts here -->
+{% endblock %}
