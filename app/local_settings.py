@@ -68,25 +68,14 @@ COMPANY = "agent7"
 SQLALCHEMY_DATABASE_URI = 'postgresql://db1:db1@localhost/db1'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-RMQ_USER = ""
-RMQ_PASS = ""
-RMQ_HOST = ""
-RMQ_QUEUE = "stage_one_queue"
+RMQ_USER = "admin"
+RMQ_PASS = "admin"
+RMQ_HOST = "localhost"
+RMQ_QUEUE = "agent7_queue"
 
 #// Redis
 REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
 RQ_BROKER_URL = 'redis://localhost:6379'
-
-#// AD (True/False)
-#AD_ENABLED = True
-#DOMAIN_CONTROLLER="10.5.100.95"
-#NAMESERVER="10.5.100.95"
-#DOMAIN="blueteamfort.com"
-#USER="Administrator"
-#PASSWORD="7YRy2"
-
-#// Agent (True/False)
-#AGENT_ENABLED = True
 
 # Logging Setup
 LOG_TYPE = "watched"  # Default is a Stream handler
