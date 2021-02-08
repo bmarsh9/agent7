@@ -61,4 +61,5 @@ You can also tell agents to collect data from Active Directory. Such as:
 ### Considerations for anything more than testing  
 + You will need to run the RabbitMQ service if you are using more than 2-3 agents to handle the load.  
 + By default, the agent does NOT verify the server certificate before sending the data via TLS.  
-+ By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS.
++ By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS.  
++ Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)
