@@ -41,6 +41,8 @@ You can also tell agents to collect data from Active Directory. Such as:
 + SysVol & permissions  
 + Domains & Domain Controllers  
 
+![Alt text](photos/a7_1.PNG?raw=true "Sch Tasks")  
+
 ### How to Install
 + Clone the Repo  
 + Build it with `docker build -t agent7_1.0 .`  
