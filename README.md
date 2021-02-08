@@ -55,8 +55,10 @@ You can also tell agents to collect data from Active Directory. Such as:
 ##### Set up the Agent  
 + Download the `agent7_installer.exe` onto the Windows workstation/server  
 + Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server> /key=<sitekey> /group=mycustomgroup`  
-+ Open Event Viewer > Windows Logs > Application and look for `Initialization Successful` from Agent7  
++ Open Event Viewer > Windows Logs > Application and look for `Initialization Successful` and EventID `2002` from Agent7  
 + Verify that the agent checked into the server as well
+##### Uninstall  
++ Right-click and uninstall from Control Panel
 
 ### What is next on the roadmap?  
 + Documentation (lots of that)  
