@@ -7,7 +7,8 @@
 4. [What data does it collect & track](#What-data-does-it-collect--track)
 5. [How to Install](#how-to-install)
 6. [What is next on the roadmap?](#what-is-next-on-the-roadmap)
-7. [Considerations](#considerations)
+7. [Architecture](#Architecture)
+8. [Considerations](#considerations)
 
 ### What is it?
 Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also has a remote interactive/shell module and a Active Directory module.  
@@ -77,6 +78,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Separate components into single containers (nginx,app,postgres,redis,rabbit) and provide Helm charts for Kubernetes  
 + Use JWT for authn/authz. Currently the agent uses the shared Site Key to register. Upon registration, the server creates a unique token for the agent. The agent saves the token and uses it for authentication. B/c the token is shared on the server side, it must perform a database lookup everytime an agent sends data. JWT would be much quicker and you could separate out the control and data plane (which many tools do today) thanks to public keys. Currently, the agent token can only POST data.. so a user could not use it to query the server API.
 
+### Architecture
 ![Alt text](photos/agent7_arch.PNG?raw=true "Architecture")  
 
 ### Considerations 
