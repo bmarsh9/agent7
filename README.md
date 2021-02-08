@@ -23,6 +23,7 @@ The list below is not exhaustive but gives a good overview.
 + Scheduled tasks  
 + Software  
 + Updates  
++ Logged on users  
 + Network Connections  
 + Network Shares  
 + Services  
@@ -56,3 +57,8 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Make it easier to write custom Insights  
 + Explore possibility of a Linux based agent as well  
 + Distributed network scanner with the agents
+
+### Considerations for anything more than testing  
++ You will need to run the RabbitMQ service if you are using more than 2-3 agents to handle the load.  
++ By default, the agent does NOT verify the server certificate before sending the data via TLS.  
++ By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS.
