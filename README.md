@@ -55,7 +55,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 ##### Set up the Agent  
 + Download the `agent7_installer.exe` onto the Windows workstation/server  
 + Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server> /key=<sitekey> /group=mycustomgroup`. The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`.  
-+ Open Event Viewer > Windows Logs > Application and look for `Initialization Successful` and EventID `2002` from Agent7. This means that the agent installed correctly. Then look for EventID `2003`. `Agent Registered` means the agent successful registered with the server.
++ Open Event Viewer > Windows Logs > Application and look for EventID `2002` (`Initialization Successful`) from Agent7. This means that the agent installed correctly. Then look for EventID `2003`. `Agent Registered` means the agent successfully registered with the server.
 + Verify that the agent checked into the server as well
 ##### Uninstall  
 + Right-click and uninstall from Control Panel
