@@ -9,12 +9,16 @@ Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Ser
 There is no shortage of tools to collect data from endpoints and send it to a central server. Similar tools that come to mind are OSquery, OSSEC (Wazuh included), Sysmon, etc. While these tools are great, you will spend hundreds of hours trying to get actionable data from them because they lack a decent server component. However with Agent7, you can immediately receive actionable information (such as insecure file permissions and overprivileged users). While there are built in alerts and dashboards, there is also a full API that you can query for your own alerts and integrations.
 
 ### How does it work?
-There is a agent and server component. You install the `.exe` on the endpoints and it communicates with the server. 90% of the data is collected via the Windows API but there are a few methods that use WMI. 
+There is a agent and server component. You install the `.exe` on the endpoints and it communicates with the server. 90% of the data is collected via the Windows API but there are a few methods that use WMI. There are a couple main features:  
++ Collect data from the endpoint on a periodic basis
++ Collect data from Active Directory  
++ Agent Interact - Allows the user to remote in or shell into a host and run commands. You can also run commands on a group of hosts.  
++ Insights - Automatic queries that run on the collected data and finds misconfigurations or similar
++ Privileged User/Group identification
 
-### What are the key features?
+### What data does it collect & track?
 The list below is not exhaustive but gives a good overview.   
-+ Allows the user to interact with the agents from the server console. Basically you access a shell on the endpoint and can run queries or collect data in real-time  
-+ Collects data on scheduled tasks  
++ Scheduled tasks  
 + Software  
 + Updates  
 + Network Connections  
