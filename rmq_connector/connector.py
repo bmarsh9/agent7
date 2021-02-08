@@ -51,7 +51,7 @@ class Connector():
         doc_hash = True
 
         if not table:
-            print("Missing table model")
+            print("Missing table model: {}. Please add it to the RDS Mapper".format(table))
             return False
 
         if not isinstance(payload,list):
