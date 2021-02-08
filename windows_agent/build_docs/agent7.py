@@ -90,8 +90,7 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
             try:
                 self.create_folders(subfolders=["logs","data","temp"])
                 self.cmdserver = reg["server"]
-                self.cmdurl = "https://{}:5000/api/agent".format(self.cmdserver)
-                #self.cmdurl = "http://{}:5000/api/agent".format(self.cmdserver)                
+                self.cmdurl = "https://{}/api/agent".format(self.cmdserver)
                 self.site_key = reg["key"]                
                 self.aid = reg["aid"]
                 self.group = reg.get("group","default_group")

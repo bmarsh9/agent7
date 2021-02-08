@@ -7,6 +7,7 @@ service supervisor restart
 service nginx restart
 service redis-server restart
 service postgresql restart
+service rabbitmq-server restart
 
 /bin/bash ./server_config/setup_db.sh db1
 

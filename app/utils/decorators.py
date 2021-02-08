@@ -13,13 +13,13 @@ def site_key_required(view_function):
         #// Try to authenticate with an token (API login, must have site in HTTP header)
         key = request.headers.get("site-key")
         if key:
-            #try:
+            try:
                 site = Site.query.filter(Site.key == key).first()
                 if site:
                     return view_function(*args, **kwargs)
-            #except Exception as e:
-            #    print("Error while authenticating the site key:{}".format(e))
-            #    pass
+            except Exception as e:
+                print("Error while authenticating the site key:{}".format(e))
+                pass
         return jsonify({"message":"authentication failed"}),401
     return decorator
 
@@ -30,7 +30,7 @@ def agent_auth(view_function):
         aid = request.headers.get("aid")
         token = request.headers.get("token")
         if token and aid:
-            #try:
+            try:
                 agent = Agent.query.filter(Agent.id == aid).filter(Agent.token == token).first()
                 if not agent:
                     return jsonify({"message":"agent not registered"}),401
@@ -38,8 +38,8 @@ def agent_auth(view_function):
                     return jsonify({"message":"agent disabled"}),403
                 if agent:
                     return view_function(agentobj=agent,*args, **kwargs)
-            #except Exception as e:
-            #    print("Failed agent authentication - decorators:{}".format(e))
+            except Exception as e:
+                print("Failed agent authentication - decorators:{}".format(e))
         return jsonify({"message":"authentication failed"}),401
     return decorator
 

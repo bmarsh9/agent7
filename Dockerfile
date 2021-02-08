@@ -15,9 +15,11 @@ WORKDIR /agent7
 # Install the requirements
 RUN pip3 install -r /agent7/requirements.txt
 
+# Setup RabbitMQ
+RUN /bin/bash /agent7/setup_rabbitmq.sh
+
 # expose tcp port 5000
-#EXPOSE 443
+#EXPOSE 5000
 
 # default command: run the web server
 CMD ["/bin/bash","run.sh"]
-#CMD ["/bin/bash"]

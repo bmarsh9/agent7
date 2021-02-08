@@ -53,7 +53,6 @@ def get_agent_events(model):
         response = result.generate()
         return jsonify(response)
 
-
     else:
       aid = request.args.get('aid', default = None, type = str)
       hostname = request.args.get('hostname', default = None, type = str)
@@ -131,7 +130,7 @@ def agent_version(aid,agentobj=None):
 def agent_update(aid,agentobj=None):
     agentobj.update = 0 # set update back to 0 (so agent doesnt keep trying to update forever)
     db.session.commit()
-    filename = "/home/bmarshall/my_app/app/agent/files/agent7_installer.exe"
+    filename = os.path.join(current_app.config["AGENTDIR"],"files","agent7_installer.exe")
     return send_file(filename,as_attachment=True)
 
 @rest.route("/valid-cmd/rtr/<aid>",methods=["GET"])
@@ -280,18 +279,6 @@ def get_memory(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentmemory",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentmemory",
-            crud="update",
-            filter=[("host_id","eq",aid)],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-disk/<aid>",methods=["POST"])
@@ -299,20 +286,7 @@ def get_memory(aid,agentobj=None):
 def get_disk(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
-        print(response.get("dataset"))
         RMQHelper().send("agentdisk",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentdisk",
-            crud="update",
-            filter=[("host_id","eq",aid),("device","eq",record["device"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-pipe/<aid>",methods=["POST"])
@@ -321,18 +295,6 @@ def get_pipe(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentpipe",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentpipe",
-            crud="update",
-            filter=[("host_id","eq",aid),("name","eq",record["name"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-printer/<aid>",methods=["POST"])
@@ -341,38 +303,14 @@ def get_printer(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentprinter",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentprinter",
-            crud="update",
-            filter=[("host_id","eq",aid),("name","eq",record["name"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-schtask/<aid>",methods=["POST"])
 @agent_auth
 def get_schtask(aid,agentobj=None):
     response = request.get_json()
-    '''
     if response.get("dataset"):
         RMQHelper().send("agentschtask",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentschtask",
-            crud="update",
-            filter=[("host_id","eq",aid),("command","eq",record.get("command"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
     return jsonify({"response":1})
 
 @rest.route("/collection/get-patch/<aid>",methods=["POST"])
@@ -381,18 +319,6 @@ def get_patch(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentpatch",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentpatch",
-            crud="update",
-            filter=[("host_id","eq",aid),("hotfixid","eq",record["hotfixid"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-profile/<aid>",methods=["POST"])
@@ -415,20 +341,8 @@ def get_profile(aid,agentobj=None):
 @agent_auth
 def get_logon(aid,agentobj=None):
     response = request.get_json()
-    '''
     if response.get("dataset"):
         RMQHelper().send("agentlogon",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentlogon",
-            crud="update",
-            filter=[("host_id","eq",aid),("username","eq",record.get("username")),("logonid","eq",record["logonid"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
     return jsonify({"response":1})
 
 @rest.route("/collection/get-netsession/<aid>",methods=["POST"])
@@ -437,18 +351,6 @@ def get_netsession(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentnetsession",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentnetsession",
-            crud="update",
-            filter=[("host_id","eq",aid),("user_name","eq",record["user_name"]),("client_name","eq",record["client_name"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-session/<aid>",methods=["POST"])
@@ -487,30 +389,8 @@ def get_netuse(aid,agentobj=None):
 @agent_auth
 def get_connection(aid,agentobj=None):
     response = request.get_json()
-#haaaaa
     if response.get("dataset"):
-#        SQSHelper().send("agentnet",json.dumps(response["dataset"]))
         RMQHelper().send("agentnet",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        try:
-            record["private"] = ipaddress.ip_address(record.get("raddr")).is_private
-        except:
-            pass
-
-        result = DynamicQuery(
-            model="agentnet",
-            crud="update",
-#            filter=[("host_id","eq",aid),("pname","eq",record["pname"]),("rport","eq",str(record["rport"])),
-#                ("lport","eq",str(record["lport"])),("pid","eq",str(record["pid"])),("family","eq",record["family"])],
-            filter=[("host_id","eq",aid),("pname","eq",record["pname"]),("raddr","eq",str(record.get("raddr"))),
-                ("pid","eq",str(record["pid"]))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-software/<aid>",methods=["POST"])
@@ -519,18 +399,6 @@ def get_software(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentsoftware",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentsoftware",
-            crud="update",
-            filter=[("host_id","eq",aid),("displayname","eq",record.get("displayname"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-updates/<aid>",methods=["POST"])
@@ -539,18 +407,6 @@ def get_updates(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentupdates",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentupdates",
-            crud="update",
-            filter=[("host_id","eq",aid),("guid","eq",record.get("guid"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-system/<aid>",methods=["POST"])
@@ -559,18 +415,6 @@ def get_system(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentsystem",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentsystem",
-            crud="update",
-            filter=[("host_id","eq",aid)],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-share/<aid>",methods=["POST"])
@@ -579,18 +423,6 @@ def get_share(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentshare",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentshare",
-            crud="update",
-            filter=[("host_id","eq",aid),("name","eq",record["name"]),("path","eq",record["path"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-startup/<aid>",methods=["POST"])
@@ -599,18 +431,6 @@ def get_startup(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentstartup",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentstartup",
-            crud="update",
-            filter=[("host_id","eq",aid),("username","eq",record["username"]),("command","eq",record["command"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-netadapter/<aid>",methods=["POST"])
@@ -619,84 +439,30 @@ def get_netadapter(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentadapter",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentadapter",
-            crud="update",
-            filter=[("host_id","eq",aid),("caption","eq",record["caption"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-process/<aid>",methods=["POST"])
 @agent_auth
 def get_process(aid,agentobj=None):
-    #haaaaaa
     response = request.get_json()
     if response.get("dataset"):
-#        SQSHelper().send("agentprocess",json.dumps(response["dataset"]))
         RMQHelper().send("agentprocess",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        #print(record)
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentprocess",
-            crud="update",
-#            filter=[("host_id","eq",aid),("image","eq",record["image"]),("create_time","eq",record["create_time"])],
-            filter=[("host_id","eq",aid),("pid","eq",record["pid"]),("ppid","eq",record.get("ppid"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-service/<aid>",methods=["POST"])
 @agent_auth
 def get_service(aid,agentobj=None):
     response = request.get_json()
-#haaaaa
     if response.get("dataset"):
-#        SQSHelper().send("agentservice",json.dumps(response["dataset"]))
         RMQHelper().send("agentservice",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentservice",
-            crud="update",
-            filter=[("host_id","eq",aid),("image","eq",record["image"]),("command","eq",record.get("command"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-user/<aid>",methods=["POST"])
 @agent_auth
 def get_user(aid,agentobj=None):
     response = request.get_json()
-    '''
     if response.get("dataset"):
         RMQHelper().send("agentuser",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentuser",
-            crud="update",
-            filter=[("host_id","eq",aid),("sid","eq",record.get("sid"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
     return jsonify({"response":1})
 
 @rest.route("/collection/get-group/<aid>",methods=["POST"])
@@ -705,18 +471,6 @@ def get_group(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("agentgroup",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="agentgroup",
-            crud="update",
-            filter=[("host_id","eq",aid),("group","eq",record.get("group")),("members_count","eq",record.get("members_count"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-platform/<aid>",methods=["POST"])
@@ -724,7 +478,6 @@ def get_group(aid,agentobj=None):
 def get_platform(aid,agentobj=None):
     response = request.get_json()
     remote_ip = request.remote_addr
-#    remote_ip="71.163.90.130" #for testing
     for record in response.get("dataset"):
         # remove ad collector bit if exists
         record.pop("adcollector",None)
@@ -754,7 +507,6 @@ def get_platform(aid,agentobj=None):
 @rest.route("/job/<aid>",methods=["POST"])
 @agent_auth
 def get_job(aid,agentobj=None):
-#haaaa
     # return the job
     data = {"jobset":AgentOps(aid).get_job()}
     data["adcollector"] = agentobj.adcollector
@@ -782,18 +534,6 @@ def get_ad_ou(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("ad_ou",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="ad_ou",
-            crud="update",
-            filter=[("name","eq",record.get("name"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-ad-gpo/<aid>",methods=["POST"])
@@ -802,18 +542,6 @@ def get_ad_gpo(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("ad_gpo",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="ad_gpo",
-            crud="update",
-            filter=[("distinguishedname","eq",record.get("distinguishedname"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-ad-sysvol/<aid>",methods=["POST"])
@@ -822,18 +550,6 @@ def get_ad_sysvol(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("ad_sysvol",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="ad_sysvol",
-            crud="update",
-            filter=[("path","eq",record.get("path")),("acecount","eq",record["acecount"])],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-ad-domain/<aid>",methods=["POST"])
@@ -842,18 +558,6 @@ def get_ad_domain(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("ad_domain",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="ad_domain",
-            crud="update",
-            filter=[("dc","eq",record.get("dc"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-ad-dc/<aid>",methods=["POST"])
@@ -862,18 +566,6 @@ def get_ad_dc(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("ad_dc",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="ad_dc",
-            crud="update",
-            filter=[("name","eq",record.get("name"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-ad-user/<aid>",methods=["POST"])
@@ -882,18 +574,6 @@ def get_ad_user(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("ad_user",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="ad_user",
-            crud="update",
-            filter=[("objectsid","eq",record.get("objectsid")),("samaccountname","eq",record.get("samaccountname"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-ad-group/<aid>",methods=["POST"])
@@ -902,20 +582,6 @@ def get_ad_group(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("ad_group",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-#        print(record["name"])
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="ad_group",
-            #crud="insert",
-            crud="update",
-            filter=[("objectsid","eq",record.get("objectsid")),("members_count","eq",record.get("members_count"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
 
 @rest.route("/collection/get-ad-computer/<aid>",methods=["POST"])
@@ -924,16 +590,4 @@ def get_ad_computer(aid,agentobj=None):
     response = request.get_json()
     if response.get("dataset"):
         RMQHelper().send("ad_computer",json.dumps(response["dataset"]))
-    '''
-    for record in response.get("dataset"):
-        record["host_id"] = aid
-        result = DynamicQuery(
-            model="ad_computer",
-            crud="update",
-            filter=[("distinguishedname","eq",record.get("distinguishedname"))],
-            data=record
-        )
-        if result.generate().get("result") is False:
-            print("error",request.path)
-    '''
     return jsonify({"response":1})
