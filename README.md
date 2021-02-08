@@ -66,6 +66,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Explore possibility of a Linux based agent as well  
 + Distributed network scanner with the agents  
 + Separate components into single containers (nginx,app,postgres,redis,rabbit) and provide Helm charts for Kubernetes  
++ Use JWT for authn/authz. Currently the agent uses the shared Site Key to register. Upon registration, the server creates a unique token for the agent. The agent saves the token and uses it for authentication. B/c the token is shared on the server side, it must perform a database lookup everytime an agent sends data. JWT would be much quicker and you could separate out the control and data plane (which many tools do today) thanks to public keys.
 
 ![Alt text](photos/agent7_arch.PNG?raw=true "Architecture")  
 
