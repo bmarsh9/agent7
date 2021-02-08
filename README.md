@@ -71,9 +71,10 @@ You can also tell agents to collect data from Active Directory. Such as:
 ![Alt text](photos/agent7_arch.PNG?raw=true "Architecture")  
 
 ### Considerations for anything more than testing  
-+ You will need to run the RabbitMQ service if you are using more than 2-3 agents to handle the load.  
++ You will need to run the RMQ Connector if you are using more than 2-3 agents to handle the load.  
 + The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`. Please change this in the `app/local_settings.py` file.  
-+ By default, the agent does NOT verify the server certificate before sending the data via TLS.  
++ By default, the agent does NOT verify the server certificate before sending the data via TLS.
 + By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS.  
 + Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)  
-+ RabbitMQ default user/pass is Admin:Admin and only listens on localhost. Traffic is unencrypted.
++ RabbitMQ default user/pass is Admin:Admin and only listens on localhost. Traffic is unencrypted.  
++ Postgresql creds are default as well (db1:db1) and these should be set to something stronger.
