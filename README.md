@@ -1,9 +1,9 @@
 # Agent7 - Security Agent
 
 ## Table of Contents
-1. [Example](#example)
-2. [Example2](#example2)
-3. [Third Example](#third-example)
+1. [What is it?](#what-is-it?)
+2. [Why Agent7?](#why-agent7?)
+3. [How does it work?](#how-does-it-work?)
 4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
 
 ### What is it?
