@@ -1,7 +1,17 @@
 # Agent7 - Security Agent
 
+## Table of Contents
+1. [What is it?](#what-is-it)
+2. [Why Agent7?](#why-agent7)
+3. [How does it work?](#how-does-it-work)
+4. [What data does it collect & track](#What-data-does-it-collect--track)
+5. [How to Install](#how-to-install)
+6. [What is next on the roadmap?](#what-is-next-on-the-roadmap)
+7. [Architecture](#Architecture)
+8. [Considerations](#considerations)
+
 ### What is it?
-Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also have a remote interactive module and a Active Directory module.  
+Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also has a remote interactive/shell module and a Active Directory module.  
 
 ![Alt text](photos/a7_dash.PNG?raw=true "Dashboard")  
 
@@ -55,7 +65,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 ##### Set up the Agent  
 + Download the `agent7_installer.exe` onto the Windows workstation/server  
 + Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server> /key=<sitekey> /group=mycustomgroup`. The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`.  
-+ Open Event Viewer > Windows Logs > Application and look for `Initialization Successful` and EventID `2002` from Agent7  
++ Open Event Viewer > Windows Logs > Application and look for EventID `2002` (`Initialization Successful`) from Agent7. This means that the agent installed correctly. Then look for EventID `2003`. `Agent Registered` means the agent successfully registered with the server.
 + Verify that the agent checked into the server as well
 ##### Uninstall  
 + Right-click and uninstall from Control Panel
@@ -66,13 +76,16 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Explore possibility of a Linux based agent as well  
 + Distributed network scanner with the agents  
 + Separate components into single containers (nginx,app,postgres,redis,rabbit) and provide Helm charts for Kubernetes  
++ Use JWT for authn/authz. Currently the agent uses the shared Site Key to register. Upon registration, the server creates a unique token for the agent. The agent saves the token and uses it for authentication. B/c the token is shared on the server side, it must perform a database lookup everytime an agent sends data. JWT would be much quicker and you could separate out the control and data plane (which many tools do today) thanks to public keys. Currently, the agent token can only POST data.. so a user could not use it to query the server API.
 
+### Architecture
 ![Alt text](photos/agent7_arch.PNG?raw=true "Architecture")  
 
-### Considerations for anything more than testing  
-+ You will need to run the RabbitMQ service if you are using more than 2-3 agents to handle the load.  
+### Considerations 
++ You will need to run the RMQ Connector if you are using more than 2-3 agents to handle the load.  
 + The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`. Please change this in the `app/local_settings.py` file.  
-+ By default, the agent does NOT verify the server certificate before sending the data via TLS.  
++ By default, the agent does NOT verify the server certificate before sending the data via TLS.
 + By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS.  
 + Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)  
-+ RabbitMQ default user/pass is Admin:Admin and only listens on localhost. Traffic is unencrypted.
++ RabbitMQ default user/pass is Admin:Admin and only listens on localhost. Traffic is unencrypted.  
++ Postgresql creds are default as well (db1:db1) and these should be set to something stronger.
