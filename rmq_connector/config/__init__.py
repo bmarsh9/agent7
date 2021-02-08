@@ -18,7 +18,7 @@ class Config():
       APP_AWS_SECRET_KEY = ""
 
       # --------------------------------- SQS QUEUE
-      #self.queue_url = "https://sqs.us-east-1.amazonaws.com/398558701534/queueb"
+      #self.queue_url = ""
       #self.max_messages = 10
       #self.vis_timeout = 5
       #self.sqs = boto3.client('sqs',region_name=APP_AWS_REGION,aws_access_key_id=APP_AWS_KEY_ID,aws_secret_access_key=APP_AWS_SECRET_KEY)

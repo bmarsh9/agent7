@@ -4,7 +4,7 @@
 flask routes
 
 # dev mode with ssl
-flask run --cert=adhoc -h 10.5.200.82 -p 5000
+flask run --cert=adhoc -h 0.0.0.0 -p 5000
 
 # start app
 manage runserver -h <ip>
