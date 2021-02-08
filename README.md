@@ -64,7 +64,8 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Documentation (lots of that)  
 + Make it easier to write custom Insights  
 + Explore possibility of a Linux based agent as well  
-+ Distributed network scanner with the agents
++ Distributed network scanner with the agents  
++ Separate components into single containers (nginx,app,postgres,redis,rabbit) and provide Helm charts for Kubernetes
 
 ### Considerations for anything more than testing  
 + You will need to run the RabbitMQ service if you are using more than 2-3 agents to handle the load.  
