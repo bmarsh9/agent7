@@ -74,4 +74,5 @@ You can also tell agents to collect data from Active Directory. Such as:
 + The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`. Please change this in the `app/local_settings.py` file.  
 + By default, the agent does NOT verify the server certificate before sending the data via TLS.  
 + By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS.  
-+ Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)
++ Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)  
++ RabbitMQ default user/pass is Admin:Admin and only listens on localhost. Traffic is unencrypted.
