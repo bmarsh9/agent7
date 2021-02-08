@@ -57,6 +57,7 @@ DEFAULT_JOB = {"jobset": [
 # Generate a safe one with:
 #     python -c "import os; print repr(os.urandom(24));"
 SECRET_KEY = 'This is an UNSECURE Secret. CHANGE THIS for production environments.'
+SITE_KEY = "737e079a-6170-4aae-91a6-60aca1f213aa"
 
 SERVER_HOST = "localhost"
 

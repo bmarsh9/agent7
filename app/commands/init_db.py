@@ -27,39 +27,13 @@ def init_db():
     create_users()
     create_agent_tasks()
     create_auditkeys()
-#    insert_ips()
+    #insert_ips()
     create_general_tasks()
-    #create_startdata()
-
-    # create comparison data
-    #create_comparison()
 
 def stop_forever_tasks():
     for name,scheduler in current_app.queues.items():
         for job in scheduler.get_jobs():
             scheduler.cancel(job)
-    '''
-    try:
-        tasks = Tasks.query.filter(Tasks.forever == True).all()
-        if tasks:
-            for task in tasks:
-                RqQuery().cancel(task.id)
-    except:
-        pass
-    '''
-
-
-def create_startdata():
-    rs = RiskScore(agent_risk=0,ad_risk=0,watcher_risk=0,total_risk=0,date_added="1601-01-01")
-    db.session.add(rs)
-    db.session.commit()
-    return True
-
-def create_comparison():
-    c = ComparisonScore(total_risk=400,agent_risk=100,watcher_risk=100,ad_risk=200)
-    db.session.add(c)
-    db.session.commit()
-    return True
 
 def create_auditkeys():
     file_name = os.path.join(current_app.config["INITDBDIR"],"auditkeys_ledger.json")
@@ -72,11 +46,6 @@ def create_auditkeys():
             db.session.commit()
 
 def create_general_tasks():
-    #Tasks().launch_task("general-tasks","scan",func_args={"target":"10.5.200.82"},interval=86400,repeat=2)
-#    exist = Tasks.query.filter(Tasks.name == "general_network_connections").first()
-#    if not exist:
-#        Tasks().launch_task("general-tasks","enrich_network_connections",interval=60,repeat=None)
-
     exist2 = Tasks.query.filter(Tasks.name == "update_priv_users").first()
     if not exist2:
         Tasks().launch_task("general-tasks","update_priv_users",interval=120,repeat=None)
@@ -84,10 +53,6 @@ def create_general_tasks():
     exist3 = Tasks.query.filter(Tasks.name == "update_bi_group_ledger").first()
     if not exist3:
         Tasks().launch_task("general-tasks","update_bi_group_ledger",interval=180,repeat=None)
-
-    exist4 = Tasks.query.filter(Tasks.name == "guac_ping").first()
-    if not exist4:
-        Tasks().launch_task("general-tasks","guac_ping",interval=60,repeat=None)
 
 def insert_ips():
     file_name = os.path.join(current_app.config["INITDBDIR"],"IP2LOCATION-LITE-DB5.CSV")
@@ -103,7 +68,7 @@ def insert_ips():
 
 def create_site():
     db.create_all()
-    site = find_or_create_site(key="737e079a-6170-4aae-91a6-60aca1f213aa")
+    site = find_or_create_site(key=current_app.config["SITE_KEY"])
 
     # Save to DB
     db.session.commit()
@@ -117,11 +82,9 @@ def create_users():
     # Adding roles
     admin_role = find_or_create_role('admin', u'Admin')
     rtr_role = find_or_create_role('rtr', u'RTR')
-    pam_role = find_or_create_role('pam', u'PAM')
 
     # Add users
     user = find_or_create_user(u'Admin', u'Example', u'admin@example.com', 'Password1', admin_role)
-    user = find_or_create_user(u'Brendan', u'Marshall', u'bmarshall735@gmail.com', 'Password1')
 
     # Save to DB
     db.session.commit()
