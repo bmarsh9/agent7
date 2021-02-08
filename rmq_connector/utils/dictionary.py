@@ -6,7 +6,7 @@ class Dictionary():
         available_models = {
             "agentprocess":["host_id","pid","ppid"],
             "agentschtask":["host_id","command"],
-            "agentconnection":["host_id","pname","raddr","pid"],
+            "agentnet":["host_id","pname","raddr","pid"],
             "agentservice":["host_id","image","command"],
             "agentmemory":["host_id"],
             "agentdisk":["host_id"],

@@ -24,4 +24,5 @@ class DedupCreator():
                     val = str(val).encode('utf-8')
                     sha1.update(val)
             return sha1.hexdigest(),doc_hash
+        print("WARNING: Fields were not found for the model:{}".format(model))
         return None,doc_hash
