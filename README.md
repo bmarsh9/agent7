@@ -46,11 +46,17 @@ You can also tell agents to collect data from Active Directory. Such as:
 
 ![Alt text](photos/a7_1.PNG?raw=true "Sch Tasks")  
 
-### How to Install
+### How to Install  
+##### Set up the Server
 + Clone the Repo  
 + Build it with `docker build -t agent7_1.0 .`  
 + Start it with `docker run -p 5000:5000/tcp agent7_1.0:latest`  
-+ Browse to port 5000 where the email is `admin@example.com` and password is `Password1`
++ Browse to port 5000 where the email is `admin@example.com` and password is `Password1`  
+##### Set up the Agent  
++ Download the `agent7_installer.exe` onto the Windows workstation/server  
++ Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server> /key=<sitekey> /group=mycustomgroup`  
++ Open Event Viewer > Windows Logs > Application and look for `Initialization Successful` from Agent7  
++ Verify that the agent checked into the server as well
 
 ### What is next on the roadmap?  
 + Documentation (lots of that)  
