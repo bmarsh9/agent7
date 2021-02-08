@@ -77,14 +77,6 @@ def validate_token_in_header(user_manager,enc_token):
 
     return False
 
-def check_mfa_req():
-    if current_user.mfa_enabled:
-        if not current_user.provisioning_qr: # if never received a QR code or it is reset
-            return redirect(url_for("main_ui.enroll_mfa"))
-        if not hasattr(current_user,"mfa_auth"): # if user did not authenticate with mfa code
-            return redirect(url_for("main_ui.verify_mfa"))
-    return True
-
 def login_required_no_mfa(view_function):
     @wraps(view_function)    # Tells debuggers that is is a function wrapper
     def decorator(*args, **kwargs):
@@ -130,15 +122,8 @@ def login_required(view_function):
             allowed = _is_logged_in_with_confirmed_email(user_manager)
             if not allowed:
                 # Redirect to unauthenticated page
-#haaaaaaaa
-                print(user_manager.unauthenticated_view())
                 return user_manager.unauthenticated_view()
 
-            if current_user.mfa_enabled:
-                if not current_user.provisioning_qr: # if never received a QR code or it is reset
-                    return redirect(url_for("main_ui.enroll_mfa"))
-                if not session.get("mfa_auth"): # if user did not authenticate with mfa code
-                    return redirect(url_for("main_ui.verify_mfa"))
         # It's OK to call the view
         return view_function(*args, **kwargs)
 
@@ -184,12 +169,6 @@ def roles_accepted(*role_names):
                     # Redirect to unauthenticated page
                     return user_manager.unauthenticated_view()
 
-                if current_user.mfa_enabled:
-                    if not current_user.provisioning_qr: # if never received a QR code or it is reset
-                        return redirect(url_for("main_ui.enroll_mfa"))
-                    if not session.get("mfa_auth"): # if user did not authenticate with mfa code
-                        return redirect(url_for("main_ui.verify_mfa"))
-
             # User must have the required roles
             # NB: roles_required would call has_roles(*role_names): ('A', 'B') --> ('A', 'B')
             # But: roles_accepted must call has_roles(role_names):  ('A', 'B') --< (('A', 'B'),)
@@ -230,7 +209,6 @@ def roles_required(*role_names):
         @wraps(view_function)    # Tells debuggers that is is a function wrapper
         def decorator(*args, **kwargs):
             user_manager = current_app.user_manager
-#haaaa
             #// Try to authenticate with an token (API login, must have token in HTTP header)
             enc_token = request.headers.get("token")
             if enc_token:
@@ -245,12 +223,6 @@ def roles_required(*role_names):
                 if not allowed:
                     # Redirect to unauthenticated page
                     return user_manager.unauthenticated_view()
-
-                if current_user.mfa_enabled:
-                    if not current_user.provisioning_qr: # if never received a QR code or it is reset
-                        return redirect(url_for("main_ui.enroll_mfa"))
-                    if not session.get("mfa_auth"): # if user did not authenticate with mfa code
-                        return redirect(url_for("main_ui.verify_mfa"))
 
             # User must have the required roles
             if not current_user.has_roles(*role_names):
@@ -318,12 +290,6 @@ def allow_unconfirmed_email(view_function):
             if not allowed:
                 # Redirect to unauthenticated page
                 return user_manager.unauthenticated_view()
-
-            if current_user.mfa_enabled:
-                if not current_user.provisioning_qr: # if never received a QR code or it is reset
-                    return redirect(url_for("main_ui.enroll_mfa"))
-                if not session.get("mfa_auth"): # if user did not authenticate with mfa code
-                    return redirect(url_for("main_ui.verify_mfa"))
 
             # It's OK to call the view
             return view_function(*args, **kwargs)

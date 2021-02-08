@@ -19,120 +19,6 @@ from flask_user import UserMixin
 from app.utils.mixins import AgentMixin
 import base64
 
-'''
-class SnapPass(db.Model):
-    __tablename__ = 'snappass'
-    id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.JSON())
-    until = db.Column(db.BigInteger)
-    burned = db.Column(db.Boolean,server_default='0')
-    access_ip = db.Column(db.String())
-    date_added = db.Column(db.DateTime, server_default=func.now())
-    date_updated = db.Column(db.DateTime, onupdate=func.now())
-
-class SMConnection(db.Model):
-    __tablename__ = 'sm_connection'
-    id = db.Column(db.Integer, primary_key=True)
-    host = db.Column(db.String())
-    quick_link = db.Column(db.String())
-    connection_details = db.Column(db.JSON())
-    remove_after = db.Column(db.DateTime)
-    date_added = db.Column(db.DateTime, server_default=func.now())
-    date_updated = db.Column(db.DateTime, onupdate=func.now())
-    guac_id = db.Column(db.Integer, db.ForeignKey('guacsm.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-#TESTING VAULT ROLES
-# Define the Role data model
-class Vault(db.Model):
-    __tablename__ = 'vault'
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(50), nullable=False, server_default=u'', unique=True)
-    label = db.Column(db.Unicode(255), server_default=u'')
-    localaccounts = db.relationship("AgentUser",backref="vault", lazy="dynamic")
-    domainaccounts = db.relationship("ADUser",backref="vault", lazy="dynamic")
-
-class VaultRoles(db.Model):
-    __tablename__ = 'vault_roles'
-    id = db.Column(db.Integer(), primary_key=True)
-    user_id = db.Column(db.Integer(), db.ForeignKey('users.id', ondelete='CASCADE'))
-    vault_id = db.Column(db.Integer(), db.ForeignKey('vault.id', ondelete='CASCADE'))
-
-class GuacSM(db.Model):
-    __tablename__ = 'guacsm'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String())
-    host = db.Column(db.String()) # can be ip or hostname
-    status = db.Column(db.Boolean,server_default='0')
-    token = db.Column(db.String())
-    last_ping = db.Column(db.DateTime)
-    date_added = db.Column(db.DateTime, server_default=func.now())
-    date_updated = db.Column(db.DateTime, onupdate=func.now())
-
-class ScanAssessment(db.Model):
-    __tablename__ = 'scan_assessment'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String())
-    targets = db.Column(db.String())
-    arguments = db.Column(db.String())
-    schedule = db.Column(db.String())
-    scheduled_start = db.Column(db.String())
-    scan_start = db.Column(db.DateTime)
-    scan_end = db.Column(db.DateTime)
-    elapsed = db.Column(db.Float)
-    uphosts = db.Column(db.Integer)
-    downhosts = db.Column(db.Integer)
-    totalhosts = db.Column(db.Integer)
-    percentage_up = db.Column(db.Integer)
-    uniq_family = db.Column(db.String())
-    uniq_os = db.Column(db.String())
-    total_ports_open = db.Column(db.Integer())
-    uniq_ports_open = db.Column(db.Integer())
-    total_services = db.Column(db.Integer())
-    uniq_services = db.Column(db.Integer())
-    meta_services = db.Column(db.JSON())
-    meta_ports = db.Column(db.JSON())
-    meta_os = db.Column(db.JSON())
-    meta_family = db.Column(db.JSON())
-    date_added = db.Column(db.DateTime, server_default=func.now())
-    date_updated = db.Column(db.DateTime, onupdate=func.now())
-    # Ref
-    hosts = db.relationship("ScanData",backref="assessment", lazy="dynamic")
-
-class ScanData(db.Model):
-    __tablename__ = 'scan_data'
-    id = db.Column(db.Integer, primary_key=True)
-    ip = db.Column(db.String())
-    hostname = db.Column(db.String())
-    state = db.Column(db.String())
-    uptime = db.Column(db.String())
-    last_boot = db.Column(db.String())
-    os = db.Column(db.String())
-    accuracy = db.Column(db.String())
-    type = db.Column(db.String())
-    vendor = db.Column(db.String())
-    osfamily = db.Column(db.String())
-    osgen = db.Column(db.String())
-    os_data = db.Column(db.JSON())
-    port_data = db.Column(db.JSON())
-    ports_open = db.Column(db.Integer())
-    critical_severity = db.Column(db.Integer())
-    high_severity = db.Column(db.Integer())
-    medium_severity = db.Column(db.Integer())
-    services = db.Column(db.Integer())
-    country_code = db.Column(db.String())
-    country_name = db.Column(db.String())
-    region_name = db.Column(db.String())
-    city_name = db.Column(db.String())
-    lat = db.Column(db.Float)
-    long = db.Column(db.Float)
-    date_added = db.Column(db.DateTime, server_default=func.now())
-    date_updated = db.Column(db.DateTime, onupdate=func.now())
-    # Ref
-    assessment_id = db.Column(db.Integer, db.ForeignKey('scan_assessment.id'), nullable=False)
-
-'''
-
 class ComparisonScore(db.Model):
     '''Table for holding comparison score data such as industry or other clients'''
     __tablename__ = 'comparison_score'
@@ -317,11 +203,6 @@ class Agent(db.Model):
     #// Ref
     groups = db.relationship('Group', secondary='agents_groups',
                             backref=db.backref('agents', lazy='dynamic'))
-#    software = db.relationship("AgentSoftware",backref="agent", lazy="joined")
-#    software = db.relationship("AgentSoftware",backref=db.backref("agent", lazy="immediate"))
-
-#    def __repr__(self):
-#        return "<Agent: {}>".format(self.hostname)
 
 # Define the Group data model
 class Group(db.Model):
@@ -392,11 +273,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.Unicode(255), nullable=False, server_default=u'', unique=True)
     email_confirmed_at = db.Column(db.DateTime())
     password = db.Column(db.String(255), nullable=False, server_default='')
-    # reset_password_token = db.Column(db.String(100), nullable=False, server_default='')
     active = db.Column(db.Boolean(), nullable=False, server_default='0')
-    otp_secret = db.Column(db.String(), default=base64.b32encode(os.urandom(10)).decode('utf-8'))
-    mfa_enabled = db.Column(db.Boolean(),  server_default='0')
-    provisioning_qr = db.Column(db.Boolean(),  server_default='0')
 
     # User information
     active = db.Column('is_active', db.Boolean(), nullable=False, server_default='0')
@@ -406,9 +283,6 @@ class User(db.Model, UserMixin):
     # Relationships
     roles = db.relationship('Role', secondary='users_roles',
                             backref=db.backref('users', lazy='dynamic'))
-
-#    vaults = db.relationship('Vault', secondary='vault_roles',
-#                            backref=db.backref('users', lazy='dynamic'))
 
     @staticmethod
     def verify_auth_token(token):
@@ -445,28 +319,7 @@ class UserInvitation(db.Model):
     __tablename__ = 'user_invitations'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), nullable=False)
-    # save the user of the invitee
     invited_by_user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    invited_by_user = db.relationship('User', uselist=False)
-    # token used for registration page to identify user registering
-    token = db.Column(db.String(100), nullable=False, server_default='')
-
-# # Define the User registration form
-# # It augments the Flask-User RegisterForm with additional fields
-# class MyRegisterForm(RegisterForm):
-#     first_name = StringField('First name', validators=[
-#         validators.DataRequired('First name is required')])
-#     last_name = StringField('Last name', validators=[
-#         validators.DataRequired('Last name is required')])
-
-
-# Define the User profile form
-class UserProfileForm(FlaskForm):
-    first_name = StringField('First name', validators=[
-        validators.DataRequired('First name is required')])
-    last_name = StringField('Last name', validators=[
-        validators.DataRequired('Last name is required')])
-    submit = SubmitField('Save')
 
 class AuditLogs(db.Model):
     '''

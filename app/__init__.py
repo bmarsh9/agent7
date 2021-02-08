@@ -112,7 +112,6 @@ def create_app():
             request.user_agent,
             request.query_string
         )
-        #print(vars(request))
         return response
 
     # Setup tasks

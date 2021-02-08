@@ -113,10 +113,6 @@ MAIL_PASSWORD = 'agent7'
 # Sendgrid settings
 SENDGRID_API_KEY='none'
 
-# Flask-User settings
-USER_EMAIL_SENDER_NAME = 'Test'
-USER_EMAIL_SENDER_EMAIL = 'Test'
-
 ADMINS = [
     '"Admin One" <admin1@gmail.com>',
     ]
