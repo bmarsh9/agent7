@@ -4,7 +4,10 @@
 1. [What is it?](#what-is-it)
 2. [Why Agent7?](#why-agent7)
 3. [How does it work?](#how-does-it-work)
-4. [What data does it collect & track](#What-data-does-it-collect-&-track)
+4. [What data does it collect & track](#What-data-does-it-collect--track)
+5. [How to Install](#how-to-install)
+6. [What is next on the roadmap?](#what-is-next-on-the-roadmap)
+7. [Considerations](#considerations)
 
 ### What is it?
 Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also has a remote interactive/shell module and a Active Directory module.  
@@ -76,7 +79,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 
 ![Alt text](photos/agent7_arch.PNG?raw=true "Architecture")  
 
-### Considerations for anything more than testing  
+### Considerations 
 + You will need to run the RMQ Connector if you are using more than 2-3 agents to handle the load.  
 + The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`. Please change this in the `app/local_settings.py` file.  
 + By default, the agent does NOT verify the server certificate before sending the data via TLS.
