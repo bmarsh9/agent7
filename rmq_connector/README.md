@@ -14,4 +14,4 @@
 + You see data being populated in the Agent7 UI  
 + Screenshot looks something like this below  
 
-![Alt text](photos/rmq_connector_start.PNG?raw=true "Logon Map")  
+![Alt text](photos/rmq_connector_start.PNG?raw=true "RMQ Connector Output")  
