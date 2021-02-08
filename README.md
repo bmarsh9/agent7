@@ -16,6 +16,8 @@ There is a agent and server component. You install the `.exe` on the endpoints a
 + Insights - Automatic queries that run on the collected data and finds misconfigurations or similar
 + Privileged User/Group identification
 
+![Alt text](photos/a7_map.PNG?raw=true "Logon Map")  
+
 ### What data does it collect & track?
 The list below is not exhaustive but gives a good overview.   
 + Scheduled tasks  
