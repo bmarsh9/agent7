@@ -8,3 +8,10 @@
 + Run `pip3 install -r requirements.txt`  
 + Run `apt-get install sqlite3`  
 + Start the connector -> `python3 connector.py`
+
+### How do I know its working?  
++ If you get no errors upon start up  
++ You see data being populated in the Agent7 UI  
++ Screenshot looks something like this below  
+
+![Alt text](photos/rmq_connector_start.PNG?raw=true "Logon Map")  
