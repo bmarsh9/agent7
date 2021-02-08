@@ -46,3 +46,9 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Build it with `docker build -t agent7_1.0 .`  
 + Start it with `docker run -p 5000:5000/tcp agent7_1.0:latest`  
 + Browse to port 5000 where the email is `admin@example.com` and password is `Password1`
+
+### What is next on the roadmap?  
++ Documentation (lots of that)  
++ Make it easier to write custom Insights  
++ Explore possibility of a Linux based agent as well  
++ Distributed network scanner with the agents
