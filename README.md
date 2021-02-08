@@ -1,10 +1,10 @@
 # Agent7 - Security Agent
 
 ## Table of Contents
-1. [What is it?](#what-is-it?)
-2. [Why Agent7?](#why-agent7?)
-3. [How does it work?](#how-does-it-work?)
-4. [Fourth Example](#fourth-examplehttpwwwfourthexamplecom)
+1. [What is it?](#what-is-it)
+2. [Why Agent7?](#why-agent7)
+3. [How does it work?](#how-does-it-work)
+4. [What data does it collect & track](#What-data-does-it-collect-&-track)
 
 ### What is it?
 Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also has a remote interactive/shell module and a Active Directory module.  
