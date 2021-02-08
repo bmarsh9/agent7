@@ -23,6 +23,11 @@ The list below is not exhaustive but gives a good overview.
 + Network Sessions  
 + Registry Keys  
 
+You can also tell agents to collect data from Active Directory. Such as:  
++ Users, Groups & Computers (along with their attributes)    
++ GPO  
++ SysVol & permissions  
++ Domains & Domain Controllers  
 
 
 ### Build
