@@ -54,7 +54,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Browse to port 5000 where the email is `admin@example.com` and password is `Password1`  
 ##### Set up the Agent  
 + Download the `agent7_installer.exe` onto the Windows workstation/server  
-+ Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server> /key=<sitekey> /group=mycustomgroup`  
++ Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server> /key=<sitekey> /group=mycustomgroup`. The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`.  
 + Open Event Viewer > Windows Logs > Application and look for `Initialization Successful` and EventID `2002` from Agent7  
 + Verify that the agent checked into the server as well
 ##### Uninstall  
@@ -68,6 +68,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 
 ### Considerations for anything more than testing  
 + You will need to run the RabbitMQ service if you are using more than 2-3 agents to handle the load.  
++ The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`. Please change this in the `app/local_settings.py` file.  
 + By default, the agent does NOT verify the server certificate before sending the data via TLS.  
 + By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS.  
 + Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)
