@@ -68,7 +68,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Open Event Viewer > Windows Logs > Application and look for EventID `2002` (`Initialization Successful`) from Agent7. This means that the agent installed correctly. Then look for EventID `2003`. `Agent Registered` means the agent successfully registered with the server.
 + Verify that the agent checked into the server as well
 ##### Uninstall  
-+ Right-click and uninstall from Control Panel
++ Right-click and uninstall from Control Panel or uninstall via the console UI
 
 ### What is next on the roadmap?  
 + Documentation (lots of that)  
