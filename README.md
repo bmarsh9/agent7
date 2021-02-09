@@ -82,15 +82,15 @@ You can also tell agents to collect data from Active Directory. Such as:
 ![Alt text](photos/agent7_arch.PNG?raw=true "Architecture")  
 
 ### Considerations 
-+ You will need to run the RMQ Connector if you are using more than 2-3 agents to handle the load.  
-+ The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`. Please change this in the `app/local_settings.py` file.  
-+ By default, the agent does NOT verify the server certificate before sending the data via TLS.
-+ By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS.  
++ The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`. Please change this in the `app/local_settings.py` file and via the command line when installing the agent.  
++ By default, the agent does NOT verify the server certificate before sending the data via TLS. Change this for prod  
++ By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS. Change this for prod    
 + Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)  
-+ RabbitMQ default user/pass is Admin:Admin and only listens on localhost. Traffic is unencrypted.  
-+ Postgresql creds are default as well (db1:db1) and these should be set to something stronger.
++ Components (Redis,Postgres,RabbitMQ) all use default creds and the traffic is unencrypted. Docker-compose places them on their own network but something to change if going to prod.    
 
 ### Building  
 ##### Docker  
 1.) Tag image: `docker tag agent7_ui bmarsh13/public-dev:agent7_ui`  
-2.) Public image: `docker push bmarsh13/public-dev:agent7_ui`
+2.) Public image: `docker push bmarsh13/public-dev:agent7_ui`  
+
+
