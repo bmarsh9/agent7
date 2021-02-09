@@ -89,3 +89,8 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)  
 + RabbitMQ default user/pass is Admin:Admin and only listens on localhost. Traffic is unencrypted.  
 + Postgresql creds are default as well (db1:db1) and these should be set to something stronger.
+
+### Building  
+##### Docker  
+1.) Tag image: `docker tag agent7_ui bmarsh13/public-dev:agent7_ui`  
+2.) Public image: `docker push bmarsh13/public-dev:agent7_ui`
