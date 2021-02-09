@@ -15,3 +15,12 @@
 + Screenshot looks something like this below  
 
 ![Alt text](../photos/rmq_connector_start.PNG?raw=true "RMQ Connector Output")  
+
+### Docker  
+##### Bring up the cluster
+docker-compose up -d postgres_db  
+docker-compose up -d rabbitmq  
+docker-compose up -d  
+
+##### Bring down  
+docker-compose down  

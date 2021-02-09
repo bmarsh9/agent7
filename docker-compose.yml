@@ -1,0 +1,78 @@
+version: '3'
+services:
+  #ubuntu: # debug: docker exec -i -t ubuntu bash
+  #  image: ubuntu
+  #  command: tail -F anything
+  #  networks:
+  #    - db_nw
+  #    - web_nw
+
+  agent7_ui:
+    container_name: agent7_ui
+    image: bmarsh13/public-dev:agent7_ui
+    depends_on:
+      - postgres_db
+      - rabbitmq
+      - redis_server
+    networks:
+      - db_nw
+      - web_nw
+    ports:
+      - "443:443"
+    restart: unless-stopped
+
+  rmq_connector:
+    container_name: agent7_connector
+    image: bmarsh13/public-dev:agent7_connector
+    #command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done;echo 12345'
+    #env_file:
+    #  - env_file
+    #environment:
+    #  - DATABASE_URL=postgres://postgres:password@db:5432/practicedocker
+    #  - PORT=3000
+    depends_on:
+      - postgres_db
+    networks:
+      - db_nw
+      - web_nw
+    restart: unless-stopped #always
+
+  redis_server:
+    container_name: redis_server
+    image: redis
+    networks:
+      - db_nw
+      - web_nw
+    restart: unless-stopped
+
+  postgres_db:
+    container_name: postgres_db
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-db1}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-db1}
+      PGDATA: /data/postgres
+    #volumes:
+    #   - postgres:/data/postgres
+    #ports:
+    #  - "5432:5432"
+    networks:
+      - db_nw
+    restart: unless-stopped
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq
+    networks:
+      - db_nw
+      - web_nw
+    restart: unless-stopped
+
+networks:
+  db_nw:
+    driver: bridge
+  web_nw:
+    driver: bridge
+volumes:
+  dbdata:
+

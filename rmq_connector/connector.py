@@ -1,9 +1,11 @@
 from utils.dedup_creator import DedupCreator
+from config import Config,Ledger,FullHashLedger
 import json
 import os
 import time
-from config import Config,Ledger,FullHashLedger
 import pika
+import logging
+import sys
 
 class Connector():
     def __init__(self,app,auto_ack=False):
@@ -12,13 +14,13 @@ class Connector():
 
     def run(self):
         '''run entire process. get --> forward --> delete'''
-
         while True:
+            logging.info("Processing the queue")
             count = 0
             d_count = 0
             try:
                 connection = pika.BlockingConnection(
-                    pika.ConnectionParameters(host='localhost'))
+                    pika.ConnectionParameters(host='rabbitmq'))
                 channel = connection.channel()
                 channel.queue_declare(queue='agent7_queue',durable=True)
 
@@ -27,18 +29,17 @@ class Connector():
 
             # Don't recover if connection was closed by broker
             except pika.exceptions.ConnectionClosedByBroker as e:
-                print("Channel error:{}".format(e))
+                logging.error("ConnectionClosedByBroker exception:{}".format(e))
                 break
             except pika.exceptions.ChannelClosedByBroker as e:
-                print("Channel error:{}".format(e))
+                logging.error("ChannelClosedByBroker exception:{}".format(e))
             # Don't recover on channel errors
             except pika.exceptions.AMQPChannelError as e:
-                print("Channel error:{}".format(e))
+                logging.critical("AMQPChannelError exception:{}".format(e))
                 break
             # Recover on all other connection errors
             except pika.exceptions.AMQPConnectionError:
                 continue
-            #print(channel.basic_get("agent7_queue"))
             channel.start_consuming()
 
     def process_message(self,ch,method,properties,body):
@@ -51,7 +52,7 @@ class Connector():
         doc_hash = True
 
         if not table:
-            print("Missing table model: {}. Please add it to the RDS Mapper".format(table))
+            logging.warning("Missing table model: {}. Please add it to the RDS Mapper".format(table))
             return False
 
         if not isinstance(payload,list):
@@ -77,8 +78,8 @@ class Connector():
                     up+=1
                     outcome = self.update_to_rds(table,message_id,model,data)
             if not outcome:
-                print(outcome)
-        print("Processed {} records. Inserted {} new records. Performed {} updates. Ignored {} duplicates.".format(len(payload),new,up,dup))
+                logging.error("Error while processing record:{}".format(str(outcome)))
+        logging.info("Processed {} records. Inserted {} new records. Performed {} updates. Ignored {} duplicates.".format(len(payload),new,up,dup))
 
         if not self.auto_ack:
             ch.basic_ack(delivery_tag = method.delivery_tag) # on success, delete from queue
@@ -90,9 +91,8 @@ class Connector():
             app.rds_session.commit()
             return True
         except TypeError as e:
-            print("TypeError: Field in record does not exist in target table. Error:{}".format(e))
+            logging.warning("TypeError: Field in record does not exist in target table. Error:{}".format(e))
         return False
-            # should save record to a orphan table
 
     def update_to_rds(self,table,message_id,model,data):
         try:
@@ -103,6 +103,7 @@ class Connector():
 #                self.insert_to_rds(table,record)
             return True
         except Exception as e:
+            logging.warning("Exception while updating record in rds:{}".format(e))
             print("Exception while updating record in rds:{}".format(e))
         return False
 
@@ -147,10 +148,10 @@ class Connector():
 
 
 if __name__ == "__main__":
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+    logging.info("Starting the connector")
     base_dir = os.path.abspath(os.path.dirname(__file__))
     app = Config(base_dir)
 
     # Start Connector service
     Connector(app).run()
-
-

@@ -1,15 +1,16 @@
-#server {
-    # listen on port 80 (http)
-    #listen 80;
-    #server_name 0.0.0.0;
-    #location / {
-    #    # redirect any requests to the same URL but on https
-    #    return 301 https://$host$request_uri;
-    #}
-#}
 server {
-    # listen on port 443 (https)
-    listen 5000 ssl;
+    # listen on port 80 (http)
+    listen 80;
+    server_name 0.0.0.0;
+    location / {
+        # redirect any requests to the same URL but on https
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    # listen on port 443
+    listen 443 ssl;
     server_name 0.0.0.0;
 
     # location of the self-signed SSL certificate

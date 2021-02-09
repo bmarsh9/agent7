@@ -1,2 +1,4 @@
 boto3==1.16.18
 Flask-SQLAlchemy==2.3.2
+pika==1.2.0
+psycopg2==2.8.6

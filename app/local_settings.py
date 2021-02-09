@@ -65,17 +65,17 @@ SERVER_HOST = "localhost"
 COMPANY = "agent7"
 
 #// Postgres
-SQLALCHEMY_DATABASE_URI = 'postgresql://db1:db1@localhost/db1'
+SQLALCHEMY_DATABASE_URI = 'postgresql://db1:db1@postgres_db/db1'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-RMQ_USER = "admin"
-RMQ_PASS = "admin"
-RMQ_HOST = "localhost"
+RMQ_USER = "guest"
+RMQ_PASS = "guest"
+RMQ_HOST = "rabbitmq"
 RMQ_QUEUE = "agent7_queue"
 
 #// Redis
-REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
-RQ_BROKER_URL = 'redis://localhost:6379'
+#REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
+REDIS_URL = 'redis://redis_server:6379'
 
 # Logging Setup
 LOG_TYPE = "watched"  # Default is a Stream handler

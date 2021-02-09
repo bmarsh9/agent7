@@ -116,10 +116,9 @@ def create_app():
 
     # Setup tasks
     app.redis = Redis.from_url(app.config['REDIS_URL'])
-    connection = Redis.from_url('redis://')
     app.queues = {
-        "agent-tasks": Scheduler('agent-tasks',connection=connection),
-        "general-tasks": Scheduler('general-tasks',connection=connection)
+        "agent-tasks": Scheduler('agent-tasks',connection=app.redis),
+        "general-tasks": Scheduler('general-tasks',connection=app.redis)
     }
 
     return app

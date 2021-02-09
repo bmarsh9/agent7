@@ -32,7 +32,7 @@ class Config():
       Base.metadata.create_all(engine)
 
       # --------------------------------- Create connection to RDS
-      rds_uri = 'postgresql://db1:db1@localhost/db1'
+      rds_uri = 'postgresql://db1:db1@postgres_db/db1'
       rds_engine = sqlalchemy.create_engine(rds_uri)
       RDS.prepare(rds_engine,reflect=True)
       self.rds_session = Session(rds_engine)

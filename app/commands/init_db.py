@@ -31,9 +31,10 @@ def init_db():
     create_general_tasks()
 
 def stop_forever_tasks():
-    for name,scheduler in current_app.queues.items():
-        for job in scheduler.get_jobs():
-            scheduler.cancel(job)
+    if current_app.queues:
+        for name,scheduler in current_app.queues.items():
+            for job in scheduler.get_jobs():
+                scheduler.cancel(job)
 
 def create_auditkeys():
     file_name = os.path.join(current_app.config["INITDBDIR"],"auditkeys_ledger.json")

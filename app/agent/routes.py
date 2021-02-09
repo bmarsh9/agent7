@@ -74,13 +74,17 @@ def rtr_shell():
     '''shell access for rtr'''
     aid = request.args.get('agent')
     if aid:
-        since = datetime.now() - timedelta(minutes=1)
+        if not aid.rtr:
+            flash("RTR is not enabled for this agent. Please enable it below.",category="warning")
+            return redirect(url_for("agent_ui.rtr_home"))
+        checkin_time = 2 # minutes
+        since = datetime.now() - timedelta(minutes=checkin_time)
         agent = Agent.query.filter(Agent.last_active > since).filter(Agent.id == aid).first()
         if agent:
             session = "{}_{}".format(datetime.now().strftime("%m-%d-%Y"),uuid.uuid4().hex[:6])
             return render_template("agent/rtr_interact.html",agent=agent,session=session,date_started=datetime.now())
         else:
-            flash("Agent is not online or does not exist!",category="warning")
+            flash("Agent is not online (within:{} minutes) or does not exist!".format(checkin_time),category="warning")
             return redirect(url_for("agent_ui.rtr_home"))
     flash("Agent ID does not exist!",category="warning")
     return redirect(url_for("agent_ui.rtr_home"))
