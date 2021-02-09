@@ -57,11 +57,11 @@ You can also tell agents to collect data from Active Directory. Such as:
 ![Alt text](photos/a7_1.PNG?raw=true "Sch Tasks")  
 
 ### How to Install  
-##### Set up the Server
-+ Clone the Repo  
-+ Build it with `docker build -t agent7_1.0 .`  
-+ Start it with `docker run -p 5000:5000/tcp agent7_1.0:latest`  
-+ Browse to port 5000 where the email is `admin@example.com` and password is `Password1`  
+##### Set up the Server  
++ Clone the Repo (or just copy down the `docker-compose.yml` file)  
++ Run `docker-compose up -d postgres_db redis_server rabbitmq && docker-compose up -d` 
++ Browse your server URL and the email is `admin@example.com` and password is `Password1`  
+
 ##### Set up the Agent  
 + Download the `agent7_installer.exe` onto the Windows workstation/server  
 + Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server> /key=<sitekey> /group=mycustomgroup`. The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`.  
