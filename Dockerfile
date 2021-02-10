@@ -2,10 +2,10 @@
 FROM ubuntu
 
 # update the operating system:
-RUN apt-get update
+RUN apt-get update --fix-missing
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 #RUN apt install -y python3-pip supervisor nginx redis-server nano libpq-dev postgresql postgresql-contrib net-tools sudo
-RUN apt install -y python3-pip supervisor nginx nano libpq-dev net-tools sudo
+RUN apt install -y python3-pip supervisor nginx nano libpq-dev net-tools sudo postgresql-client unzip
 
 # copy the folder to the container:
 ADD . /agent7

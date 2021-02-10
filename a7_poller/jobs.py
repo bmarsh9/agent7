@@ -1,16 +1,17 @@
 import ipaddress
 import requests
 import os
+from sqlalchemy import or_
 
 def enrich_network_connections(task,app,**kwargs):
     Table = app.tables["agentnet"]
     IpTable = app.tables["iplocation"]
     # Gather all un-enriched network connections and enrich ones with public ip address
-    connections = app.db_session.query(Table).filter(Table.private == False).filter(Table.lat == None).filter(Table.family == "tcp").all()
+    connections = app.db_session.query(Table).filter(or_(Table.private == False,Table.private == None)).filter(Table.lat == None).filter(Table.family == "tcp").all()
     for c in connections:
         try:
-            if ipaddress.ip_address(address).is_global:
-                address_dec = int(ipaddress.ip_address(address))
+            if ipaddress.ip_address(c.raddr).is_global:
+                address_dec = int(ipaddress.ip_address(c.raddr))
                 geo = app.db_session.query(IpTable).filter(IpTable.ip_to > address_dec).filter(IpTable.ip_from < address_dec).first()
             else:
                 geo = None
@@ -23,7 +24,11 @@ def enrich_network_connections(task,app,**kwargs):
             c.city_name = geo.city_name
             c.lat = geo.latitude
             c.long = geo.longitude
-            app.db_session.commit()
+            c.private == False
+        else:
+            c.lat = 0
+            c.private = True
+        app.db_session.commit()
     return True
 
 def update_privilged_users(task,app,**kwargs):

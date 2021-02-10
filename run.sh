@@ -13,4 +13,7 @@ service nginx restart
 
 python3 manage.py init_db
 
+unzip ./app/commands/ip_db.zip -d ./app/commands/
+psql postgresql://db1:db1@postgres_db:5432/db1 -c "\copy iplocation from './app/commands/IP2LOCATION-LITE-DB5.CSV' delimiter ',' csv;"
+
 /usr/local/bin/uwsgi --ini start.ini

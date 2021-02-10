@@ -73,8 +73,9 @@ def rtr_audit(id=None):
 def rtr_shell():
     '''shell access for rtr'''
     aid = request.args.get('agent')
-    if aid:
-        if not aid.rtr:
+    agent = Agent.query.filter(Agent.id == aid).first()
+    if agent:
+        if not agent.rtr:
             flash("RTR is not enabled for this agent. Please enable it below.",category="warning")
             return redirect(url_for("agent_ui.rtr_home"))
         checkin_time = 2 # minutes
