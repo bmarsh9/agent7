@@ -8,7 +8,9 @@
 5. [How to Install](#how-to-install)
 6. [What is next on the roadmap?](#what-is-next-on-the-roadmap)
 7. [Architecture](#Architecture)
-8. [Considerations](#considerations)
+8. [Considerations](#considerations)  
+9. [Debugging](#debugging)  
+
 
 ### What is it?
 Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also has a remote interactive/shell module and a Active Directory module.  
@@ -87,6 +89,13 @@ You can also tell agents to collect data from Active Directory. Such as:
 + By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS. Change this for prod    
 + Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)  
 + Components (Redis,Postgres,RabbitMQ) all use default creds and the traffic is unencrypted. Docker-compose places them on their own network but something to change if going to prod.    
+
+### Debugging  
+Check the containers by running `docker ps`. It should look something like below:  
+![Alt text](photos/a7_docker_status.PNG?raw=true "Docker ps")  
+
+After that, start running `docker logs <container_name> -f` and looking for errors. File a bug if you need help.  
+
 
 ### Building  
 ##### Docker  
