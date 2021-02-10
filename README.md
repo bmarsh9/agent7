@@ -6,7 +6,7 @@
 3. [How does it work?](#how-does-it-work)
 4. [What data does it collect & track](#What-data-does-it-collect--track)
 5. [How to Install](#how-to-install)
-6. [Powerful API](#api-examples)
+6. [Powerful API for Custom Queries](#api-examples)
 7. [What is next on the roadmap?](#what-is-next-on-the-roadmap)
 8. [Architecture](#Architecture)
 9. [Considerations](#considerations)  
