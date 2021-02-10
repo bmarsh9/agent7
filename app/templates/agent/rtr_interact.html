@@ -394,7 +394,7 @@ $(document).ready(function() {
 function ajaxd() { 
     $.ajax({
          type: "GET",
-         url: "/api/agent/data/agent?filter=id,eq,{{agent.id}};last_active,gt,15 seconds ago",
+         url: "/api/agent/data/agent?filter=id,eq,{{agent.id}};last_active,gt,30 seconds ago",
          contentType: 'application/json',
          success: function(result) {
             if (!result["count"]) {
