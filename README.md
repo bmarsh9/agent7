@@ -66,7 +66,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Browse to your server URL. The email is `admin@example.com` and password is `Password1` (The UI takes a few minutes to come online so you may get a few 500 errors)  
 
 ##### Set up the Agent  
-+ Download the `agent7_installer.exe` onto the Windows workstation/server  
++ Download the `agent7_installer.exe` from this repo (`./windows_agent/agent7_installer.exe`) onto the Windows workstation/server  
 + Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server>`.    
 + Open Event Viewer > Windows Logs > Application and look for EventID `2002` (`Initialization Successful`) from Agent7. This means that the agent installed correctly. Then look for EventID `2003`. `Agent Registered` means the agent successfully registered with the server.
 + Verify that the agent checked into the server as well
