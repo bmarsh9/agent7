@@ -1,5 +1,4 @@
 import datetime
-
 from flask import current_app
 from flask_script import Command
 import uuid
@@ -9,8 +8,6 @@ from app.models import User, Role,Group, Agent, Site, AgentSoftware, Job, AgentC
 from sqlalchemy import create_engine
 import os
 import json
-from app.utils.rq_helper import RqQuery
-import zipfile
 
 class InitDbCommand(Command):
     """ Initialize the database."""
@@ -21,21 +18,12 @@ class InitDbCommand(Command):
 
 def init_db():
     """ Initialize the database."""
-#    stop_forever_tasks()
     db.drop_all()
     db.create_all()
     create_site()
     create_users()
     create_agent_tasks()
     create_auditkeys()
-#    insert_ips()
-#    create_general_tasks()
-
-def stop_forever_tasks():
-    if current_app.queues:
-        for name,scheduler in current_app.queues.items():
-            for job in scheduler.get_jobs():
-                scheduler.cancel(job)
 
 def create_auditkeys():
     file_name = os.path.join(current_app.config["INITDBDIR"],"auditkeys_ledger.json")
@@ -46,32 +34,6 @@ def create_auditkeys():
                 a = AuditKeyLedger(**key)
                 db.session.add(a)
             db.session.commit()
-
-def create_general_tasks():
-    exist2 = Tasks.query.filter(Tasks.name == "update_priv_users").first()
-    if not exist2:
-        Tasks().launch_task("general-tasks","update_priv_users",interval=120,repeat=None)
-
-    exist3 = Tasks.query.filter(Tasks.name == "update_bi_group_ledger").first()
-    if not exist3:
-        Tasks().launch_task("general-tasks","update_bi_group_ledger",interval=180,repeat=None)
-
-def insert_ips():
-    path = "./app/commands/ip_db.zip"
-    directory_to_extract_to = "./app/commands/"
-    with zipfile.ZipFile(path, 'r') as zip_ref:
-        zip_ref.extractall(directory_to_extract_to)
-
-    file_name = os.path.join(current_app.config["INITDBDIR"],"IP2LOCATION-LITE-DB5.CSV")
-    if os.path.isfile(file_name):
-        with open(file_name, 'r') as f:
-            conn = create_engine(current_app.config["SQLALCHEMY_DATABASE_URI"]).raw_connection()
-            cursor = conn.cursor()
-            cmd=r"""COPY iplocation FROM '{}' WITH CSV QUOTE AS '"'""".format(file_name)
-            cursor.copy_expert(cmd, f)
-            conn.commit()
-    else:
-        print("Warning. Missing GeoIP file. Please add the file to this path: {}".format(file_name))
 
 def create_site():
     db.create_all()

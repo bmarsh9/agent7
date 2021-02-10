@@ -1,8 +1,5 @@
 from flask import current_app
 from sqlalchemy.sql import func,text
-from rq_scheduler import Scheduler
-from redis import Redis
-from rq import Queue
 from sqlalchemy.dialects.postgresql import JSON,JSONB
 from sqlalchemy import asc,desc,orm
 import json,os,uuid

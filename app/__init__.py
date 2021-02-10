@@ -5,10 +5,7 @@ from flask_mail import Mail
 from flask_migrate import Migrate, MigrateCommand
 from flask_user import UserManager
 from flask_script import Manager
-from redis import Redis
-import rq
 import os,sys
-from rq_scheduler import Scheduler
 import logging
 from datetime import datetime as dt
 from app.utils.flask_logs import LogSetup
@@ -113,13 +110,6 @@ def create_app():
             request.query_string
         )
         return response
-
-    # Setup tasks
-    app.redis = Redis.from_url(app.config['REDIS_URL'])
-    app.queues = {
-        "agent-tasks": Scheduler('agent-tasks',connection=app.redis),
-        "general-tasks": Scheduler('general-tasks',connection=app.redis)
-    }
 
     return app
 

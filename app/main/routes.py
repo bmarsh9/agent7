@@ -4,11 +4,9 @@ from app import db
 from app.main import ui
 from app.models import *
 from app.utils.operations import AgentOps, GroupOps, JobOps, AgentCmdOps
-from app.utils.rq_helper import *
 from datetime import datetime
 from sqlalchemy import or_
 from app.utils.db_helper import DynamicQuery
-from app.utils.rq_helper import RqQuery
 import ast
 from app.utils.agent_helper import AgentHelper
 import json
@@ -560,8 +558,7 @@ def enable_ad_collector(id):
 @login_required
 def configuration():
     site = Site.query.first()
-    scheduled_scans = RqQuery().get_scheduled_jobs()
-    return render_template("settings/configuration.html",site=site,scheduled_scans=scheduled_scans)
+    return render_template("settings/configuration.html",site=site)
 
 @ui.route('/users', methods = ['GET'])
 @login_required

@@ -73,10 +73,6 @@ RMQ_PASS = "guest"
 RMQ_HOST = "rabbitmq"
 RMQ_QUEUE = "agent7_queue"
 
-#// Redis
-#REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
-REDIS_URL = 'redis://redis_server:6379'
-
 # Logging Setup
 LOG_TYPE = "watched"  # Default is a Stream handler
 LOG_LEVEL = "INFO"

@@ -16,9 +16,7 @@ def lookup_ip(address):
         return None
 
 def color_scheme(id=None):
-#    color_dict = {1: '#898ad4', 2: '#88a571', 3: '#a0af51', 4: '#bdb739', 5: '#ddbd24', 6: '#faa825', 7: '#f38f32', 8: '#ec753b', 9: '#e45841', 10: '#dc3545'} #lightest
     color_dict = {1: '#898ad4', 2: '#80a997', 3: '#99ba7b', 4: '#b8c866', 5: '#dbd551', 6: '#ffd242', 7: '#ffa82e', 8: '#ff781a', 9: '#f34508', 10: '#d90000'}
-#    color_dict = {1: '#7bcb7d', 2: '#87b970', 3: '#90a764', 4: '#979558', 5: '#9b834c', 6: '#9d7141', 7: '#9e5e36', 8: '#9e492c', 9: '#9c3122', 10: '#990718'} #darker
     if id:
         return color_dict.get(id,1)
     return color_dict

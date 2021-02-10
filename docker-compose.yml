@@ -9,7 +9,8 @@ services:
 
   agent7_ui:
     container_name: agent7_ui
-    image: bmarsh13/public-dev:agent7_ui
+#    image: bmarsh13/public-dev:agent7_ui
+    image: agent7_ui
     depends_on:
       - postgres_db
       - rabbitmq
