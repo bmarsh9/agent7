@@ -13,7 +13,7 @@
 
 
 ### What is it?
-Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also has a remote interactive/shell module and a Active Directory module.  
+Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also has a remote interactive/shell module and a Active Directory module. The server component consists of 5 docker containers, 3 custom containers and postgresql/rabbitmq.    
 
 ![Alt text](photos/a7_dash.PNG?raw=true "Dashboard")  
 
