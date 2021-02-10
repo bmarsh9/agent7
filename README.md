@@ -6,10 +6,11 @@
 3. [How does it work?](#how-does-it-work)
 4. [What data does it collect & track](#What-data-does-it-collect--track)
 5. [How to Install](#how-to-install)
-6. [What is next on the roadmap?](#what-is-next-on-the-roadmap)
-7. [Architecture](#Architecture)
-8. [Considerations](#considerations)  
-9. [Debugging](#debugging)  
+6. [Powerful API](#api-examples)
+7. [What is next on the roadmap?](#what-is-next-on-the-roadmap)
+8. [Architecture](#Architecture)
+9. [Considerations](#considerations)  
+10. [Debugging](#debugging)  
 
 
 ### What is it?
@@ -71,6 +72,12 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Verify that the agent checked into the server as well
 ##### Uninstall  
 + Right-click and uninstall from Control Panel or uninstall via the console UI
+
+### API Examples  
+The API has fantastic support for any advanced queries or custom analytics you want to gather from your agent fleet. For example, if we want to view `All Software that was installed in the last 5 days`...  
+
+![Alt text](photos/a7_api.PNG?raw=true "API")  
+
 
 ### What is next on the roadmap?  
 + Documentation (lots of that)  
