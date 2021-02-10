@@ -6,14 +6,15 @@
 3. [How does it work?](#how-does-it-work)
 4. [What data does it collect & track](#What-data-does-it-collect--track)
 5. [How to Install](#how-to-install)
-6. [What is next on the roadmap?](#what-is-next-on-the-roadmap)
-7. [Architecture](#Architecture)
-8. [Considerations](#considerations)  
-9. [Debugging](#debugging)  
+6. [Powerful API for Custom Queries](#api-examples)
+7. [What is next on the roadmap?](#what-is-next-on-the-roadmap)
+8. [Architecture](#Architecture)
+9. [Considerations](#considerations)  
+10. [Debugging](#debugging)  
 
 
 ### What is it?
-Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also has a remote interactive/shell module and a Active Directory module. The server component consists of 5 docker containers, 3 custom containers and postgresql/rabbitmq.    
+Agent7 is a security monitoring agent for Windows endpoints (Windows 7,8,10, Server 08,12,16 +). At a high level, the agent runs as a local service on the endpoint and sends data to the server for more analysis. It also has a remote interactive/shell module and a Active Directory module. The server component consists of 5 docker containers (3 custom containers and postgresql/rabbitmq). The [API](#api-examples) is also a great way to gain insights into your fleet.
 
 ![Alt text](photos/a7_dash.PNG?raw=true "Dashboard")  
 
@@ -61,8 +62,8 @@ You can also tell agents to collect data from Active Directory. Such as:
 ### How to Install  
 ##### Set up the Server  
 + Clone the Repo (or just copy down the `docker-compose.yml` file)  
-+ Run `docker-compose up -d postgres_db redis_server rabbitmq && docker-compose up -d` 
-+ Browse to your server URL. The email is `admin@example.com` and password is `Password1`  
++ Run `docker-compose up -d postgres_db rabbitmq && docker-compose up -d`  
++ Browse to your server URL. The email is `admin@example.com` and password is `Password1` (The UI takes a few minutes to come online so you may get a few 500 errors)  
 
 ##### Set up the Agent  
 + Download the `agent7_installer.exe` onto the Windows workstation/server  
@@ -71,6 +72,15 @@ You can also tell agents to collect data from Active Directory. Such as:
 + Verify that the agent checked into the server as well
 ##### Uninstall  
 + Right-click and uninstall from Control Panel or uninstall via the console UI
+
+### API Examples  
+The API has fantastic support for any advanced queries or custom analytics you want to gather from your agent fleet. For example, if we want to view `All Software that was installed in the last 5 days`...  
+
+![Alt text](photos/a7_api.PNG?raw=true "API")  
+
+Or if you wanted to view all privileged users that logged in within the last week  
+
+![Alt text](photos/a7_api_2.PNG?raw=true "API")  
 
 ### What is next on the roadmap?  
 + Documentation (lots of that)  
@@ -88,13 +98,17 @@ You can also tell agents to collect data from Active Directory. Such as:
 + By default, the agent does NOT verify the server certificate before sending the data via TLS. Change this for prod  
 + By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS. Change this for prod    
 + Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)  
-+ Components (Redis,Postgres,RabbitMQ) all use default creds and the traffic is unencrypted. Docker-compose places them on their own network but something to change if going to prod.    
++ Components (Redis,Postgres,RabbitMQ) all use default creds and the traffic is unencrypted. Docker-compose places them on their own network but something to change if going to prod.  
++ If installing on lots of hosts (+100), you may want to adjust and lengthen the checkin time of the agents. By default, they check in every 20 seconds. This can be seen here:
+https://github.com/bmarsh9/agent7/blob/main/windows_agent/build_docs/agent7.py#L71  
 
 ### Debugging  
 Check the containers by running `docker ps`. It should look something like below:  
 ![Alt text](photos/a7_docker_status.PNG?raw=true "Docker ps")  
 
 After that, start running `docker logs <container_name> -f` and looking for errors. File a bug if you need help.  
+
+If you see the error `Missing table model: <>. Please add it to the RDS Mapper` while running `docker logs agent7_connector -f`... then you can try to restart that container with `docker-compose restart rmq_connector` and see if that fixes the issue.  
 
 
 ### Building  
