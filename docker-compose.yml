@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
 
   agent7_poller:
-    container_name: agent7_poller
+    container_name: bmarsh13/public-dev:agent7_poller
     image: agent7_poller    
     depends_on:
       - postgres_db
