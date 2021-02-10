@@ -78,6 +78,9 @@ The API has fantastic support for any advanced queries or custom analytics you w
 
 ![Alt text](photos/a7_api.PNG?raw=true "API")  
 
+Or if you wanted to view all privileged users that logged in within the last week  
+
+![Alt text](photos/a7_api_2.PNG?raw=true "API")  
 
 ### What is next on the roadmap?  
 + Documentation (lots of that)  
