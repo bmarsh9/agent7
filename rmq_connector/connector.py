@@ -52,7 +52,7 @@ class Connector():
         doc_hash = True
 
         if not table:
-            logging.warning("Missing table model: {}. Please add it to the RDS Mapper".format(table))
+            logging.warning("Missing table model: {}. Please add it to the RDS Mapper".format(model))
             return False
 
         if not isinstance(payload,list):
@@ -78,8 +78,8 @@ class Connector():
                     up+=1
                     outcome = self.update_to_rds(table,message_id,model,data)
             if not outcome:
-                logging.error("Error while processing record:{}".format(str(outcome)))
-        logging.info("Processed {} records. Inserted {} new records. Performed {} updates. Ignored {} duplicates.".format(len(payload),new,up,dup))
+                logging.error("[{}] Error while processing record:{}".format(model,str(outcome)))
+        logging.info("[{}] Processed {} records. Inserted {} new records. Performed {} updates. Ignored {} duplicates.".format(model,len(payload),new,up,dup))
 
         if not self.auto_ack:
             ch.basic_ack(delivery_tag = method.delivery_tag) # on success, delete from queue
@@ -153,5 +153,8 @@ if __name__ == "__main__":
     base_dir = os.path.abspath(os.path.dirname(__file__))
     app = Config(base_dir)
 
-    # Start Connector service
-    Connector(app).run()
+    if not app.tables:
+        logging.critical("Agent7 database is not ready. Exiting...")
+    else:
+        # Start Connector service
+        Connector(app).run()

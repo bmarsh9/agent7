@@ -43,30 +43,6 @@ class Config():
           table_object = getattr(RDS.classes,name)
           self.tables[name] = table_object
 
-    def rds_mapper(self,tbl):
-        table_mapper = {
-            "agentprocess":RDS.classes.agentprocess,
-            "agentschtask":RDS.classes.agentschtask,
-            "agentnet":RDS.classes.agentnet,
-            "agentservice":RDS.classes.agentservice,
-            "agentmemory":RDS.classes.agentmemory,
-            "agentdisk":RDS.classes.agentdisk,
-            "agentpipe":RDS.classes.agentpipe,
-            "agentprinter":RDS.classes.agentprinter,
-            "agentpatch":RDS.classes.agentpatch,
-            "agentprofile":RDS.classes.agentprofile,
-            "agentlogon":RDS.classes.agentlogon,
-            "agentnetsession":RDS.classes.agentnetsession,
-            "agentsoftware":RDS.classes.agentsoftware,
-            "agentsystem":RDS.classes.agentsystem,
-            "agentshare":RDS.classes.agentshare,
-            "agentstartup":RDS.classes.agentstartup,
-            "agentadapter":RDS.classes.agentadapter,
-            "agentuser":RDS.classes.agentuser,
-            "agentgroup":RDS.classes.agentgroup
-        }
-        return table_mapper.get(tbl)
-
 class Ledger(Base):
     __tablename__ = 'ledger'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
