@@ -9,12 +9,11 @@ services:
 
   agent7_ui:
     container_name: agent7_ui
-#    image: bmarsh13/public-dev:agent7_ui
-    image: agent7_ui
+    image: bmarsh13/public-dev:agent7_ui
     depends_on:
       - postgres_db
       - rabbitmq
-      - redis_server
+      #- redis_server
     networks:
       - db_nw
       - web_nw
@@ -49,13 +48,13 @@ services:
       - web_nw
     restart: unless-stopped #always
 
-  redis_server:
-    container_name: redis_server
-    image: redis
-    networks:
-      - db_nw
-      - web_nw
-    restart: unless-stopped
+  #redis_server:
+  #  container_name: redis_server
+  #  image: redis
+  #  networks:
+  #    - db_nw
+  #    - web_nw
+  #  restart: unless-stopped
 
   postgres_db:
     container_name: postgres_db
@@ -87,4 +86,3 @@ networks:
     driver: bridge
 volumes:
   dbdata:
-
