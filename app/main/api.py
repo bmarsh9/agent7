@@ -8,9 +8,74 @@ from app.utils.data_formats import convert_to_datatables,convert_to_chartjs
 from app.utils.db_helper import DynamicQuery
 from app.utils.ad_helper import ADHelper
 from app.utils.agent_helper import AgentHelper
+from app.utils.pam_helper import PamHelper
 import datetime
 import json
 import arrow
+
+@rest.route('/priv/local-users')
+#@login_required
+def api_get_priv_local_users():
+    data = []
+    for user in PamHelper().get_priv_users_local():
+        data.append(user.id)
+    return jsonify({"data":data})
+
+@rest.route('/priv/domain-users')
+#@login_required
+def api_get_priv_domain_users():
+    data = []
+    for user in PamHelper().get_priv_users_domain():
+        data.append(user.id)
+    return jsonify({"data":data})
+
+@rest.route('/priv/process')
+#@login_required
+def api_get_priv_process():
+    data = []
+    for process in PamHelper().get_process_for_priv_users():
+        data.append(process.id)
+    return jsonify({"data":data})
+
+@rest.route('/priv/schtask')
+#@login_required
+def api_get_priv_schtask():
+    data = []
+    for task in PamHelper().get_schtask_for_priv_users():
+        data.append(task.id)
+    return jsonify({"data":data})
+
+@rest.route('/priv/service')
+#@login_required
+def api_get_priv_service():
+    data = []
+    for service in PamHelper().get_service_for_priv_users():
+        data.append(service.id)
+    return jsonify({"data":data})
+
+@rest.route('/priv/startup')
+#@login_required
+def api_get_priv_startup():
+    data = []
+    for su in PamHelper().get_startup_for_priv_users():
+        data.append(su.id)
+    return jsonify({"data":data})
+
+@rest.route('/priv/logon')
+#@login_required
+def api_get_priv_logon():
+    data = []
+    for logon in PamHelper().get_logon_for_priv_users():
+        data.append(logon.id)
+    return jsonify({"data":data})
+
+@rest.route('/priv/connection')
+#@login_required
+def api_get_priv_connection():
+    data = []
+    for conn in PamHelper().get_connections_for_priv_users():
+        data.append(conn.id)
+    return jsonify({"data":data})
 
 @rest.route('/logon-map/analytics/host/<int:id>')
 @login_required

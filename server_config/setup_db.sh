@@ -28,6 +28,7 @@ fi
 
 sudo su postgres <<EOF
 psql -c "CREATE USER $1 WITH PASSWORD '$1';"
+psql -c "ALTER USER $1 superuser;"
 createdb -O$1 -Eutf8 $1
 echo "Postgres user and database '$1' created."
 EOF

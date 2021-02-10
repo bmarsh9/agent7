@@ -21,6 +21,17 @@ services:
       - "443:443"
     restart: unless-stopped
 
+  agent7_poller:
+    container_name: agent7_poller
+    image: agent7_poller    
+    depends_on:
+      - postgres_db
+      - agent7_ui
+    networks:
+      - db_nw
+      - web_nw
+    restart: unless-stopped
+
   rmq_connector:
     container_name: agent7_connector
     image: bmarsh13/public-dev:agent7_connector

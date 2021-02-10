@@ -48,7 +48,7 @@ class Connector():
         dup = 0
         model = properties.headers["model"]
         payload = json.loads(body)
-        table = app.rds_mapper(model)
+        table = app.tables.get(model)
         doc_hash = True
 
         if not table:

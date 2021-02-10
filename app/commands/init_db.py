@@ -5,11 +5,12 @@ from flask_script import Command
 import uuid
 from app import db
 from app.utils.operations import AgentOps, GroupOps, JobOps, AgentCmdOps
-from app.models import User, Role,Group, Agent, Site, AgentSoftware, Job, AgentCmd,IpLocation,Tasks,AssetLedger,AuditKeyLedger,ComparisonScore,RiskScore
+from app.models import User, Role,Group, Agent, Site, AgentSoftware, Job, AgentCmd,IpLocation,AssetLedger,AuditKeyLedger,ComparisonScore,RiskScore
 from sqlalchemy import create_engine
 import os
 import json
 from app.utils.rq_helper import RqQuery
+import zipfile
 
 class InitDbCommand(Command):
     """ Initialize the database."""
@@ -20,15 +21,15 @@ class InitDbCommand(Command):
 
 def init_db():
     """ Initialize the database."""
-    stop_forever_tasks()
+#    stop_forever_tasks()
     db.drop_all()
     db.create_all()
     create_site()
     create_users()
     create_agent_tasks()
     create_auditkeys()
-    #insert_ips()
-    create_general_tasks()
+#    insert_ips()
+#    create_general_tasks()
 
 def stop_forever_tasks():
     if current_app.queues:
@@ -56,6 +57,11 @@ def create_general_tasks():
         Tasks().launch_task("general-tasks","update_bi_group_ledger",interval=180,repeat=None)
 
 def insert_ips():
+    path = "./app/commands/ip_db.zip"
+    directory_to_extract_to = "./app/commands/"
+    with zipfile.ZipFile(path, 'r') as zip_ref:
+        zip_ref.extractall(directory_to_extract_to)
+
     file_name = os.path.join(current_app.config["INITDBDIR"],"IP2LOCATION-LITE-DB5.CSV")
     if os.path.isfile(file_name):
         with open(file_name, 'r') as f:

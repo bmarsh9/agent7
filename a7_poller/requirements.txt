@@ -1,0 +1,5 @@
+Flask-SQLAlchemy==2.3.2
+psycopg2==2.8.6
+arrow==0.17.0
+requests==2.25.1
+

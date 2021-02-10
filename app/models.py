@@ -18,6 +18,56 @@ from wtforms import StringField, SubmitField, validators
 from flask_user import UserMixin
 from app.utils.mixins import AgentMixin
 import base64
+import arrow
+
+class Tasks(db.Model):
+    __tablename__ = 'tasks'
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
+    name = db.Column(db.String(64), unique=True)
+    description = db.Column(db.String())
+    enabled = db.Column(db.Boolean, default=True)
+    module = db.Column(db.String())
+    healthy = db.Column(db.Boolean, default=True)
+    args = db.Column(db.JSON(),default={})
+    start_on = db.Column(db.DateTime)
+    last_ran = db.Column(db.DateTime)
+    run_every = db.Column(db.Integer,default="10") # in minutes
+    date_added = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    date_updated = db.Column(db.DateTime, onupdate=datetime.datetime.utcnow)
+
+    def pretty_dt(self,date):
+        return arrow.get(date).format("MMM D, HH:mm A")
+
+    @staticmethod
+    def ready_to_run():
+        tasks = []
+        now = arrow.utcnow()
+        enabled_tasks = Tasks.query.filter(Tasks.enabled == True).all()
+        for task in enabled_tasks:
+            if task.module:
+                if not task.last_ran: # never ran
+                    if not task.start_on or now > arrow.get(task.start_on):
+                        tasks.append(task)
+                else:
+                    minutes = task.run_every or 1
+                    if arrow.get(task.last_ran).shift(minutes=minutes) < now:
+                        tasks.append(task)
+        return tasks
+
+    def was_executed(self):
+        now = arrow.utcnow().datetime
+        self.last_ran = now
+        db.session.commit()
+
+    def get_next_run(self,humanize=False):
+        minutes = self.run_every or 0
+        if self.last_ran:
+            next_run = arrow.get(self.last_ran).shift(minutes=minutes or 1)
+        else:
+            next_run = arrow.utcnow()
+        if humanize:
+            return next_run.humanize()
+        return next_run
 
 class ComparisonScore(db.Model):
     '''Table for holding comparison score data such as industry or other clients'''
@@ -342,166 +392,6 @@ class AuditLogs(db.Model):
     def add(self,**kwargs):
         db.session.add(**kwargs)
         db.session.commit()
-
-#----------------------------------- Task Database
-class Tasks(db.Model):
-    '''
-    Database table for background tasks. All other tables should have a field
-        with `task_id = db.Column(db.String, db.ForeignKey('tasks.id')) #// Set a foreign key`
-    '''
-    __tablename__ = 'tasks'
-    id = db.Column(db.String(100),primary_key=True)
-    repeat_id = db.Column(db.Integer()) #// Repeat id is if the task repeats we need a id other than the job_id
-    name = db.Column(db.String(128))
-    queue = db.Column(db.String(128))
-    active = db.Column(db.Boolean, server_default='1')
-    interval = db.Column(db.Integer)
-    repeat = db.Column(db.Integer,server_default='0')
-    repeating_bool = db.Column(db.Boolean, server_default='0')
-    func_args = db.Column(db.JSON)
-    category = db.Column(db.String) #// The category of the task (bloodhound,dns,etc.)
-    description = db.Column(db.String(128))
-    complete = db.Column(db.Boolean, server_default='0')
-    progress = db.Column(db.Integer, server_default='0')
-    error = db.Column(db.Integer)
-    forever = db.Column(db.Boolean, server_default='0')
-    start_time = db.Column(db.DateTime)
-    date_added = db.Column(db.DateTime, server_default=func.now())
-    date_updated = db.Column(db.DateTime, onupdate=func.now())
-
-    def get_rq_func(self,name):
-        '''
-        .Description --> Return the function for the rq job names
-        '''
-        job_names = {
-            "test": "app.agent.tasks.test_alert",
-            "scan": "app.agent.tasks.scan",
-            "enrich_network_connections": "app.agent.tasks.enrich_network_connections",
-            "start_onboarding_workflow": "app.agent.tasks.start_onboarding_workflow",
-            "update_priv_users": "app.agent.tasks.update_privilged_user_tables",
-            "update_bi_group_ledger": "app.agent.tasks.update_built_in_group_ledger_table",
-            "insight": "app.insights.dev.rq_insights",
-            "guac_ping": "app.agent.tasks.guac_ping",
-        }
-        j = job_names.get(name,None)
-        if not j:
-            current_app.logger.error("Requested RQscheduler task does not exist: {}".format(name))
-        return j
-
-    def launch_task(self,queue,name,repeat=0,interval=60,start_time=None,func_args={},**kwargs):
-        #//Add 5 second lag to the start_time so the job ID can be added to the database before the task completes
-        if not start_time:
-            start_time = (datetime.datetime.utcnow() + datetime.timedelta(seconds=5))
-
-        #"2019-02-14 16" start_time format
-        if start_time and isinstance(start_time,str): #convert to datetime object
-            start_time = datetime.datetime.strptime(start_time,"%Y-%m-%d %H")
-
-        #// Push task to scheduler
-        scheduler = current_app.queues[queue]
-        rq_job = scheduler.schedule(
-            scheduled_time=start_time,           # Time for first execution, in UTC timezone datetime.datetime(2020, 1, 1, 3, 4)
-            func=self.get_rq_func(name),                           # Function to be queued
-            kwargs=func_args, # Keyword arguments passed into function when executed
-            interval=interval,                   # Time before the function is called again, in seconds
-            repeat=repeat,                        # Repeat this number of times (None means repeat forever)
-            timeout=18000 # 5 hours
-        )
-
-        current_app.logger.info("Added task to RQscheduler. Queue:{}, Job_ID:{}".format(queue,rq_job.get_id()))
-
-        #// Build Job record for database
-        task = Tasks(id=str(rq_job.get_id()),name=name,queue=queue,repeat=repeat,
-            interval=interval,func_args=func_args,start_time=start_time)
-
-        #// Repeating task
-        if repeat is not None and repeat is not 0 and repeat is not 1:
-            setattr(task,"repeat_id",0)
-            setattr(task,"repeating_bool",True)
-
-        #// Forever task
-        if repeat is None:
-          task.forever = True
-
-        #// Commit to db
-        db.session.add(task)
-        db.session.commit()
-
-        return True
-
-    @staticmethod
-    def update_task(id,progress):
-        id = str(id)
-        record = Tasks.query.filter_by(id=id).order_by(Tasks.repeat_id.desc()).first()
-        if record:
-            #// If task repeats, grab the last repeat_id and add a count to it
-            if record.repeating_bool:
-
-                record.repeat_id += 1
-
-                #// If task repeats and the current update is 100 (successful) / else failed
-                if progress is 100:
-                    progress = int(100 * float(record.repeat_id)/float(record.repeat))
-                    record.progress = progress
-            else:
-                record.progress = progress
-
-            if progress is 100:
-                record.complete = True
-            db.session.commit()
-
-            return True
-        return False
-
-    @staticmethod
-    def stop_task(id):
-        id = str(id)
-        #// Get queue name and cancel it
-        record = Tasks.query.filter_by(id=id).first()
-        if record:
-            scheduler = current_app.queues[record.queue]
-            scheduler.cancel(id)
-
-            #// Update the record in the database
-            record.active = False
-            db.session.commit()
-
-            return True
-        return False
-
-    @staticmethod
-    def get_task(key_list=list(), **kwargs):
-        """
-        DEPRECATED
-        .Ex: print Tasks.get_task(key_list=["id","progress"],id="a7410198-d0d6-41a8-9f9d-cf609d910162",progress=100)
-        """
-        dataset = []
-        try:
-            #// Query all tasks with filters
-            data = db.session.query(Tasks)
-            for k,v in kwargs.items():
-                data = data.filter(getattr(Tasks,k)==v)
-            results = data.all()
-
-            for record in results:
-                if record.repeat == record.repeat_id and record.progress is not 100:
-                    task_failed = True
-                else:
-                    task_failed = False
-                if key_list:
-                    temp_dic = {}
-                    for k,v in record.__dict__.items():
-                        if k in key_list:
-                            temp_dic[k] = v
-                    temp_dic["task_failed"] = task_failed
-                    dic.append(temp_dic)
-                else:
-                    record.__dict__.pop("_sa_instance_state")
-                    record.__dict__["task_failed"] = task_failed
-                    dataset.append(record.__dict__)
-        except Exception as e:
-            return e
-        return dataset
 
 def get_TableSchema(table,column=None,is_date=False,is_int=False,is_str=False,is_json=False,is_bool=False):
     '''

@@ -5,7 +5,6 @@ from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
-from sqlalchemy.ext.automap import automap_base
 
 RDS = automap_base()
 Base = declarative_base()
@@ -21,7 +20,8 @@ class Config():
       #self.queue_url = ""
       #self.max_messages = 10
       #self.vis_timeout = 5
-      #self.sqs = boto3.client('sqs',region_name=APP_AWS_REGION,aws_access_key_id=APP_AWS_KEY_ID,aws_secret_access_key=APP_AWS_SECRET_KEY)
+      #self.sqs = boto3.client('sqs',region_name=APP_AWS_REGION,
+      #  aws_access_key_id=APP_AWS_KEY_ID,aws_secret_access_key=APP_AWS_SECRET_KEY)
 
       # --------------------------------- Local Ledger database
       db_uri = "sqlite:////{}/database/ledger.db".format(base_dir)
@@ -36,6 +36,12 @@ class Config():
       rds_engine = sqlalchemy.create_engine(rds_uri)
       RDS.prepare(rds_engine,reflect=True)
       self.rds_session = Session(rds_engine)
+
+      self.tables = {}
+      for obj in RDS.classes:
+          name = str(obj.__table__)
+          table_object = getattr(RDS.classes,name)
+          self.tables[name] = table_object
 
     def rds_mapper(self,tbl):
         table_mapper = {

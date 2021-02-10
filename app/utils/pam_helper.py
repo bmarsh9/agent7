@@ -11,6 +11,14 @@ class PamHelper():
     def __init__(self):
         pass
 
+    def get_priv_users_local(self):
+        local = AgentHelper().get_privileged_users()
+        return local
+
+    def get_priv_users_domain(self):
+        domain = ADHelper().get_priv_users()
+        return domain
+
     def get_priv_users(self):
         local = AgentHelper().get_privileged_users()
         domain = ADHelper().get_priv_users()
