@@ -88,7 +88,9 @@ You can also tell agents to collect data from Active Directory. Such as:
 + By default, the agent does NOT verify the server certificate before sending the data via TLS. Change this for prod  
 + By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS. Change this for prod    
 + Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)  
-+ Components (Redis,Postgres,RabbitMQ) all use default creds and the traffic is unencrypted. Docker-compose places them on their own network but something to change if going to prod.    
++ Components (Redis,Postgres,RabbitMQ) all use default creds and the traffic is unencrypted. Docker-compose places them on their own network but something to change if going to prod.  
++ If installing on lots of hosts (+100), you may want to adjust and lengthen the checkin time of the agents. By default, they check in every 20 seconds. This can be seen here:
+https://github.com/bmarsh9/agent7/blob/main/windows_agent/build_docs/agent7.py#L71  
 
 ### Debugging  
 Check the containers by running `docker ps`. It should look something like below:  
