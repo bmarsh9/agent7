@@ -1,4 +1,7 @@
 # Agent7 - Security Agent
+<p align="center">
+  <img height="150px" src="https://github.com/bmarsh9/agent7/raw/main/photos/a7_logo.PNG?raw=true" alt="Logo"/>
+</p>
 
 ## Table of Contents
 1. [What is it?](#what-is-it)
