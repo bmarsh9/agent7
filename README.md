@@ -65,7 +65,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 ### How to Install  
 ##### Set up the Server  
 + Clone the Repo (or just copy down the `docker-compose.yml` file)  
-+ Run `docker-compose up -d postgres_db rabbitmq && docker-compose up -d`  
++ Run `docker-compose up -d postgres_db rabbitmq && docker-compose up -d`  (Pro Tip, edit the `THEME_COLOR` env variable in the `docker-compose` file to set a `dark` or `white` theme. I prefer the dark theme  
 + Browse to your server URL. The email is `admin@example.com` and password is `Password1` (The UI takes a few minutes to come online so you may get a few 500 errors)  
 
 ##### Set up the Agent  
