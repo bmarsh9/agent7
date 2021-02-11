@@ -8,7 +8,7 @@
 | :zap:        Agent7 now ships with a White and Dark Theme!   |
 |-----------------------------------------|
 
-Dark Theme            |  White Theme
+Dark Theme            |  White Theme (:zap: BETA)
 :-------------------------:|:-------------------------:
 ![](photos/a7_dash.PNG?raw=true)  |  ![](photos/a7_white.PNG?raw=true)
 
