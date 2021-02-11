@@ -94,6 +94,11 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 self.site_key = reg["key"]                
                 self.aid = reg["aid"]
                 self.group = reg.get("group","default_group")
+                vtls = reg.get("verifytls","yes")
+                if vtls == "no":
+                    self.verifytls = False
+                else:
+                    self.verifytls = True
                 self.headers = {
                     "user-agent": "Agent7",
                     "site-key":self.site_key,
@@ -372,7 +377,7 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                         url,
                         json=payload,
                         headers=self.headers,
-                        verify=False,
+                        verify=self.verifytls,
                         stream=False,
                         timeout=20
                     )
@@ -400,7 +405,7 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                     response = requests.get(
                         url,
                         headers=self.headers,
-                        verify=False,
+                        verify=self.verifytls,
                         stream=False,
                         timeout=20
                     )
@@ -427,7 +432,7 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 url = (os.path.join(self.cmdurl,endpoint,self.aid).replace(os.sep,"/"))          
             chunk_size = 2000
             abs_filepath = os.path.join(save_folder,filename)            
-            file = requests.get(url,headers=self.headers,stream=True,verify=False)
+            file = requests.get(url,headers=self.headers,stream=True,verify=self.verifytls)
             for attempt in range(0,retries):            
                 if file.ok:
                     if os.path.exists(abs_filepath) and overwrite is True:
