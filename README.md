@@ -1,4 +1,7 @@
 # Agent7 - Security Agent
+<p align="center">
+  <img height="150px" src="https://github.com/bmarsh9/agent7/raw/main/photos/a7_logo.PNG?raw=true" alt="Logo"/>
+</p>
 
 ## Table of Contents
 1. [What is it?](#what-is-it)
@@ -67,9 +70,10 @@ You can also tell agents to collect data from Active Directory. Such as:
 
 ##### Set up the Agent  
 + Download the `agent7_installer.exe` from this repo (`./windows_agent/agent7_installer.exe`) onto the Windows workstation/server  
-+ Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server>`  
++ Open up cmd or powershell and run `.\agent7_installer.exe /verysilent /server=<ip of server> /verifytls=no`  (WARNING: Do not set `/verifytls=no` outside of testing. This disables server certificate validation!!)    
 + Open Event Viewer > Windows Logs > Application and look for EventID `2002` (`Initialization Successful`) from Agent7. This means that the agent installed correctly. Then look for EventID `2003`. `Agent Registered` means the agent successfully registered with the server.
-+ Verify that the agent checked into the server as well
++ Verify that the agent checked into the server as well  
+
 ##### Uninstall  
 + Right-click and uninstall from Control Panel or uninstall via the console UI
 
@@ -95,12 +99,12 @@ Or if you wanted to view all privileged users that logged in within the last wee
 
 ### Considerations 
 + The default `Site Key` is `737e079a-6170-4aae-91a6-60aca1f213aa`. Please change this in the `app/local_settings.py` file and via the command line when installing the agent.  
-+ By default, the agent does NOT verify the server certificate before sending the data via TLS. Change this for prod  
 + By default, Nginx (which fronts the app) uses a preconfigured private/public key for TLS. Change this for prod    
 + Data is not currently compressed before being sent from agent -> server (though this is a new feature being added)  
-+ Components (Redis,Postgres,RabbitMQ) all use default creds and the traffic is unencrypted. Docker-compose places them on their own network but something to change if going to prod.  
++ Components (Postgres,RabbitMQ) all use default/weaks creds and the traffic is unencrypted. Docker-compose places them on their own network so they can't be reached but it is still best practice to set non-default and strong secrets  
 + If installing on lots of hosts (+100), you may want to adjust and lengthen the checkin time of the agents. By default, they check in every 20 seconds. This can be seen here:
 https://github.com/bmarsh9/agent7/blob/main/windows_agent/build_docs/agent7.py#L71  
++ Restarting Postgres or Agent7_ui will delete all data. Consider placing placing Postgres on a volume for data persistence  
 
 ### Debugging  
 Check the containers by running `docker ps`. It should look something like below:  
