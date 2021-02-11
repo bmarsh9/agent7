@@ -54,9 +54,9 @@
         </ul>
         <div class="alert alert-dark alert-dismissible">
           <button type="button" class="close"  data-dismiss="alert">&times;</button>
-            <h4 class="card-title"><i class="tim-icons icon-light-3 text-success"></i>  Host Investigation</h4>
-            <h5 class="card-title">Hostname: {{agent.hostname}}</h5>
-            <h5 class="card-title">Agent ID: {{agent.id}}</h5>
+            <h4 class="card-title {%if config.THEME_COLOR == "white"%}text-white{%endif%}"><i class="tim-icons icon-light-3 text-success"></i>  Host Investigation</h4>
+            <h5 class="card-title {%if config.THEME_COLOR == "white"%}text-white{%endif%}">Hostname: {{agent.hostname}}</h5>
+            <h5 class="card-title {%if config.THEME_COLOR == "white"%}text-white{%endif%}">Agent ID: {{agent.id}}</h5>
         </div>
         {% block tab_data %}{% endblock %}
     </div>

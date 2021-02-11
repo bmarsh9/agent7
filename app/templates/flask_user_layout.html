@@ -11,48 +11,19 @@
 
     <!-- In-lining styles to avoid needing a separate .css file -->
     <style>
-        hr { border-color: #cccccc; margin: 0; }
-        .no-margins { margin: 0px; }
-        .with-margins { margin: 10px; }
-        .col-centered { float: none; margin: 0 auto; }
-        .container-fluid {
-            background-color: #333;
-            border-color: #333;
-        }
-        .navbar-default .navbar-brand {
-            color: #00bf9a;
-        }
-        a {
-            color: #00bf9a;
-        }
-        input.btn.btn-default.btn-primary {
-            background: #00bf9a !important;
-            border-color: #00bf9a !important;
-        }
-        .navbar-default .navbar-nav>li>a {
-            color: whitesmoke;
-        }
-        a:hover {
-            color: grey !important;
-        }
-        body {
-            background-color: #ededed;
-        }
-        span.label.label-default {
-            margin-left: 10px;
-        }
-        i.glyphicon.glyphicon-remove {
-            color:#d9534f;
-        }
-        i.glyphicon.glyphicon-ok {
-            color:#5cb85c;
-        }
-        i.glyphicon.glyphicon-signal {
-            color:#5bc0de;
-        }
-        i.glyphicon.glyphicon-cloud-upload {
-            color:#eea236;
-        }
+      html,body{
+        height:100vh;
+        background-color:#f8f8f8;
+      }
+      .col-sm-7.col-md-6.col-lg-5.col-centered {
+        background-color: white;
+        padding: 50px;
+        border-radius: .5rem!important;
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+      }
+      .container-fluid {
+        background-color: #45484b;
+      }
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -76,7 +47,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">{{ user_manager.USER_APP_NAME }}</a>
+          <a style="color:#fff" class="navbar-brand" href="/">{{ user_manager.USER_APP_NAME }}</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -87,10 +58,10 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
                 {% if call_or_get(current_user.is_authenticated) %}
-                    <li><a href="{{ url_for('user.edit_user_profile') }}">{{ current_user.username or current_user.email }}</a></li>
-                    <li><a href="{{ url_for('user.logout') }}">{%trans%}Sign out{%endtrans%}</a></li>
+                    <li><a style="color:#fff" href="{{ url_for('user.edit_user_profile') }}">{{ current_user.username or current_user.email }}</a></li>
+                    <li><a style="color:#fff" href="{{ url_for('user.logout') }}">{%trans%}Sign out{%endtrans%}</a></li>
                 {% else %}
-                    <li><a href="{{ url_for('user.login') }}">{%trans%}Sign in{%endtrans%}</a></li>
+                    <li><a style="color:#fff" href="{{ url_for('user.login') }}">{%trans%}Sign in{%endtrans%}</a></li>
                 {% endif %}
             </li>
           </ul>
@@ -98,7 +69,7 @@
       </div><!-- /.container-fluid -->
     </nav>
     {% block body %}
-    <hr class="no-margins"/>
+    <hr style="border-top:0px" class="no-margins"/>
     <div id="main-div" class="with-margins">
     {# One-time system messages called Flash messages #}
     {% block flash_messages %}
@@ -134,3 +105,4 @@
 
   </body>
 </html>
+

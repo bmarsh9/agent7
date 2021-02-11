@@ -17,7 +17,11 @@
   {% endif %}
 
   {% if chartjs %}
+    {% if config.THEME_COLOR == "white" %}
+    <script src="{{url_for('static',filename='assets/js/white_chartjs_template.js')}}"></script>
+    {% else %}
     <script src="{{url_for('static',filename='assets/js/chartjs_template.js')}}"></script>
+    {% endif %}
 
   {% endif %}
 

@@ -10,6 +10,7 @@ services:
   agent7_ui:
     container_name: agent7_ui
     image: bmarsh13/public-dev:agent7_ui
+#    image: agent7_ui
     depends_on:
       - postgres_db
       - rabbitmq
@@ -20,6 +21,8 @@ services:
     ports:
       - "443:443"
     restart: unless-stopped
+    environment:
+      - THEME_COLOR=dark #change to white
 
   agent7_poller:
     container_name: agent7_poller

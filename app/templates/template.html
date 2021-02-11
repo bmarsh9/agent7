@@ -7,7 +7,7 @@
 
   <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/skywalker.png') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/img/a7_logo_trans.png') }}">
 
   <title>{{ user_manager.USER_APP_NAME|upper }} </title>
 
@@ -18,11 +18,14 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/nucleo-icons.css') }}">
 
   <!-- CSS Files -->
+  {% if config.THEME_COLOR == "white" %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='white_theme.css') }}">
+  {% else %}
   <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+  {% endif %}
   <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/black-dashboard.min.css') }}">
 
   {% block head %}{% endblock %}
-
   <style>
     {% block style %}
         .table {
@@ -33,11 +36,11 @@
 
 </head>
 
-<body id="entire-body" class="sidebar-mini">
+<body id="entire-body" class="sidebar-mini {%if config.THEME_COLOR=="white"%}white-content{%endif%}">
   <div class="wrapper">
     {% block sidebar %}
     <div class="sidebar" data="yellow">
-      <div class="sidebar-wrapper border-white">
+      <div class="sidebar-wrapper {%if config.THEME_COLOR=="white"%}white-content{%else%}border-white{%endif%}">
         <div class="logo">
           <a href="javascript:void(0)" class="simple-text logo-mini">
             A7
@@ -48,13 +51,13 @@
         </div>
          <ul class="nav">
            {% block nav %}
-             <li class=""><a href="{{url_for('main_ui.dashboard')}}"><i class="tim-icons icon-chart-pie-36"></i><p>Dashboard</p></a></li>
-             <li class=""><a href="{{url_for('main_ui.insight')}}"><i class="tim-icons icon-atom"></i><p>Insight</p></a></li>
-             <li class=""><a href="{{url_for('agent_ui.panels')}}"><i class="tim-icons icon-chart-bar-32"></i><p>Panels</p></a></li>
-             <li class=""><a href="{{url_for('main_ui.investigate')}}"><i class="tim-icons icon-light-3"></i><p>Investigate</p></a></li>
-             <li class=""><a href="{{url_for('agent_ui.agents')}}"><i class="tim-icons icon-spaceship"></i><p>Agents</p></a></li>
-             <li class=""><a href="{{url_for('agent_ui.rtr_home')}}"><i class="tim-icons icon-controller"></i><p>Agent Console</p></a></li>
-             <li class=""><a href="{{url_for('main_ui.configuration')}}"><i class="tim-icons icon-settings"></i><p>Settings</p></a></li>
+             <li class=""><a href="{{url_for('main_ui.dashboard')}}"><i class="tim-icons icon-chart-pie-36 {%if config.THEME_COLOR=="white"%}text-dark{%endif%}"></i><p>Dashboard</p></a></li>
+             <li class=""><a href="{{url_for('main_ui.insight')}}"><i class="tim-icons icon-atom {%if config.THEME_COLOR=="white"%}text-dark{%endif%}"></i><p>Insight</p></a></li>
+             <li class=""><a href="{{url_for('agent_ui.panels')}}"><i class="tim-icons icon-chart-bar-32 {%if config.THEME_COLOR=="white"%}text-dark{%endif%}"></i><p>Panels</p></a></li>
+             <li class=""><a href="{{url_for('main_ui.investigate')}}"><i class="tim-icons icon-light-3 {%if config.THEME_COLOR=="white"%}text-dark{%endif%}"></i><p>Investigate</p></a></li>
+             <li class=""><a href="{{url_for('agent_ui.agents')}}"><i class="tim-icons icon-spaceship {%if config.THEME_COLOR=="white"%}text-dark{%endif%}"></i><p>Agents</p></a></li>
+             <li class=""><a href="{{url_for('agent_ui.rtr_home')}}"><i class="tim-icons icon-controller {%if config.THEME_COLOR=="white"%}text-dark{%endif%}"></i><p>Agent Console</p></a></li>
+             <li class=""><a href="{{url_for('main_ui.configuration')}}"><i class="tim-icons icon-settings {%if config.THEME_COLOR=="white"%}text-dark{%endif%}"></i><p>Settings</p></a></li>
            {% endblock %}
          </ul>
       </div>
@@ -64,7 +67,6 @@
       <!-- Navbar -->
       <nav style="background:#45484b !important" class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
         <div class="container-fluid">
-
           <div class="navbar-header">
             <a class="navbar-brand text-white" href="{{url_for('main_ui.dashboard')}}">{{ user_manager.USER_APP_NAME|upper }}</a>
           </div>
@@ -72,7 +74,7 @@
             <ul class="navbar-nav ml-auto">
               {% block header %}
               <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('main_ui.manage_users',id=current_user.id) }}">{{ current_user.username or current_user.email }}</a>
+                <a class="nav-link {%if config.THEME_COLOR=="white"%}text-light{%endif%}" href="{{ url_for('main_ui.manage_users',id=current_user.id) }}">{{ current_user.username or current_user.email }}</a>
               </li>
               <li class="dropdown nav-item">
                 <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
@@ -121,7 +123,9 @@
                             {% set category='info' %}
                         {% elif category == 'error' %}
                             {% set category='warning' %}                        
-                        {% endif %}
+                        {% elif category == 'success' %}
+                            {% set category='primary' %}                        
+	                        {% endif %}
                         <div class="alert alert-{{category}} alert-dismissible">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
                             <strong>{{category|upper}}!</strong> {{ message|safe }}
@@ -157,7 +161,6 @@
   <script src="{{ url_for('static', filename='assets/js/core/jquery.min.js') }}"></script>
   <script src="{{ url_for('static', filename='assets/js/core/popper.min.js') }}"></script>
   <script src="{{ url_for('static', filename='assets/js/core/bootstrap.min.js') }}"></script>
-<!--  <script src="{{ url_for('static', filename='assets/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script> -->
   <script src="{{ url_for('static', filename='assets/js/plugins/chartjs.min.js') }}"></script>
 
   <script src="{{ url_for('static', filename='assets/js/plugins/chartjs-plugin-colorschemes.js') }}"></script>
