@@ -104,6 +104,7 @@ Or if you wanted to view all privileged users that logged in within the last wee
 + Components (Postgres,RabbitMQ) all use default/weaks creds and the traffic is unencrypted. Docker-compose places them on their own network so they can't be reached but it is still best practice to set non-default and strong secrets  
 + If installing on lots of hosts (+100), you may want to adjust and lengthen the checkin time of the agents. By default, they check in every 20 seconds. This can be seen here:
 https://github.com/bmarsh9/agent7/blob/main/windows_agent/build_docs/agent7.py#L71  
++ Restarting Postgres or Agent7_ui will delete all data. Consider placing placing Postgres on a volume for data persistence  
 
 ### Debugging  
 Check the containers by running `docker ps`. It should look something like below:  
