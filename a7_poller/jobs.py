@@ -24,7 +24,7 @@ def enrich_network_connections(task,app,**kwargs):
             c.city_name = geo.city_name
             c.lat = geo.latitude
             c.long = geo.longitude
-            c.private == False
+            c.private = False
         else:
             c.lat = 0
             c.private = True
