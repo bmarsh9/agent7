@@ -117,5 +117,5 @@ If you see the error `Missing table model: <>. Please add it to the RDS Mapper` 
 2.) Public image: `docker push bmarsh13/public-dev:agent7_ui`  
 
 ##### Clean dataset:  
-`docker-compose stop rmq_connector && docker-compose rm rmq_container && docker-compose up -d`
+`docker-compose stop rmq_connector && docker-compose rm rmq_connector && docker-compose up -d`
 
