@@ -1,7 +1,16 @@
-# Agent7 - Security Agent
+# Agent7 - Security Agent <img alt="Flask" src="https://img.shields.io/badge/flask%20-%23000.svg?&style=for-the-badge&logo=flask&logoColor=white"/> <img alt="Postgres" src ="https://img.shields.io/badge/postgres-%23316192.svg?&style=for-the-badge&logo=postgresql&logoColor=white"/> <img alt="Python" src="https://img.shields.io/badge/python%20-%2314354C.svg?&style=for-the-badge&logo=python&logoColor=white"/> <img alt="jQuery" src="https://img.shields.io/badge/jquery%20-%230769AD.svg?&style=for-the-badge&logo=jquery&logoColor=white"/>  
+
+
 <p align="center">
   <img height="150px" src="https://github.com/bmarsh9/agent7/raw/main/photos/a7_logo.PNG?raw=true" alt="Logo"/>
 </p>
+
+| :zap:        Agent7 now ships with a White and Dark Theme!   |
+|-----------------------------------------|
+
+Dark Theme            |  White Theme (:zap: BETA)
+:-------------------------:|:-------------------------:
+![](photos/a7_dash.PNG?raw=true)  |  ![](photos/a7_white.PNG?raw=true)
 
 ## Table of Contents
 1. [What is it?](#what-is-it)
@@ -65,7 +74,7 @@ You can also tell agents to collect data from Active Directory. Such as:
 ### How to Install  
 ##### Set up the Server  
 + Clone the Repo (or just copy down the `docker-compose.yml` file)  
-+ Run `docker-compose up -d postgres_db rabbitmq && docker-compose up -d`  
++ Run `docker-compose up -d postgres_db rabbitmq && docker-compose up -d`  (Pro Tip, edit the `THEME_COLOR` env variable in the `docker-compose` file to set a `dark` or `white` theme. I prefer the dark theme  
 + Browse to your server URL. The email is `admin@example.com` and password is `Password1` (The UI takes a few minutes to come online so you may get a few 500 errors)  
 
 ##### Set up the Agent  
