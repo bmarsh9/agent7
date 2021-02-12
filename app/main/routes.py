@@ -1,5 +1,5 @@
 from flask import Flask, request,url_for, render_template,redirect, flash, current_app,jsonify,session
-from app.utils.decorators import login_required, roles_required,current_user
+from app.utils.decorators import login_required, roles_required,current_user,roles_accepted
 from app import db
 from app.main import ui
 from app.models import *
@@ -180,7 +180,6 @@ def agent_group_members(aid,group):
     group = AgentGroup.query.filter(AgentGroup.host_id == aid).filter(AgentGroup.group == group).order_by(AgentGroup.id.desc()).first()
     return render_template("investigate/agent_groupmembers.html",agent=agent,group=group)
 
-############################### START
 @ui.route('/investigate/user/domain/<int:id>', methods = ['GET'])
 @login_required
 def investigate_domain_user(id):
@@ -406,7 +405,7 @@ def insight():
         module=module,severity=severity,ease=ease,confidence=confidence)
 
 @ui.route('/insight/close', methods = ['GET','POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def close_insight():
     id = request.form.get("insight_id")
     if id:
@@ -435,9 +434,6 @@ def insight_stats():
 def snapshot():
     diff = request.args.get('diff', default = "month", type = str)
     data = RiskHelper().compare_recent_score_to_last_month()
-#    data = RiskHelper().compare_recent_score_to_last_year()
-#    data = RiskHelper().compare_recent_score_to_last_six_month()
-#    data = RiskHelper().compare_recent_score_to_last_week()
 
     # Get stats
     insight_summary = RiskHelper().get_insight_summary_for_score()
@@ -445,7 +441,7 @@ def snapshot():
     return render_template("snapshot.html",data=data,insight_summary=insight_summary)
 
 @ui.route('/ledger/manage/software', methods = ['GET','POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def manage_software_ledger():
     if request.method == "POST":
         host_mapper = {
@@ -512,7 +508,7 @@ def manage_ledger():
     return render_template("settings/manage_ledger.html",s_ledger=s_ledger,a_ledger=a_ledger)
 
 @ui.route('/settings/agent/<id>',methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def agent_settings(id):
     agent = Agent.query.get(id)
     if agent:
@@ -543,7 +539,7 @@ def agent_settings(id):
     return redirect(url_for("main_ui.agents"))
 
 @ui.route('/enable-ad-collector/<id>',methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def enable_ad_collector(id):
     agent = Agent.query.get(id)
     if "enable" in request.form:
@@ -577,7 +573,7 @@ def manage_users(id):
         return redirect(url_for("main_ui.users"))
 
 @ui.route('/users/update/<id>', methods = ['POST'])
-@login_required
+@roles_required("admin")
 def update_user(id):
     user = User.query.get(id)
     if user:
@@ -601,7 +597,7 @@ def update_user(id):
     return redirect(url_for("main_ui.users"))
 
 @ui.route('/users/delete/<id>', methods = ['POST'])
-@login_required
+@roles_required("admin")
 def delete_user(id):
     user = User.query.get(id)
     if user:
@@ -615,7 +611,7 @@ def delete_user(id):
     return redirect(url_for("main_ui.users"))
 
 @ui.route('/users/roles/edit/<id>', methods = ['POST'])
-@login_required
+@roles_required("admin")
 def edit_user_roles(id):
     user = User.query.get(id)
     if user:
@@ -627,7 +623,7 @@ def edit_user_roles(id):
                 flash("Role added to user.",category="info")
             elif "remove" in request.form:
                 user.roles.remove(r)
-                flash("Role removed from  user.",category="warning")
+                flash("Role removed from user.",category="warning")
             db.session.commit()
         return redirect(url_for("main_ui.users"))
     flash("User does not exist.",category="warning")
@@ -645,7 +641,7 @@ def manage_audit(id):
     return render_template("settings/manage_audit.html",key=key)
 
 @ui.route('/audit/create', methods = ['GET','POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def create_audit():
     if request.method == "POST":
         template = {
@@ -668,7 +664,7 @@ def create_audit():
         return render_template("settings/create_audit.html",keys=keys)
 
 @ui.route('/audit/delete/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def delete_audit(id):
     if request.method == "POST":
         key = AuditKey.query.get(id)
@@ -685,7 +681,7 @@ def ledger_auditkeys():
     return render_template("settings/ledger_auditkey.html",keys=keys)
 
 @ui.route('/ledger/auditkeys/delete', methods = ['GET','POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def ledger_delete_auditkeys():
     if request.method == "POST":
         key_id = request.form["id"]
@@ -697,7 +693,7 @@ def ledger_delete_auditkeys():
     return redirect(url_for("main_ui.ledger_auditkeys"))
 
 @ui.route('/ledger/auditkeys/create', methods = ['GET','POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def ledger_create_auditkeys():
     '''Add new run keys'''
     if request.method == "POST":
@@ -728,7 +724,7 @@ def groups():
     return render_template("settings/groups.html")
 
 @ui.route('/groups/delete/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def delete_group(id):
     '''Delete group'''
     group = Group.query.get(id)
@@ -742,7 +738,7 @@ def delete_group(id):
     return redirect(url_for("main_ui.groups"))
 
 @ui.route('/groups/create', methods = ['GET','POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def create_group():
     '''Create new group'''
     if request.method == "POST":
@@ -764,7 +760,7 @@ def create_group():
         return render_template("settings/create_group.html",jobs=jobs,commands=commands)
 
 @ui.route('/groups/version/update/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def update_group_version(id):
     group = Group.query.get(id)
     if group:
@@ -780,7 +776,7 @@ def update_group_version(id):
     return redirect(url_for("main_ui.groups"))
 
 @ui.route('/groups/agent/update/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def update_group_agents(id):
     group = Group.query.get(id)
     if group:
@@ -796,7 +792,7 @@ def update_group_agents(id):
     return redirect(url_for("main_ui.groups"))
 
 @ui.route('/groups/agent/edit/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def edit_group_agents(id):
     group = Group.query.get(id)
     aid = request.form.get("agent_id")
@@ -839,7 +835,7 @@ def manage_groups(id):
         return redirect(url_for("main_ui.groups"))
 
 @ui.route('/groups/job/edit/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def edit_group_jobs(id):
     group = Group.query.get(id)
     job_id = request.form.get("job_id")
@@ -858,7 +854,7 @@ def edit_group_jobs(id):
     return redirect(url_for("main_ui.groups"))
 
 @ui.route('/groups/command/edit/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def edit_group_commands(id):
     group = Group.query.get(id)
     cmd_id = request.form.get("command_id")
@@ -877,7 +873,7 @@ def edit_group_commands(id):
     return redirect(url_for("main_ui.groups"))
 
 @ui.route('/groups/auditkey/edit/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def edit_group_auditkey(id):
     group = Group.query.get(id)
     audit_id = request.form.get("auditkey_id")
@@ -902,7 +898,7 @@ def jobs():
     return render_template("settings/jobs.html")
 
 @ui.route('/jobs/create', methods = ['GET','POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def create_job():
     '''Create new job'''
     if request.method == "POST":
@@ -929,7 +925,7 @@ def manage_jobs(id):
         return redirect(url_for("main_ui.jobs"))
 
 @ui.route('/jobs/edit/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def edit_job(id):
     data = {"jobset":[]}
     posted_data = request.get_json()
@@ -958,7 +954,7 @@ def edit_job(id):
     return jsonify({"message":"success"})
 
 @ui.route('/jobs/delete/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def delete_job(id):
     job = Job.query.get(id)
     if job:
@@ -971,7 +967,7 @@ def delete_job(id):
     return redirect(url_for("main_ui.jobs"))
 
 @ui.route('/agents/uninstall/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def uninstall_agent(id):
     agent = Agent.query.get(id)
     if agent:
@@ -1023,7 +1019,7 @@ def commands():
     return render_template("settings/commands.html")
 
 @ui.route('/commands/create', methods = ['GET','POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def create_command():
     '''Create new command'''
     data = {"commands":[]}
@@ -1051,7 +1047,7 @@ def manage_commands(id):
         return redirect(url_for("main_ui.commands"))
 
 @ui.route('/commands/edit/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def edit_commands(id):
     command = AgentCmd.query.get(id)
     if command:
@@ -1079,7 +1075,7 @@ def edit_commands(id):
     return redirect(url_for("main_ui.commands"))
 
 @ui.route('/commands/delete/<id>', methods = ['POST'])
-@login_required
+@roles_accepted('admin', 'manager')
 def delete_command(id):
     command = AgentCmd.query.get(id)
     if command:
@@ -1112,8 +1108,8 @@ def unauthorized(error):
 
 @ui.errorhandler(404)
 def page_not_found(error):
-    return render_template('404.html'), 404
+    return render_template('httpcodes/404.html'), 404
 
 @ui.errorhandler(500)
 def internal_error(error):
-    return render_template('500.html'), 500
+    return render_template('httpcodes/500.html'), 500

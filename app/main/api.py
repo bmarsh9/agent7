@@ -192,7 +192,6 @@ def api_vault_priv_domain_group_metrics():
 @rest.route('/privileged/assets/percentages', methods = ['GET'])
 @login_required
 def api_priv_assets_percentages():
-#haaaaa
     total_users = 0
     total_priv_users = 0
     # get all active users (from AD and local)
@@ -221,6 +220,3 @@ def api_priv_assets_percentages():
                 total_priv_users += int(record["count"])
     per_of_priv_users = round((total_priv_users/total_users)*100,1)
     return {"percentage_of_priv_users":per_of_priv_users}
-    # get all priv users
-
-    # perform priv / total * 100

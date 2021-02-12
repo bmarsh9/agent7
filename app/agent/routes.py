@@ -9,8 +9,7 @@ from datetime import datetime,timedelta
 from app.agent import ui
 from app.utils.db_helper import DynamicQuery
 from app.utils.ad_helper import ADHelper
-
-from app.utils.decorators import login_required, roles_required,current_user
+from app.utils.decorators import login_required, roles_required,current_user,roles_accepted
 import json
 import uuid
 
@@ -55,7 +54,7 @@ def rtr_campaign():
         return redirect(url_for("agent_ui.rtr_campaign"))
 
 @ui.route("/rtr/audit/<id>")
-@roles_required('rtr')
+@roles_accepted("admin","manager")
 def rtr_view_audit(id):
     session = AgentInteract.query.get(id)
     if session:
@@ -202,12 +201,6 @@ def software():
 def agents():
     return render_template("agent/agents.html")
 
-#------------- Watcher -------------------
-@ui.route('/panel/watcher', methods = ['GET'])
-@login_required
-def w_panels():
-    return render_template("agent/w_panels.html")
-
 #------------- Active Directory -------------------
 @ui.route('/panel/ad', methods = ['GET'])
 @login_required
@@ -290,29 +283,6 @@ def ad_priv_users():
         easy_fixes=easy_fixes,medium_risk=medium_risk,high_risk=high_risk,critical_risk=critical_risk)
 
 #----------------- Web UI --------------------#
-@ui.route("/orders",methods=["GET","POST"])
-@login_required
-def orders():
-    '''
-    Page for assigning orders to the agents in the database
-    '''
-    if request.method == "GET":
-        return render_template("table.html")
-    #// New orders being placed into the database
-    elif request.method == "POST": #// placing new order in
-        if not request.content_type == 'application/json': #// Using the web front end
-            current_date = datetime.utcnow()
-            selected_ids = request.form.getlist("id[]")
-    return "ok"
-
-@ui.route("/assets")
-@login_required
-def assets():
-    '''
-    Page for returning all assets in the database
-    '''
-    return render_template("assets.html")
-
 @ui.route("/explore")
 @login_required
 def explore():
@@ -328,7 +298,6 @@ def dashboard():
         data.append({"code":agent.country_code,"city":agent.city_name,"country":agent.country_name,"lat":agent.lat,"lon":agent.long})
 
     # Risk score data
-#haaaa
     risk_data = RiskHelper(days_ago=364,limit=7).get_timeline_risk()
     compare_data = RiskHelper().get_comparison_risk()
 
@@ -337,22 +306,3 @@ def dashboard():
     return render_template("agent/dashboard.html",data=json.dumps(data),risk_data=risk_data,compare_data=compare_data,current_risk=current_risk)
     return render_template("dashboard.html",data=json.dumps(data))
 '''
-
-
-@ui.route("/campaign")
-@login_required
-def campaign():
-    '''
-    Page for assigning orders to the agents in the database
-    '''
-    return render_template("campaign.html")
-
-@ui.route("/discover", methods=["GET","POST"])
-@login_required
-def discover():
-    return render_template("discover.html")
-
-@ui.route("/search", methods=["GET","POST"])
-@login_required
-def search():
-    return render_template("search.html")

@@ -149,7 +149,7 @@ def agent_registry_auditkeys(aid,agentobj=None):
     return jsonify({"keys":AgentOps(aid).get_auditkey()})
 
 @rest.route("/rtr/<aid>",methods=["GET","POST"])
-@login_required
+@roles_required("rtr")
 def agent_rtr(aid,agentobj=None):
     '''Shell commands are added to the database for the agents to query and execute'''
     if request.method == "GET": # UI checking for updates
