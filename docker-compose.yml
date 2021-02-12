@@ -38,11 +38,10 @@ services:
   rmq_connector:
     container_name: agent7_connector
     image: bmarsh13/public-dev:agent7_connector
-    #command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done;echo 12345'
     #env_file:
     #  - env_file
     #environment:
-    #  - DATABASE_URL=postgres://postgres:password@db:5432/practicedocker
+    #  - DATABASE_URL=
     #  - PORT=3000
     depends_on:
       - postgres_db
