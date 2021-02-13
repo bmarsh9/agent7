@@ -152,6 +152,7 @@ def roles_accepted(*role_names):
 
         @wraps(view_function)    # Tells debuggers that is is a function wrapper
         def decorator(*args, **kwargs):
+            from flask_login import current_user
             user_manager = current_app.user_manager
 
             #// Try to authenticate with an token (API login, must have token in HTTP header)
@@ -208,6 +209,7 @@ def roles_required(*role_names):
 
         @wraps(view_function)    # Tells debuggers that is is a function wrapper
         def decorator(*args, **kwargs):
+            from flask_login import current_user
             user_manager = current_app.user_manager
             #// Try to authenticate with an token (API login, must have token in HTTP header)
             enc_token = request.headers.get("token")
@@ -231,7 +233,6 @@ def roles_required(*role_names):
                 # Redirect to the unauthorized page
                 flash("User does not have the required roles to access this resource!",category="danger")
                 return redirect(url_for("main_ui.dashboard"))
-#                return user_manager.unauthorized_view()
 
             # It's OK to call the view
             return view_function(*args, **kwargs)
@@ -299,4 +300,3 @@ def allow_unconfirmed_email(view_function):
             g._flask_user_allow_unconfirmed_email = False
 
     return decorator
-
