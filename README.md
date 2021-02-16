@@ -9,6 +9,9 @@
   <img height="150px" src="https://github.com/bmarsh9/agent7/raw/main/photos/a7_logo.PNG?raw=true" alt="Logo"/>
 </p>
 
+:bulb: Currently the agent supports 64-bit Windows 7+ and Server 08+. 32 bit build is being tested.
+
+
 | :zap:        Agent7 now ships with a White and Dark Theme!   |
 |-----------------------------------------|
 
