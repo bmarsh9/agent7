@@ -1972,7 +1972,7 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 asset = self.ip_to_hostname(ip)
                 temp = {"asset":asset,"address":ip,"status":"up",
                     "host_name":self.hostname,"host_id":self.aid,"mac":target["mac"],
-                    "type":target["mac"]}
+                    "type":target["type"]}
                 dataset.append(temp)
             return dataset             
         
