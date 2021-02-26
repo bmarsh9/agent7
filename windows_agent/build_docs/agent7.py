@@ -1971,7 +1971,8 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 ip = target["addr"]
                 asset = self.ip_to_hostname(ip)
                 temp = {"asset":asset,"address":ip,"status":"up",
-                    "host_name":self.hostname,"host_id":self.aid,"mac":target["mac"]}
+                    "host_name":self.hostname,"host_id":self.aid,"mac":target["mac"],
+                    "type":target["mac"]}
                 dataset.append(temp)
             return dataset             
         
@@ -2010,22 +2011,15 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 '65389', '65000', '64680', '64623', '55600', '55555', '52869', '35500', '33354', 
                 '23502', '20828', '2702', '1311', '1060', '4443', '1051', '1055', '1067', '13782', 
                 '5902', '366', '9050']
-
             targets = self.get_arp_table(limit=10)
             for target in targets:
                 ip = target["addr"]
                 asset = self.ip_to_hostname(ip)
-                temp = {"asset":asset,"address":ip,"status":"down","ports":[],
-                    "host_name":self.hostname,"host_id":self.aid,"mac":target["mac"],
-                    "type":target["mac"]}                
                 open_ports = self.tcp_scan(ip,ports=ports)
-                if not open_ports:        
-                    if self.icmp_scan(ip): # host up
-                        temp["status"] = "up"
-                else:# host up
-                    temp["ports"] = open_ports
-                    temp["status"] = "up"
-                dataset.append(temp)
+                for port in open_ports:
+                    temp = {"asset":asset,"address":ip,"port":port,
+                        "host_name":self.hostname,"host_id":self.aid,"mac":target["mac"]}
+                    dataset.append(temp)
             return dataset        
         
         def ip_to_hostname(self,ip):
@@ -2049,6 +2043,8 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
 
         def tcp_scan(self,ip,ports=[]):
             data = []
+            if not isinstance(ports,list):
+                ports = [ports]            
             socket.setdefaulttimeout(0.01)
             for port in ports:
                 try:
