@@ -55,6 +55,8 @@ There is a agent and server component. You install the `.exe` on the endpoints a
 The list below is not exhaustive but gives a good overview.   
 + Scheduled tasks  
 + Software  
++ Local Neighbors (:lion: New Feature!)   
++ Port Scans  (:lion: New Feature!)
 + Updates  
 + Logged on users  
 + Network Connections  
