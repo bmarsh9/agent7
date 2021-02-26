@@ -62,6 +62,8 @@ DEFAULT_JOB = {"jobset": [
         {"task":"get-printer","interval":86400,"force":0,"enabled":0},
         {"task":"get-pipe","interval":86400,"force":0,"enabled":0},
         {"task":"get-netsession","interval":600,"force":0,"enabled":0},
+        {"task":"get-neighbor","interval":500,"force":0,"enabled":0},
+        {"task":"get-scan","interval":86400,"force":0,"enabled":0},
         {"task":"get-ad-user","interval":172800,"force":0,"enabled":0},
         {"task":"get-ad-group","interval":172800,"force":0,"enabled":0},
         {"task":"get-ad-computer","interval":172800,"force":0,"enabled":0},
