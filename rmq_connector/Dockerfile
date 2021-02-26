@@ -2,7 +2,7 @@
 FROM ubuntu
 
 # update the operating system:
-RUN apt-get update
+RUN apt-get update && apt-get install -y apt-transport-https
 RUN apt install -y python3-pip nano net-tools sudo sqlite3 libpq-dev
 
 # copy the folder to the container:
