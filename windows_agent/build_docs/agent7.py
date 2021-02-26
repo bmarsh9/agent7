@@ -34,6 +34,7 @@ import xmltodict
 import random
 from ldap3.utils.dn import to_dn
 from requests.adapters import HTTPAdapter
+import ipaddress
 
 svc_name="agent7"
 
