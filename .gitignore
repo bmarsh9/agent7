@@ -23,7 +23,7 @@ __pycache__
 
 # logs
 pip-log.txt
-logs/*.log
+*.log
 
 # Unit test / coverage reports
 .coverage

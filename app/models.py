@@ -441,6 +441,37 @@ class AgentAuditKey(db.Model):
     host_id = db.Column(db.Integer, db.ForeignKey('agent.id'), nullable=False)
     message_id = db.Column(db.String())
 
+class AgentNeighbor(db.Model):
+    __tablename__ = "agentneighbor"
+    id = db.Column(db.Integer, primary_key=True)
+    asset = db.Column(db.String())
+    address = db.Column(db.String())
+    mac = db.Column(db.String())
+    type = db.Column(db.String())
+    status = db.Column(db.String())
+    #ports = db.relationship('NeighborPort', backref='neighbor', lazy='dynamic')
+    host_name = db.Column(db.String())    
+    date_added = db.Column(db.DateTime, server_default=func.now())
+    date_updated = db.Column(db.DateTime, onupdate=func.now())
+    #// Ref
+    host_id = db.Column(db.Integer, db.ForeignKey('agent.id'), nullable=False)
+    message_id = db.Column(db.String())    
+
+class AgentScan(db.Model):
+    __tablename__ = "agentscan"
+    id = db.Column(db.Integer, primary_key=True)
+    asset = db.Column(db.String())
+    address = db.Column(db.String())
+    mac = db.Column(db.String())
+    port = db.Column(db.Integer)
+    service = db.Column(db.String())
+    host_name = db.Column(db.String())        
+    date_added = db.Column(db.DateTime, server_default=func.now())
+    date_updated = db.Column(db.DateTime, onupdate=func.now())
+    #// Ref
+    host_id = db.Column(db.Integer, db.ForeignKey('agent.id'), nullable=False)
+    message_id = db.Column(db.String()) 
+    
 class AgentMemory(db.Model):
     __tablename__ = "agentmemory"
     id = db.Column(db.Integer, primary_key=True)

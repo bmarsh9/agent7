@@ -55,6 +55,8 @@ There is a agent and server component. You install the `.exe` on the endpoints a
 The list below is not exhaustive but gives a good overview.   
 + Scheduled tasks  
 + Software  
++ Local Neighbors (:lion: New Feature!)   
++ Port Scans  (:lion: New Feature!)
 + Updates  
 + Logged on users  
 + Network Connections  
@@ -145,6 +147,10 @@ If you see the error `Missing table model: <>. Please add it to the RDS Mapper` 
 ##### Docker  
 1.) Tag image: `docker tag agent7_ui bmarsh13/public-dev:agent7_ui`  
 2.) Public image: `docker push bmarsh13/public-dev:agent7_ui`  
+
+`docker build -t agent7_ui .`  
+`docker build -t agent7_poller .`  
+`docker build -t rmq_connector .`  
 
 ##### Clean dataset:  
 `docker-compose stop rmq_connector && docker-compose rm rmq_connector && docker-compose up -d`

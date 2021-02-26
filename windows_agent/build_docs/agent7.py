@@ -16,7 +16,7 @@ import win32evtlog
 import win32evtlogutil
 import json,requests,argparse,zipfile
 from socket import AF_INET, SOCK_STREAM, SOCK_DGRAM
-import platform,socket,sys,os,subprocess
+import platform,socket,sys,os,subprocess,re
 import pythoncom
 import threading
 from datetime import datetime,timedelta
@@ -34,6 +34,7 @@ import xmltodict
 import random
 from ldap3.utils.dn import to_dn
 from requests.adapters import HTTPAdapter
+import ipaddress
 
 svc_name="agent7"
 
@@ -245,7 +246,9 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 {"name":"get-share","func":self.get_share,"desc":"Get network shares.","params":"filter,exc,inc","example":"job=get-share"},
                 {"name":"get-netadapter","func":self.get_netadapter,"desc":"Get network adapter data.","params":"filter,exc,inc","example":"job=get-netadapter"},
                 {"name":"get-startup","func":self.get_startup,"desc":"Get startup commands.","params":"filter,exc,inc","example":"job=get-startup"},
-                {"name":"get-pipe","func":self.get_pipe,"desc":"Enumerate named pipes.","params":"filter,exc,inc","example":"job=get-pipe"},                
+                {"name":"get-pipe","func":self.get_pipe,"desc":"Enumerate named pipes.","params":"filter,exc,inc","example":"job=get-pipe"},
+                {"name":"get-neighbor","func":self.get_neighbor,"desc":"Enumerate local neighbors","params":"filter,exc,inc","example":"job=get-neighbor"},
+                {"name":"get-scan","func":self.get_scan,"desc":"Scan local neighbors","params":"filter,exc,inc","example":"job=get-scan"},                  
                 {"name":"raw","func":"n/a","desc":"Execute raw shell commands.","params":"cmd","example":"job=raw,cmd=tasklist /svc"},
                 {"name":"get-help","func":"n/a","desc":"Display the Help menu.","params":"none","example":"job=get-help"},
                 {"name":"dir or ls","func":"n/a","desc":"List directory contents.","params":"path","example":"job=ls OR job=ls,path=C:\\users"},
@@ -1960,6 +1963,100 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 if obj:
                     data.append(obj)
             return data
+
+        @should_we_run        
+        def get_neighbor(self,props=None,**kwargs):
+            self.event_logger(message="starting neighbor scan",log_type="info")  
+            dataset = []
+            targets = self.get_arp_table(limit=50)            
+            for target in targets:
+                ip = target["addr"]
+                asset = self.ip_to_hostname(ip)
+                temp = {"asset":asset,"address":ip,"status":"up",
+                    "host_name":self.hostname,"host_id":self.aid,"mac":target["mac"],
+                    "type":target["type"]}
+                dataset.append(temp)
+            return dataset             
+        
+        @should_we_run        
+        def get_scan(self,ports=[],props=None,**kwargs):
+            dataset = []
+            if not ports:
+                ports = ['80', '23', '443', '21', '22', '25', '3389', '110', 
+                '445', '139', '143', '53', '135', '3306', '8080', '1723', '111', 
+                '995', '993', '5900', '1025', '587', '8888', '199', '1720', '465', 
+                '548', '113', '81', '6001', '10000', '514', '5060', '179', '1026', 
+                '2000', '8443', '8000', '32768', '554', '26', '1433', '49152', '2001', 
+                '515', '8008', '49154', '1027', '5666', '646', '5000', '5631', '631', 
+                '49153', '8081', '2049', '88', '79', '5800', '106', '2121', '1110', '49155', 
+                '6000', '513', '990', '5357', '427', '49156', '543', '544', '5101', '144', 
+                '7', '389', '8009', '3128', '444', '9999', '5009', '7070', '5190', '3000', 
+                '5432', '1900', '3986', '13', '1029', '9', '5051', '6646', '49157', '1028', 
+                '873', '1755', '2717', '4899', '9100', '119', '37', '1000', '3001', '5001', 
+                '82', '10010', '1030', '9090', '2107', '1024', '2103', '6004', '1801', '5050', 
+                '19', '8031', '1041', '255', '1056', '1049', '1065', '2967', '1048', '1053', 
+                '1064', '1054', '3703', '17', '808', '3689', '1031', '1044', '1071', '5901', 
+                '100', '9102', '8010', '2869', '1039', '4001', '9000', '5120', '2105', '636', 
+                '1038', '2601', '1', '7000', '1066', '1069', '625', '311', '280', '254', '4000', 
+                '1761', '5003', '2002', '2005', '1998', '1032', '1050', '6112', '3690', '1521', 
+                '2161', '6002', '1080', '2401', '902', '4045', '7937', '787', '1058', '2383', 
+                '32771', '1040', '1033', '1059', '50000', '5555', '10001', '1494', '593', '3', 
+                '2301', '7938', '3268', '1022', '1234', '1074', '9001', '8002', '1036', '1035', 
+                '1037', '464', '1935', '6666', '2003', '497', '6543', '1352', '24', '3269', '1111', 
+                '407', '500', '20', '2006', '1034', '3260', '15000', '1218', '4444', '264', '33', 
+                '2004', '1042', '42510', '3052', '999', '1023', '1068', '222', '7100', '888', '563', 
+                '1717', '992', '32770', '2008', '32772', '7001', '8082', '2007', '5550', '5801', 
+                '512', '1043', '2009', '7019', '50001', '2701', '1700', '4662', '2065', '2010', 
+                '42', '2602', '3333', '161', '9535', '5100', '5002', '2604', '4002', '6059', '1047', 
+                '8194', '8193', '8192', '9595', '9594', '9593', '16993', '16992', '6789', '5226', 
+                '5225', '32769', '1052', '3283', '1062', '9415', '8701', '8652', '8651', '8089', 
+                '65389', '65000', '64680', '64623', '55600', '55555', '52869', '35500', '33354', 
+                '23502', '20828', '2702', '1311', '1060', '4443', '1051', '1055', '1067', '13782', 
+                '5902', '366', '9050']
+            targets = self.get_arp_table(limit=10)
+            for target in targets:
+                ip = target["addr"]
+                asset = self.ip_to_hostname(ip)
+                open_ports = self.tcp_scan(ip,ports=ports)
+                for port in open_ports:
+                    temp = {"asset":asset,"address":ip,"port":port,
+                        "host_name":self.hostname,"host_id":self.aid,"mac":target["mac"]}
+                    dataset.append(temp)
+            return dataset        
+        
+        def ip_to_hostname(self,ip):
+            try:
+                host,alias,ip_alias = socket.gethostbyaddr(ip)
+                return host
+            except:
+                return "unknown"
+        
+        def icmp_scan(self,ip):
+            try:
+                ping = subprocess.check_output(
+                    ["ping", "-n", "1", ip],
+                    timeout=1
+                )
+                if "unreachable" not in ping.decode():
+                    return True
+            except:
+                pass
+            return False
+
+        def tcp_scan(self,ip,ports=[]):
+            data = []
+            if not isinstance(ports,list):
+                ports = [ports]            
+            socket.setdefaulttimeout(0.01)
+            for port in ports:
+                try:
+                    tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)        
+                    if not tcp.connect_ex((ip, int(port))):
+                        data.append(port)
+                    tcp.close()            
+                except:
+                    pass
+            return data
         
         # May Get Rid of this...
         def get_pid(self,pname=None,**kwargs):
@@ -1976,7 +2073,28 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 except IndexError:
                     pass            
             return data
-                                  
+        
+        def get_arp_table(self,limit=50):
+            data = []
+            try:
+                table = subprocess.Popen(['arp', '-a'], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=open(os.devnull,'wb'))
+                bytes = table.stdout.read() + table.stderr.read()
+                output = bytes.decode("utf-8", errors="replace")
+                for line in re.findall('([-.0-9]+)\s+([-0-9a-f]{17})\s+(\w+)',output)[:limit]:
+                    addr,mac,type = line
+                    try:
+                        #we only want private, need better way to remove broadcast
+                        #get network bits from primary interface and pass to ipaddress
+                        if ipaddress.ip_address(str(addr)).is_private and "255" not in str(addr):
+                            data.append({"addr":addr,"mac":mac,"type":type})
+                    except ValueError as e:
+                        self.event_logger(message="Another Exception:{}".format(str(e)),log_type="info")
+                        pass #invalid ip
+            except Exception as e:
+                self.event_logger(message="Exception:{}".format(str(e)),log_type="info")
+                pass
+            return data
+        
         #-----------------------------------------------ALL HELPER FUNCTIONS and WRAPPERS-----------------------------------------------     
         def get_ip(self):
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -2991,4 +3109,3 @@ if __name__ == '__main__':
             win32serviceutil.HandleCommandLine(AppServerSvc)
         elif action in  ("remove","restart","start","stop","debug","update"):
             win32serviceutil.HandleCommandLine(AppServerSvc)
-                      

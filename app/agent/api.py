@@ -321,6 +321,22 @@ def get_patch(aid,agentobj=None):
         RMQHelper().send("agentpatch",json.dumps(response["dataset"]))
     return jsonify({"response":1})
 
+@rest.route("/collection/get-neighbor/<aid>",methods=["POST"])
+@agent_auth
+def get_neighbor(aid,agentobj=None):
+    response = request.get_json()
+    if response.get("dataset"):
+        RMQHelper().send("agentneighbor",json.dumps(response["dataset"]))
+    return jsonify({"response":1})
+
+@rest.route("/collection/get-scan/<aid>",methods=["POST"])
+@agent_auth
+def get_scan(aid,agentobj=None):
+    response = request.get_json()
+    if response.get("dataset"):
+        RMQHelper().send("agentscan",json.dumps(response["dataset"]))
+    return jsonify({"response":1})
+
 @rest.route("/collection/get-profile/<aid>",methods=["POST"])
 @agent_auth
 def get_profile(aid,agentobj=None):
