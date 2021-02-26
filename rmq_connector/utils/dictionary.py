@@ -23,6 +23,7 @@ class Dictionary():
             "agentadapter":["host_id","caption"],
             "agentuser":["host_id","sid"],
             "agentgroup":["host_id","group","members_count"],
+            "agentneighbor":["host_id","asset"]
         }
 
         return available_models.get(self.model)
