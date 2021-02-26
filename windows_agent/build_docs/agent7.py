@@ -1966,8 +1966,9 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
 
         @should_we_run        
         def get_neighbor(self,props=None,**kwargs):
+            self.event_logger(message="starting neighbor scan",log_type="info")  
             dataset = []
-            targets = self.get_arp_table(limit=50)
+            targets = self.get_arp_table(limit=50)            
             for target in targets:
                 ip = target["addr"]
                 asset = self.ip_to_hostname(ip)
@@ -2076,18 +2077,21 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
         def get_arp_table(self,limit=50):
             data = []
             try:
-                with os.popen('arp -a') as f:
-                    table = f.read()
-                    for line in re.findall('([-.0-9]+)\s+([-0-9a-f]{17})\s+(\w+)',table)[:limit]:
-                        addr,mac,type = line
-                        try:
-                            #we only want private, need better way to remove broadcast
-                            #get network bits from primary interface and pass to ipaddress
-                            if ipaddress.ip_address(str(addr)).is_private and "255" not in str(addr):
-                                data.append({"addr":addr,"mac":mac,"type":type})
-                        except ValueError:
-                            pass #invalid ip
+                table = subprocess.Popen(['arp', '-a'], shell=False, stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=open(os.devnull,'wb'))
+                bytes = table.stdout.read() + table.stderr.read()
+                output = bytes.decode("utf-8", errors="replace")
+                for line in re.findall('([-.0-9]+)\s+([-0-9a-f]{17})\s+(\w+)',output)[:limit]:
+                    addr,mac,type = line
+                    try:
+                        #we only want private, need better way to remove broadcast
+                        #get network bits from primary interface and pass to ipaddress
+                        if ipaddress.ip_address(str(addr)).is_private and "255" not in str(addr):
+                            data.append({"addr":addr,"mac":mac,"type":type})
+                    except ValueError as e:
+                        self.event_logger(message="Another Exception:{}".format(str(e)),log_type="info")
+                        pass #invalid ip
             except Exception as e:
+                self.event_logger(message="Exception:{}".format(str(e)),log_type="info")
                 pass
             return data
         
