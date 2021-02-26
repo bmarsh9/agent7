@@ -245,7 +245,8 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 {"name":"get-share","func":self.get_share,"desc":"Get network shares.","params":"filter,exc,inc","example":"job=get-share"},
                 {"name":"get-netadapter","func":self.get_netadapter,"desc":"Get network adapter data.","params":"filter,exc,inc","example":"job=get-netadapter"},
                 {"name":"get-startup","func":self.get_startup,"desc":"Get startup commands.","params":"filter,exc,inc","example":"job=get-startup"},
-                {"name":"get-pipe","func":self.get_pipe,"desc":"Enumerate named pipes.","params":"filter,exc,inc","example":"job=get-pipe"},                
+                {"name":"get-pipe","func":self.get_pipe,"desc":"Enumerate named pipes.","params":"filter,exc,inc","example":"job=get-pipe"},
+                {"name":"get-neighbor","func":self.get_neighbor,"desc":"Enumerate and scan local neighbors","params":"filter,exc,inc","example":"job=get-neighbor"},                                
                 {"name":"raw","func":"n/a","desc":"Execute raw shell commands.","params":"cmd","example":"job=raw,cmd=tasklist /svc"},
                 {"name":"get-help","func":"n/a","desc":"Display the Help menu.","params":"none","example":"job=get-help"},
                 {"name":"dir or ls","func":"n/a","desc":"List directory contents.","params":"path","example":"job=ls OR job=ls,path=C:\\users"},
@@ -1962,7 +1963,7 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
             return data
             
         @should_we_run        
-        def scan_targets(self,ports=[],props=None,**kwargs):
+        def get_neighbor(self,ports=[],props=None,**kwargs):
             dataset = []
             if not ports:
                 ports = ['80', '23', '443', '21', '22', '25', '3389', '110', 
