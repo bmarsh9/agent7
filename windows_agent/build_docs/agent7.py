@@ -246,7 +246,8 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 {"name":"get-netadapter","func":self.get_netadapter,"desc":"Get network adapter data.","params":"filter,exc,inc","example":"job=get-netadapter"},
                 {"name":"get-startup","func":self.get_startup,"desc":"Get startup commands.","params":"filter,exc,inc","example":"job=get-startup"},
                 {"name":"get-pipe","func":self.get_pipe,"desc":"Enumerate named pipes.","params":"filter,exc,inc","example":"job=get-pipe"},
-                {"name":"get-neighbor","func":self.get_neighbor,"desc":"Enumerate and scan local neighbors","params":"filter,exc,inc","example":"job=get-neighbor"},                                
+                {"name":"get-neighbor","func":self.get_neighbor,"desc":"Enumerate local neighbors","params":"filter,exc,inc","example":"job=get-neighbor"},
+                {"name":"get-scan","func":self.get_scan,"desc":"Scan local neighbors","params":"filter,exc,inc","example":"job=get-scan"},                  
                 {"name":"raw","func":"n/a","desc":"Execute raw shell commands.","params":"cmd","example":"job=raw,cmd=tasklist /svc"},
                 {"name":"get-help","func":"n/a","desc":"Display the Help menu.","params":"none","example":"job=get-help"},
                 {"name":"dir or ls","func":"n/a","desc":"List directory contents.","params":"path","example":"job=ls OR job=ls,path=C:\\users"},
@@ -1961,9 +1962,21 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 if obj:
                     data.append(obj)
             return data
-            
+
         @should_we_run        
-        def get_neighbor(self,ports=[],props=None,**kwargs):
+        def get_neighbor(self,props=None,**kwargs):
+            dataset = []
+            targets = self.get_arp_table(limit=50)
+            for target in targets:
+                ip = target["addr"]
+                asset = self.ip_to_hostname(ip)
+                temp = {"asset":asset,"address":ip,"status":"up",
+                    "host_name":self.hostname,"host_id":self.aid,"mac":target["mac"]}
+                dataset.append(temp)
+            return dataset             
+        
+        @should_we_run        
+        def get_scan(self,ports=[],props=None,**kwargs):
             dataset = []
             if not ports:
                 ports = ['80', '23', '443', '21', '22', '25', '3389', '110', 
@@ -2001,8 +2014,10 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
             targets = self.get_arp_table(limit=10)
             for target in targets:
                 ip = target["addr"]
-                hostname = self.ip_to_hostname(ip)
-                temp = {"hostname":hostname,"addr":ip,"status":"down","ports":[]}
+                asset = self.ip_to_hostname(ip)
+                temp = {"asset":asset,"address":ip,"status":"down","ports":[],
+                    "host_name":self.hostname,"host_id":self.aid,"mac":target["mac"],
+                    "type":target["mac"]}                
                 open_ports = self.tcp_scan(ip,ports=ports)
                 if not open_ports:        
                     if self.icmp_scan(ip): # host up
@@ -2010,13 +2025,15 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 else:# host up
                     temp["ports"] = open_ports
                     temp["status"] = "up"
-
                 dataset.append(temp)
             return dataset        
         
-        def ip_to_hostname(self):
-            host,alias,ip_alias = socket.gethostbyaddr(ip)
-            return host
+        def ip_to_hostname(self,ip):
+            try:
+                host,alias,ip_alias = socket.gethostbyaddr(ip)
+                return host
+            except:
+                return "unknown"
         
         def icmp_scan(self,ip):
             try:
