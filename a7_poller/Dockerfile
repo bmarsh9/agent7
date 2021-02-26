@@ -2,7 +2,7 @@
 FROM ubuntu
 
 # update the operating system:
-RUN apt-get update --fix-missing
+RUN apt-get update --fix-missing && apt-get install -y apt-transport-https
 RUN apt install -y python3-pip nano net-tools sudo libpq-dev
 
 # copy the folder to the container:
