@@ -2,7 +2,7 @@
 FROM ubuntu
 
 # update the operating system:
-RUN apt-get update --fix-missing
+RUN apt-get update --fix-missing && apt-get install -y apt-transport-https
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 RUN apt install -y python3-pip nginx nano libpq-dev net-tools sudo postgresql-client unzip
 
