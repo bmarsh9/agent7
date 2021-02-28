@@ -148,9 +148,10 @@ If you see the error `Missing table model: <>. Please add it to the RDS Mapper` 
 1.) Tag image: `docker tag agent7_ui bmarsh13/public-dev:agent7_ui`  
 2.) Public image: `docker push bmarsh13/public-dev:agent7_ui`  
 
-`docker build -t agent7_ui .`  
-`docker build -t agent7_poller .`  
-`docker build -t rmq_connector .`  
+`docker build -t agent7_ui . && docker tag agent7_ui bmarsh13/public-dev:agent7_ui && docker push bmarsh13/public-dev:agent7_ui`  
+`cd a7_poller && docker build -t agent7_poller . && docker tag agent7_poller bmarsh13/public-dev:agent7_poller && docker push bmarsh13/public-dev:agent7_poller`  
+`cd rmq_connector && docker build -t rmq_connector . && docker tag rmq_connector bmarsh13/public-dev:agent7_connector && docker push bmarsh13/public-dev:agent7_connector`  
+
 
 ##### Clean dataset:  
 `docker-compose stop rmq_connector && docker-compose rm rmq_connector && docker-compose up -d`
