@@ -13,6 +13,11 @@ import json
 import arrow
 from app.utils.misc import color_scheme
 
+@ui.route('/neighbors', methods = ['GET'])
+@login_required
+def neighbors():
+    return render_template("agent/neighbors.html")
+
 @ui.route('/map/user/<string:accounttype>/<string:sid>', methods = ['GET'])
 @login_required
 def user_logon_map(accounttype,sid):
