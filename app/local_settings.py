@@ -36,6 +36,16 @@ RESTRICTED_FIELDS = ["password"]
 # Theme color
 THEME_COLOR = os.environ.get("THEME_COLOR","dark") #dark or white
 
+# Dropzone
+DROPZONE_ALLOWED_FILE_CUSTOM=True
+DROPZONE_ALLOWED_FILE_TYPE='.json'
+DROPZONE_MAX_FILE_SIZE=3
+DROPZONE_MAX_FILES=1
+DROPZONE_IN_FORM=True
+DROPZONE_UPLOAD_ON_CLICK=True
+DROPZONE_UPLOAD_ACTION='main_ui.bs_handle_upload'  # URL or endpoint
+DROPZONE_UPLOAD_BTN_ID='submit'
+
 # Default Valid RTR commands
 DEFAULT_CMD = {"commands": [
         {"cmd":"netstat"}
