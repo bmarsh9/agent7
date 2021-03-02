@@ -13,6 +13,17 @@ import json
 import arrow
 from app.utils.misc import color_scheme
 
+@ui.route('/settings/bluespawn/mitigation',methods = ['GET','POST'])
+@roles_accepted('admin', 'manager')
+def bs_handle_upload():
+    if request.method == "POST":
+        for key, f in request.files.items():
+            if key.startswith('file'):
+                print(f.filename)
+                #f.save(os.path.join(app.config['UPLOADED_PATH'], f.filename))
+    else:
+        return render_template("settings/bs_mitigation_upload.html")
+
 @ui.route('/neighbors', methods = ['GET'])
 @login_required
 def neighbors():
