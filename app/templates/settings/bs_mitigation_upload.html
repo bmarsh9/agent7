@@ -1,0 +1,45 @@
+{% extends "settings/setting_template.html" %}
+
+  {% block head %}
+    {{ super() }}
+    {{ dropzone.load_css() }}
+    <style>
+      .dropzone {
+        background: transparent !important;
+      }
+    </style>
+  {% endblock %}
+
+  {%block mitigation_active%}
+      active
+  {%endblock%}
+  {% block tab_data %}
+      <div class="row">
+          <div class="col-md-9">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="title">Upload BlueSpawn Mitigation File</h3>
+              </div>
+              <div class="card-body">
+                <form action="{{ url_for('main_ui.bs_handle_upload') }}" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                      <label>Label</label>
+                      <input type="label" class="form-control" placeholder="Placeholder" name="label">
+                    </div>
+                    <div class="form-group">
+                      <label>Label</label>
+                      <input type="label" class="form-control" placeholder="Placeholder" name="label">
+                    </div>
+                    {{ dropzone.create() }}
+                    <input class="btn btn-fill btn-simple btn-sm text-success mt-5" type="submit" id="submit" value="Submit and Upload">
+                </form>
+              </div>
+            </div>
+          </div>
+      </div>
+  {%endblock%}
+
+{% block extra_js%}
+  {{ dropzone.load_js() }}
+  {{ dropzone.config() }}
+{% endblock %}
