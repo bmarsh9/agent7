@@ -5,6 +5,7 @@ from flask_mail import Mail
 from flask_migrate import Migrate, MigrateCommand
 from flask_user import UserManager
 from flask_script import Manager
+from flask_dropzone import Dropzone
 import os,sys
 import logging
 from datetime import datetime as dt
@@ -15,6 +16,7 @@ db = SQLAlchemy()
 logs = LogSetup()
 mail = Mail()
 migrate = Migrate()
+dropzone = Dropzone()
 
 def create_app():
     # Instantiate Flask
@@ -28,6 +30,9 @@ def create_app():
     # Setup Flask-SQLAlchemy
     db.init_app(app)
 
+    # Dropzone
+    dropzone.init_app(app)
+    
     # Add Jinja filter
     app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
