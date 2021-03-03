@@ -140,7 +140,20 @@ Check the containers by running `docker ps`. It should look something like below
 
 After that, start running `docker logs <container_name> -f` and looking for errors. File a bug if you need help.  
 
-If you see the error `Missing table model: <>. Please add it to the RDS Mapper` while running `docker logs agent7_connector -f`... then you can try to restart that container with `docker-compose restart rmq_connector` and see if that fixes the issue.  
+If you see the error from `agent7_connector`  
+
+```
+Missing table model: <>. Please add it to the RDS Mapper
+```
+then run `docker-compose restart rmq_connector`
+
+If you see errors from `agent7_poller` such as:  
+```
+ERROR:root:Exception when processing job:update_privilged_users. Error:'ad_user'
+INFO:root:Executing ready task: update_built_in_groups
+ERROR:root:Exception when processing job:update_built_in_groups. Error:'ad_group'
+```  
+then run `docker-compose restart agent7_poller`
 
 
 ### Building  
