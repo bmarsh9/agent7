@@ -31,6 +31,7 @@ Dark Theme            |  White Theme (:zap: BETA)
 9. [Architecture](#Architecture)
 10. [Considerations](#considerations)  
 11. [Debugging](#debugging)  
+12. [Debugging The Agent](#debugging-the-agent)  
 
 
 ### What is it?
@@ -155,6 +156,17 @@ ERROR:root:Exception when processing job:update_built_in_groups. Error:'ad_group
 ```  
 then run `docker-compose restart agent7_poller`
 
+### Debugging the agent
+
+1.) Check Event Viewer and filter for the source being `agent7`. Look for any errors.  
+2.) You can run the agent in debug mode as well. First, stop the agent if its running. Open up Services, right click `agent7` and `Stop`
+3.) Next, open up a elevated powershell or cmd prompt and type the following
+
+```
+cd C:\Program Files\agent7
+.\agent7.exe debug
+```
+Look for any errors... it will most likely be a networking error
 
 ### Building  
 ##### Docker  
