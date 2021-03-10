@@ -96,6 +96,7 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
                 self.aid = reg["aid"]
                 self.group = reg.get("group","default_group")
                 vtls = reg.get("verifytls","yes")
+                self.proxy_addr = reg.get("proxy",None)
                 if vtls == "no":
                     self.verifytls = False
                 else:
@@ -358,7 +359,13 @@ class AppServerSvc(win32serviceutil.ServiceFramework):
             return None
        
         def requests_session(self,session=None):
-            session = session or requests.Session()            
+            session = session or requests.Session()
+            if self.proxy_addr:
+                proxy_dict = {
+                    "http": "http://{}".format(self.proxy_addr),
+                    "https": "https://{}".format(self.proxy_addr)                    
+                }
+                session.proxies = proxy_dict
             adapter = HTTPAdapter()
             #session.mount('http://',adapter)
             session.mount('https://',adapter)
