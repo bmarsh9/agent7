@@ -3,7 +3,7 @@
 #define MyAppName "agent7" ;must match svc_name in program
 #define MyAppVersion "1.0.0" ;UPDATE THIS WHEN COMPILING NEW CODE
 #define MyAppPublisher "agent7"
-#define MyAppURL "https://sec-eng.tech"
+#define MyAppURL "https://example.com"
 #define MyAppExeName "agent7.exe" ;must remain the same between updates
 #define CompileProgramPath "C:\Users\bmarshall\Desktop\ww\ww_agent_source\dist\agent7.exe" ;path of program to compile on local system
 
@@ -11,6 +11,7 @@
 #define Server "localhost" ;command line switch: /server=value
 #define Group "default" ; group that the agent self-registers to on server: /group=value
 #define VerifyTls "yes" ; verify server TLS cert (highly recommended!): /verifytls=<yes:no>
+#define Proxy ""; set proxy: /proxy=192.168.1.1:8888
  
 [Setup]
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
@@ -51,6 +52,7 @@ Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Services\{#MyAppName}"; ValueType:
 Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Services\{#MyAppName}"; ValueType: string; ValueName: "aid"; ValueData: {code:CreateAID}; Flags: createvalueifdoesntexist
 Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Services\{#MyAppName}"; ValueType: string; ValueName: "group"; ValueData: "{param:Group|{#Group}}"
 Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Services\{#MyAppName}"; ValueType: string; ValueName: "verifytls"; ValueData: "{param:VerifyTls|{#VerifyTls}}"
+Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Services\{#MyAppName}"; ValueType: string; ValueName: "proxy"; ValueData: "{param:Proxy|{#Proxy}}"
 
 
 
